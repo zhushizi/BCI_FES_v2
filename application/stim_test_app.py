@@ -1,0 +1,92 @@
+from __future__ import annotations
+
+import logging
+from typing import Optional
+
+from service.business.hardware.stim_test_service import StimTestService
+
+
+class StimTestApp:
+    """
+    电刺激测试应用层（用例编排入口）。
+
+    UI 只依赖 App；Service 负责业务与外部依赖（硬件/协议）。
+    """
+
+    def __init__(self, stim_service: StimTestService):
+        self.service = stim_service
+        self.logger = logging.getLogger(__name__)
+
+    def start_dual(self) -> bool:
+        return self.service.start_dual()
+
+    def stop_dual(self) -> bool:
+        return self.service.stop_dual()
+
+    def start_treatment_channel(self, channel: str) -> bool:
+        return self.service.start_treatment_channel(channel)
+
+    def stop_treatment_channel(self, channel: str) -> bool:
+        return self.service.stop_treatment_channel(channel)
+
+    def set_treatment_params(
+        self,
+        scheme: int,
+        frequency: int,
+        current: int,
+        channel: Optional[str] = None,
+        time_byte: Optional[int] = None,
+    ) -> bool:
+        return self.service.set_treatment_params(
+            scheme=scheme,
+            frequency=frequency,
+            current=current,
+            channel=channel,
+            time_byte=time_byte,
+        )
+
+    def set_params(self, scheme: int, frequency: int, current: int, channel: Optional[str] = None) -> bool:
+        return self.service.set_params(
+            scheme=scheme,
+            frequency=frequency,
+            current=current,
+            channel=channel,
+        )
+
+    def device_code_for(self, channel: Optional[str], leg_part: Optional[str]) -> int:
+        return self.service.device_code_for(channel, leg_part)
+
+    def send_basic_params(
+        self,
+        device: int,
+        waveform: int,
+        pulse_width: int,
+        frequency: int,
+        stim_intensity: int = 0,
+    ) -> bool:
+        return self.service.send_basic_params(
+            device=device,
+            waveform=waveform,
+            pulse_width=pulse_width,
+            frequency=frequency,
+            stim_intensity=stim_intensity,
+        )
+
+    def send_advanced_params(
+        self,
+        device: int,
+        current: int,
+        stim_time: int,
+        rise_time: int,
+        down_time: int,
+        reserved_byte: int = 0x00,
+    ) -> bool:
+        return self.service.send_advanced_params(
+            device=device,
+            current=current,
+            stim_time=stim_time,
+            rise_time=rise_time,
+            down_time=down_time,
+            reserved_byte=reserved_byte,
+        )
+

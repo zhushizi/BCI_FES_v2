@@ -1,0 +1,21 @@
+# Python / IDE artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Generated images / analysis outputs
+db/ERDs/
+db/ReactionTimeCurve/
+db/*.db
+
+# External protocol docs / resource files
+*JSON-RPC*.pdf
+*JSON-RPC*.md
+
+# PyInstaller
+build/
+dist/
+HW_BCI_NES.spec
+
+# Local runtime (范式和外部 exe 等，不纳入版本库)
+runtime/

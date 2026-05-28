@@ -1,0 +1,1230 @@
+from __future__ import annotations
+
+import logging
+import time
+from typing import Optional
+
+from PySide6.QtCore import QEvent, QObject, Qt, QTimer
+from PySide6.QtGui import QRegion
+from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QVBoxLayout
+
+from ui.dialogs.tips_dialog import TipsDialog
+from ui.widgets.circle_level_widget import CircleLevelWidget
+from application.session_app import SessionApp, PatientTreatParams
+from application.stim_test_app import StimTestApp
+from ui.core.utils import get_ui_attr, safe_call, safe_connect
+
+
+class StimTestController:
+    """
+    电刺激测试模块（tabWidget_2 index=0 / tab_3）。
+
+    目标：把电刺激相关的 UI 逻辑从 `TreatPageController` 剥离出来，
+    让上层只负责导航与页面编排。
+    """
+
+    _NEXT_CONFIRM = "确认"
+    _NEXT_ITEM = "下一项"
+    _FREQ_MIN_MS = 20
+    _FREQ_MAX_MS = 100
+    _FREQ_DEFAULT_MS = 20
+    _TIME_MIN_TENTHS = 1
+    _TIME_MAX_TENTHS = 20
+    _TIME_DEFAULT_TENTHS = 10
+    # 刺激时长：滑块 1–4，下发协议字节即为 1–4（不按 0.1s×10 刻度）
+    _STIM_DURATION_SCROLL_NAME = "horizontalScrollBar_time_stim"
+    _STIM_DURATION_MIN = 1
+    _STIM_DURATION_MAX = 4
+    _STIM_DURATION_DEFAULT = 3
+    _TIME_DEFAULT_TENTHS_BY_SCROLLBAR = {
+        "horizontalScrollBar_time_rise": 5,
+        "horizontalScrollBar_time_down": 5,
+    }
+    # 开始测试：基础参数帧与下一条高级参数帧之间间隔（与训练范式 INTER_CMD_DELAY 一致）
+    _BASIC_ADVANCED_DELAY_SEC = 1.0
+    _CURRENT_MODE_START = 0xEF
+    _CURRENT_MODE_STOP = 0xFF
+    _CURRENT_MAX_OUTPUT = 0x50
+    _ADVANCED_RESERVED_STIM_PAGE = 0x02
+    _ADJUST_COOLDOWN_MS = 1000
+
+    _STYLE_LEG_SELECTED = (
+        "QPushButton { background-color: rgb(219, 233, 247); color: rgb(88, 122, 244); "
+        "border: 2px solid rgb(88, 122, 244); border-radius: 10px; }"
+    )
+    _STYLE_LEG_NORMAL = (
+        "QPushButton { background-color: rgb(240, 242, 245); color: rgb(120, 120, 120); "
+        "border: 1px solid rgb(200, 200, 200); border-radius: 10px; }"
+    )
+    _STYLE_LEG_COMPLETED = (
+        "QPushButton { background-color: rgb(232, 245, 233); color: rgb(46, 125, 50); "
+        "border: 2px solid rgb(129, 199, 132); border-radius: 10px; }"
+    )
+    _STYLE_LEG_COMPLETED_SELECTED = (
+        "QPushButton { background-color: rgb(220, 237, 220); color: rgb(27, 94, 32); "
+        "border: 2px solid rgb(76, 175, 80); border-radius: 10px; }"
+    )
+
+    def __init__(self, ui, session_app: Optional[SessionApp] = None, stim_app: Optional[StimTestApp] = None):
+        self.ui = ui
+        self.session_app = session_app
+        self.stim_app = stim_app
+        self._logger = logging.getLogger(__name__)
+        self._treat_entry_button: Optional[str] = None
+        self._current_patient_for_leg: dict | None = None
+        self._dual_leg_flow_step: int = 0
+        self._active_leg_channel: str = "left"
+        # 仅在本会话内对该侧点过「停止测试」且档位>0 后为 True，用于标绿（避免仅靠缓存档位一切换就绿）
+        self._stim_leg_stop_completed: dict[str, bool] = {"left": False, "right": False}
+
+        # True=开始状态（stop可用/start不可用/next不可用）；False=停止状态（start可用/stop不可用/next可用）
+        self._test_running = False
+        # 设备在线状态（影响控件可用性）
+        self._hardware_online = True
+
+        # 频率默认 20ms。这里在绑定信号前设置，避免触发下发指令。
+        self._set_default_freq()
+
+        # 记录 UI 初始默认的方案/频率值（用于患者第一次进入时初始化）
+        self._default_params = {
+            "left_scheme_idx": self._get_combo_index("comboBox_left_scheme") or 0,
+            "left_freq_idx": self._get_freq_value(),
+        }
+
+        self._current_patient_id: Optional[str] = None
+        self._left_circle_widget: Optional[CircleLevelWidget] = None
+        self._right_circle_widget: Optional[CircleLevelWidget] = None
+        self._time_scroll_widgets: dict[str, dict[str, object]] = {}
+        self._adjust_cooldown_until: float = 0.0
+
+    def set_treat_entry_button(self, button_name: Optional[str]) -> None:
+        self._treat_entry_button = (button_name or "").strip() or None
+
+    def _stim_leg_part_label(self) -> str:
+        """范式按钮名含 gou→小腿，含 tai→大腿；默认小腿。"""
+        n = (self._treat_entry_button or "").lower()
+        if "tai" in n:
+            return "大腿"
+        if "gou" in n:
+            return "小腿"
+        return "小腿"
+
+    def _patient_leg_display_mode(self) -> str:
+        """双腿：both；仅左腿/右腿：只展示单侧。"""
+        p = self._current_patient_for_leg
+        if not p:
+            return "both"
+        leg = str(p.get("Leg") or "").strip()
+        if leg == "左腿":
+            return "left"
+        if leg == "右腿":
+            return "right"
+        return "both"
+
+    def refresh_stim_leg_bar(self) -> None:
+        """刺激位置栏始终展示；文案随范式 gou/tai；单侧只显示对应腿。"""
+        bar = get_ui_attr(self.ui, "widget_stim_leg_bar")
+        safe_call(self._logger, getattr(bar, "setVisible", None), True)
+        part = self._stim_leg_part_label()
+        btn_l = get_ui_attr(self.ui, "pushButton_stim_leg_left")
+        btn_r = get_ui_attr(self.ui, "pushButton_stim_leg_right")
+        if btn_l:
+            safe_call(self._logger, getattr(btn_l, "setText", None), f"左腿（{part}）")
+        if btn_r:
+            safe_call(self._logger, getattr(btn_r, "setText", None), f"右腿（{part}）")
+        mode = self._patient_leg_display_mode()
+        if btn_l:
+            safe_call(self._logger, getattr(btn_l, "setVisible", None), mode in ("both", "left"))
+        if btn_r:
+            safe_call(self._logger, getattr(btn_r, "setVisible", None), mode in ("both", "right"))
+        self._dual_leg_flow_step = 0
+        self._set_leg_highlight(left_selected=(mode != "right"))
+        self._set_preprocess_next_button_text(self._NEXT_CONFIRM if mode == "both" else self._NEXT_ITEM)
+        self._hide_right_channel_widgets()
+
+    def reset_dual_leg_flow(self) -> None:
+        """重置“确认/下一项”流程：双腿为确认，单腿为下一项。"""
+        self._dual_leg_flow_step = 0
+        mode = self._patient_leg_display_mode()
+        self._set_preprocess_next_button_text(self._NEXT_CONFIRM if mode == "both" else self._NEXT_ITEM)
+
+    def on_completed_leave_stim_tab(self) -> None:
+        """离开电刺激子页进入阻抗页后：重置确认/下一项流程。"""
+        self._dual_leg_flow_step = 0
+        self.reset_dual_leg_flow()
+
+    def _set_preprocess_next_button_text(self, text: str) -> None:
+        btn = get_ui_attr(self.ui, "pushButton_next")
+        safe_call(self._logger, getattr(btn, "setText", None), text)
+
+    def _grade_for_leg(self, channel: str) -> int:
+        """读取某一侧档位：当前编辑中的腿用界面值，另一侧用 session 缓存。"""
+        mode = self._patient_leg_display_mode()
+        if mode != "both":
+            return self._get_left_grade() if self._selected_leg_channel() == channel else 0
+        sel = self._selected_leg_channel()
+        if channel == sel:
+            return self._get_left_grade()
+        params = self._load_current_treat_params()
+        if not params:
+            return 0
+        return int(getattr(params, "left_grade" if channel == "left" else "right_grade", 0) or 0)
+
+    def _leg_show_completed_green(self, channel: str) -> bool:
+        """标绿：该侧档位>0 + 本会话内已对该侧执行过停止测试；测试中当前侧不绿。"""
+        if self._grade_for_leg(channel) <= 0:
+            return False
+        if not self._stim_leg_stop_completed.get(channel, False):
+            return False
+        if self._test_running and self._selected_leg_channel() == channel:
+            return False
+        return True
+
+    def _reset_stim_leg_completion_flags(self) -> None:
+        self._stim_leg_stop_completed = {"left": False, "right": False}
+
+    def _style_for_leg_button(self, channel: str, is_selected: bool) -> str:
+        if self._leg_show_completed_green(channel):
+            return self._STYLE_LEG_COMPLETED_SELECTED if is_selected else self._STYLE_LEG_COMPLETED
+        if is_selected:
+            return self._STYLE_LEG_SELECTED
+        return self._STYLE_LEG_NORMAL
+
+    def _refresh_stim_leg_styles(self) -> None:
+        btn_l = get_ui_attr(self.ui, "pushButton_stim_leg_left")
+        btn_r = get_ui_attr(self.ui, "pushButton_stim_leg_right")
+        mode = self._patient_leg_display_mode()
+        sel = self._selected_leg_channel()
+        if mode == "left":
+            if btn_l:
+                safe_call(self._logger, getattr(btn_l, "setStyleSheet", None), self._style_for_leg_button("left", True))
+            return
+        if mode == "right":
+            if btn_r:
+                safe_call(self._logger, getattr(btn_r, "setStyleSheet", None), self._style_for_leg_button("right", True))
+            return
+        if btn_l:
+            safe_call(self._logger, getattr(btn_l, "setStyleSheet", None), self._style_for_leg_button("left", sel == "left"))
+        if btn_r:
+            safe_call(self._logger, getattr(btn_r, "setStyleSheet", None), self._style_for_leg_button("right", sel == "right"))
+
+    def _set_leg_highlight(self, left_selected: bool) -> None:
+        btn_l = get_ui_attr(self.ui, "pushButton_stim_leg_left")
+        btn_r = get_ui_attr(self.ui, "pushButton_stim_leg_right")
+        mode = self._patient_leg_display_mode()
+        if mode == "left":
+            self._active_leg_channel = "left"
+            if btn_l:
+                safe_call(self._logger, getattr(btn_l, "setChecked", None), True)
+            self._refresh_stim_leg_styles()
+            return
+        if mode == "right":
+            self._active_leg_channel = "right"
+            if btn_r:
+                safe_call(self._logger, getattr(btn_r, "setChecked", None), True)
+            self._refresh_stim_leg_styles()
+            return
+        self._active_leg_channel = "left" if left_selected else "right"
+        if btn_l:
+            safe_call(self._logger, getattr(btn_l, "setChecked", None), left_selected)
+        if btn_r:
+            safe_call(self._logger, getattr(btn_r, "setChecked", None), not left_selected)
+        self._refresh_stim_leg_styles()
+
+    def handle_dual_leg_next_click(self) -> bool:
+        """双腿患者需先点“确认”，再点“下一项”才允许跳页。"""
+        if self._patient_leg_display_mode() != "both":
+            return False
+        if self._dual_leg_flow_step == 0:
+            if self._test_running:
+                TipsDialog.show_tips(self.ui, "请先点击“停止测试”，停止后才能确认当前侧")
+                return True
+            if self._get_left_grade() <= 0:
+                TipsDialog.show_tips(self.ui, f"请完成{self._leg_text(self._selected_leg_channel())}（{self._stim_leg_part_label()}）侧电刺激强度测试")
+                return True
+            self._save_current_params()
+            self._dual_leg_flow_step = 1
+            self._switch_active_leg(left=False, save_current=False)
+            self._set_preprocess_next_button_text(self._NEXT_ITEM)
+            return True
+        return False
+
+    def stim_grades_satisfied_for_next(self) -> bool:
+        """离开电刺激页前：检查当前患者需要测试的腿部档位。"""
+        self._save_current_params()
+        part = self._stim_leg_part_label()
+        mode = self._patient_leg_display_mode()
+        params = self._load_current_treat_params()
+        if mode == "both":
+            checks = (
+                ("left", getattr(params, "left_grade", 0) if params else 0),
+                ("right", getattr(params, "right_grade", 0) if params else 0),
+            )
+        else:
+            channel = "right" if mode == "right" else "left"
+            checks = ((channel, self._get_left_grade()),)
+        for channel, grade in checks:
+            if int(grade or 0) <= 0:
+                TipsDialog.show_tips(self.ui, f"请完成{self._leg_text(channel)}（{part}）侧电刺激强度测试")
+                return False
+        return True
+
+    @property
+    def is_test_running(self) -> bool:
+        return bool(self._test_running)
+
+    def bind_signals(self) -> None:
+        leg_l = get_ui_attr(self.ui, "pushButton_stim_leg_left")
+        leg_r = get_ui_attr(self.ui, "pushButton_stim_leg_right")
+        if leg_l is not None and leg_r is not None:
+            safe_connect(self._logger, getattr(leg_l, "clicked", None), lambda: self._on_stim_leg_clicked(True))
+            safe_connect(self._logger, getattr(leg_r, "clicked", None), lambda: self._on_stim_leg_clicked(False))
+
+        # 开始/停止合并到同一按钮：点击切换
+        start_btn = get_ui_attr(self.ui, "pushButton_start_test")
+        safe_connect(self._logger, getattr(start_btn, "clicked", None), self._on_start_stop_test_clicked)
+        stop_btn = get_ui_attr(self.ui, "pushButton_stop_test")
+        if stop_btn is not None:
+            stop_btn.setVisible(False)
+
+        # 左通道等级调整按钮
+        left_big = get_ui_attr(self.ui, "pushButton_left_turnbig")
+        safe_connect(self._logger, getattr(left_big, "clicked", None), self._on_left_grade_increase)
+        left_small = get_ui_attr(self.ui, "pushButton_left_turnsmall")
+        safe_connect(self._logger, getattr(left_small, "clicked", None), self._on_left_grade_decrease)
+
+        # 左通道频率/方案选择
+        left_freq = get_ui_attr(self.ui, "comboBox_left_freq")
+        safe_connect(self._logger, getattr(left_freq, "valueChanged", None), self._on_left_freq_value_changed)
+        safe_connect(self._logger, getattr(left_freq, "sliderReleased", None), self._on_left_freq_released)
+        safe_connect(self._logger, getattr(left_freq, "currentIndexChanged", None), self._on_left_freq_changed)
+        left_scheme = get_ui_attr(self.ui, "comboBox_left_scheme")
+        safe_connect(self._logger, getattr(left_scheme, "currentIndexChanged", None), self._on_left_scheme_changed)
+        pulse_width = get_ui_attr(self.ui, "comboBox_pulse_width")
+        safe_connect(self._logger, getattr(pulse_width, "currentIndexChanged", None), self._on_pulse_width_changed)
+        reset_btn = get_ui_attr(self.ui, "pushButton_reset_2")
+        safe_connect(self._logger, getattr(reset_btn, "clicked", None), self._on_reset_stim_clicked)
+
+        self._init_left_circle_widget()
+        self._hide_right_channel_widgets()
+        self._update_freq_value_label()
+        self._init_time_scrollbars()
+
+    def _on_stim_leg_clicked(self, left: bool) -> None:
+        self._switch_active_leg(left=left)
+
+    def _switch_active_leg(self, left: bool, save_current: bool = True) -> None:
+        target = "left" if left else "right"
+        if save_current and target != self._active_leg_channel:
+            self._save_current_params()
+        self._set_leg_highlight(left_selected=left)
+        self._apply_cached_params(channel=self._selected_leg_channel())
+
+    def _selected_leg_channel(self) -> str:
+        mode = self._patient_leg_display_mode()
+        if mode == "right":
+            return "right"
+        if mode == "left":
+            return "left"
+        return self._active_leg_channel if self._active_leg_channel in ("left", "right") else "left"
+
+    def _leg_text(self, channel: str) -> str:
+        return "右腿" if channel == "right" else "左腿"
+
+    def _hide_right_channel_widgets(self) -> None:
+        # 单通道模式下隐藏右通道区域控件
+        for name in (
+            "widget_circle_level_right",
+            "label_right_grade",
+            "pushButton_right_turnsmall",
+            "pushButton_right_turnbig",
+            "comboBox_right_freq",
+            "comboBox_right_scheme",
+            "label_right_channel",
+            "label_right_channel_2",
+            "label_34",
+            "label_50",
+            "label_51",
+            "label_49",
+        ):
+            widget = get_ui_attr(self.ui, name)
+            safe_call(self._logger, getattr(widget, "setVisible", None), False)
+
+    def _init_left_circle_widget(self) -> None:
+        """在 widget_circle_level_left 中放入只读圆环，与 label_left_grade 联动，并裁剪为圆形区域。"""
+        host = get_ui_attr(self.ui, "widget_circle_level_left")
+        if host is None:
+            return
+        layout = host.layout()
+        if layout is None:
+            layout = QVBoxLayout(host)
+            layout.setContentsMargins(0, 0, 0, 0)
+        self._left_circle_widget = CircleLevelWidget(host)
+        self._left_circle_widget.set_level_range(0, 99)
+        self._left_circle_widget.set_read_only(True)
+        self._left_circle_widget.set_level(self._get_left_grade())
+        layout.addWidget(self._left_circle_widget)
+
+        host.installEventFilter(_CircleMaskResizeFilter(host))
+        QTimer.singleShot(0, lambda: self._apply_circle_mask_to_host(host))
+
+    def _apply_circle_mask_to_host(self, host) -> None:
+        """将 host 裁剪为圆形显示与点击区域（以短边为直径居中）。"""
+        w, h = host.width(), host.height()
+        if w <= 0 or h <= 0:
+            return
+        d = min(w, h)
+        x = (w - d) // 2
+        y = (h - d) // 2
+        region = QRegion(x, y, d, d, QRegion.Ellipse)
+        host.setMask(region)
+
+    def set_current_patient(self, patient: dict | None) -> None:
+        """设置当前患者并恢复缓存参数（患者绑定）。"""
+        self._current_patient_for_leg = patient
+        self._current_patient_id = self._extract_patient_id(patient)
+        if self.session_app:
+            try:
+                if self._current_patient_id:
+                    self.session_app.set_current_patient(self._current_patient_id)
+                else:
+                    self.session_app.set_current_patient("")
+            except Exception:
+                self._logger.exception("设置当前患者失败")
+        self._reset_stim_leg_completion_flags()
+        self.refresh_stim_leg_bar()
+        self._apply_cached_params()
+
+    def on_enter(self) -> None:
+        """进入电刺激页：强制回到停止态。"""
+        self._set_running_state(running=False)
+        self.refresh_stim_leg_bar()
+        self._apply_cached_params()
+
+    def on_exit(self) -> None:
+        """离开电刺激页：保存当前档位并停止。"""
+        self._save_current_params()
+        self._stop_treatment_safe()
+
+    def reset_stimulus_grades(self, sync_hardware: bool = True) -> None:
+        """清零单通道刺激强度（0级），可选是否同步下发到硬件。"""
+        self._set_left_grade(0)
+        if sync_hardware:
+            try:
+                self._send_advanced_params(current_value=0)
+            except Exception:
+                self._logger.exception("清零档位后下发高级参数失败")
+        self._save_current_params()
+        self._reset_stim_leg_completion_flags()
+        self._refresh_stim_leg_styles()
+
+    def _on_reset_stim_clicked(self) -> None:
+        """重置电刺激页控件与运行状态。"""
+        try:
+            # 先确保下位机回到停止态，避免 UI 与设备状态不一致。
+            self._send_advanced_params(current_value=self._CURRENT_MODE_STOP)
+        except Exception:
+            self._logger.exception("重置时发送停止高级参数失败")
+
+        self._set_running_state(running=False)
+        self._set_left_grade(0)
+        self._set_combo_index("comboBox_left_scheme", self._default_params.get("left_scheme_idx", 0))
+        self._set_freq_value(self._default_params.get("left_freq_idx", self._FREQ_DEFAULT_MS))
+        self._set_combo_index("comboBox_pulse_width", 0)
+        self._reset_time_scrollbars()
+        self._save_current_params()
+        self._reset_stim_leg_completion_flags()
+        self._refresh_stim_leg_styles()
+
+    # ----------------- UI 状态管理 -----------------
+    def _set_default_freq(self) -> None:
+        """将频率拖条默认设置为 20ms。"""
+        self._set_freq_value(self._FREQ_DEFAULT_MS)
+
+    def _set_running_state(self, running: bool) -> None:
+        self._test_running = bool(running)
+
+        start_btn = get_ui_attr(self.ui, "pushButton_start_test")
+        if start_btn is not None:
+            safe_call(
+                self._logger,
+                getattr(start_btn, "setText", None),
+                "停止测试" if self._test_running else "开始测试",
+            )
+            # 开始测试：背景 #789EFF、白色字体；停止测试：背景 #F48438、白色字体；保留倒角与 .ui 一致
+            bg = "#F48438" if self._test_running else "#789EFF"
+            safe_call(
+                self._logger,
+                getattr(start_btn, "setStyleSheet", None),
+                f"QPushButton {{ background-color: {bg}; color: white; border-radius: 12.6px; }} "
+                f"QPushButton:disabled {{ background-color: #707070; color: white; border-radius: 12.6px; }}",
+            )
+
+        self._apply_stim_controls_enabled()
+        self._refresh_stim_leg_styles()
+
+    def set_hardware_online(self, is_online: bool) -> None:
+        """根据下位机在线状态更新控件可用性"""
+        self._hardware_online = bool(is_online)
+        self._update_device_dependent_controls()
+
+    def _update_device_dependent_controls(self) -> None:
+        """更新依赖下位机在线状态的控件"""
+        if not self._hardware_online:
+            # 离线：重置档位为 0，恢复默认方案/频率
+            self._set_left_grade(0)
+            self._set_combo_index("comboBox_left_scheme", self._default_params.get("left_scheme_idx", 0))
+            self._set_freq_value(self._default_params.get("left_freq_idx", self._FREQ_DEFAULT_MS))
+            self._reset_stim_leg_completion_flags()
+
+        self._apply_stim_controls_enabled()
+        self._refresh_stim_leg_styles()
+
+    def _stim_controls_enabled(self) -> bool:
+        """开始/停止与参数调节互斥：在线且不在 1s 交互冷却内才可操作。"""
+        return bool(self._hardware_online) and not self._is_adjust_cooldown_active()
+
+    def _apply_stim_controls_enabled(self) -> None:
+        """统一刷新开始/停止与所有参数调节控件的可用状态。"""
+        enabled = self._stim_controls_enabled()
+        for name in (
+            "comboBox_left_freq",
+            "comboBox_left_scheme",
+            "comboBox_pulse_width",
+            "horizontalScrollBar_time_stim",
+            "horizontalScrollBar_time_rise",
+            "horizontalScrollBar_time_down",
+            "pushButton_left_turnbig",
+            "pushButton_left_turnsmall",
+            "pushButton_start_test",
+        ):
+            widget = get_ui_attr(self.ui, name)
+            safe_call(self._logger, getattr(widget, "setEnabled", None), enabled)
+        self._set_time_aux_controls_enabled(enabled)
+        app = QApplication.instance()
+        if app is not None:
+            app.processEvents()
+
+    def _interaction_allowed(self) -> bool:
+        """开始/停止与参数调节交叉冷却中则拒绝操作。"""
+        return not self._is_adjust_cooldown_active()
+
+    # ----------------- 开始/停止测试（同一按钮切换）-----------------
+    def _on_start_stop_test_clicked(self) -> None:
+        """点击开始测试按钮：当前运行则停止，当前停止则开始。"""
+        if not self._try_begin_adjust_cooldown():
+            return
+        if self._test_running:
+            self._on_stop_test_clicked()
+        else:
+            self._on_start_test_clicked()
+
+    def _on_start_test_clicked(self) -> None:
+        try:
+            self._stim_leg_stop_completed[self._selected_leg_channel()] = False
+            # 进入开始测试时：当前侧档位重置为 0
+            self._set_left_grade(0)
+            # 同步保存（当前患者）
+            self._save_current_params()
+            # 开始测试：先发基础参数帧，再发高级参数帧；第7位使用 0xEF 表示开始电流模式。
+            self._send_basic_params()
+            time.sleep(self._BASIC_ADVANCED_DELAY_SEC)
+            self._send_advanced_params(current_value=self._CURRENT_MODE_START)
+        finally:
+            self._set_running_state(running=True)
+            self._extend_adjust_cooldown()
+
+    def _on_stop_test_clicked(self) -> None:
+        try:
+            # 停止测试：发送高级参数帧；第7位使用 0xFF 表示结束当前模式。
+            self._send_advanced_params(current_value=self._CURRENT_MODE_STOP)
+        finally:
+            ch = self._selected_leg_channel()
+            self._stim_leg_stop_completed[ch] = self._get_left_grade() > 0
+            self._set_running_state(running=False)
+            self._extend_adjust_cooldown()
+
+    def stop_safe(self) -> None:
+        self._stop_treatment_safe()
+
+    def _stop_treatment_safe(self) -> None:
+        try:
+            if self.stim_app:
+                self._send_advanced_params(current_value=self._CURRENT_MODE_STOP)
+        except Exception:
+            self._logger.exception("停止治疗失败")
+
+    # ----------------- 档位/参数下发 -----------------
+    def _get_first_char(self, text: str) -> str:
+        if not text:
+            return ""
+        first_char = text[0]
+        if "\u4e00" <= first_char <= "\u9fff":
+            return first_char
+        if first_char.isalnum():
+            return first_char
+        return first_char
+
+    def _get_left_grade(self) -> int:
+        label = get_ui_attr(self.ui, "label_left_grade")
+        if label is None:
+            return 0
+        text = label.text()
+        try:
+            grade_str = text.replace("级", "").strip()
+            return int(grade_str)
+        except (ValueError, AttributeError):
+            return 0
+
+    def _set_left_grade(self, grade: int) -> None:
+        label = get_ui_attr(self.ui, "label_left_grade")
+        if label is None:
+            return
+        grade = max(0, min(self._CURRENT_MAX_OUTPUT, grade))
+        safe_call(self._logger, getattr(label, "setText", None), f"{grade}级")
+        if self._left_circle_widget is not None:
+            self._left_circle_widget.set_level(grade)
+
+    def _send_basic_params(self) -> None:
+        if not self.stim_app:
+            return
+        self.stim_app.send_basic_params(
+            device=self._get_stim_device_code(),
+            waveform=self._get_waveform_value(),
+            pulse_width=self._get_pulse_width_value(),
+            frequency=self._get_freq_value(),
+            stim_intensity=self._normalize_current_value(self._get_left_grade()),
+        )
+
+    def _send_advanced_params(self, current_value: int) -> None:
+        if not self.stim_app:
+            return
+        self.stim_app.send_advanced_params(
+            device=self._get_stim_device_code(),
+            current=self._normalize_current_value(current_value),
+            stim_time=self._get_time_scrollbar_value("horizontalScrollBar_time_stim"),
+            rise_time=self._get_time_scrollbar_value("horizontalScrollBar_time_rise"),
+            down_time=self._get_time_scrollbar_value("horizontalScrollBar_time_down"),
+            reserved_byte=self._ADVANCED_RESERVED_STIM_PAGE,
+        )
+
+    def _is_adjust_cooldown_active(self) -> bool:
+        return time.monotonic() < self._adjust_cooldown_until
+
+    def _extend_adjust_cooldown(self) -> None:
+        """延长冷却至至少 1s 后；开始测试内含 sleep 时需在结束时再次延长。"""
+        self._adjust_cooldown_until = max(
+            self._adjust_cooldown_until,
+            time.monotonic() + self._ADJUST_COOLDOWN_MS / 1000,
+        )
+        self._apply_stim_controls_enabled()
+        self._schedule_adjust_cooldown_end()
+
+    def _schedule_adjust_cooldown_end(self) -> None:
+        remaining_ms = max(0, int((self._adjust_cooldown_until - time.monotonic()) * 1000))
+        QTimer.singleShot(remaining_ms, self._end_adjust_cooldown)
+
+    def _try_begin_adjust_cooldown(self) -> bool:
+        if not self._interaction_allowed():
+            return False
+        self._extend_adjust_cooldown()
+        return True
+
+    def _end_adjust_cooldown(self) -> None:
+        if self._is_adjust_cooldown_active():
+            self._schedule_adjust_cooldown_end()
+            return
+        self._adjust_cooldown_until = 0.0
+        self._update_device_dependent_controls()
+
+    def _get_stim_device_code(self) -> int:
+        if self.stim_app:
+            return self.stim_app.device_code_for(self._selected_leg_channel(), self._stim_leg_part_label())
+        return 0xEB
+
+    def _get_waveform_value(self) -> int:
+        scheme_idx = self._get_combo_index("comboBox_left_scheme") or 0
+        return 1 if scheme_idx <= 0 else 2
+
+    def _get_pulse_width_value(self) -> int:
+        combo = get_ui_attr(self.ui, "comboBox_pulse_width")
+        if combo is None:
+            return 1
+        try:
+            # 下拉项按 50us、100us... 顺序对应协议值 0x01、0x02...
+            return max(1, min(0xFF, int(combo.currentIndex()) + 1))
+        except Exception:
+            self._logger.exception("读取脉冲宽度失败")
+            return 1
+
+    def _get_time_scrollbar_value(self, name: str) -> int:
+        scrollbar = get_ui_attr(self.ui, name)
+        if scrollbar is None:
+            return self._default_time_scroll_value(name)
+        try:
+            return self._normalize_time_scroll_value(name, int(scrollbar.value()))
+        except Exception:
+            self._logger.exception("读取时间拖条失败: %s", name)
+            return self._default_time_scroll_value(name)
+
+    def _set_time_scrollbar_value(self, name: str, value: int | None) -> None:
+        """回填时间拖条 UI 值。屏蔽信号避免重复下发；与缓存参数保持一致。"""
+        scrollbar = get_ui_attr(self.ui, name)
+        if scrollbar is None:
+            return
+        norm = self._normalize_time_scroll_value(name, value)
+        try:
+            old_block = scrollbar.blockSignals(True)
+            scrollbar.setValue(norm)
+            scrollbar.blockSignals(old_block)
+            self._update_time_scrollbar_display(name, norm)
+        except Exception:
+            self._logger.exception("设置时间拖条失败: %s", name)
+
+    def _normalize_current_value(self, value: int) -> int:
+        current = int(value)
+        if current in (self._CURRENT_MODE_START, self._CURRENT_MODE_STOP):
+            return current
+        return max(0, min(self._CURRENT_MAX_OUTPUT, current))
+
+    # ----------------- UI 事件：频率/方案/按钮 -----------------
+    def _on_left_freq_value_changed(self, value: int) -> None:
+        self._update_freq_value_label(value)
+
+    def _on_left_freq_released(self) -> None:
+        if not self._interaction_allowed():
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        try:
+            self._send_basic_params()
+        except Exception:
+            self._logger.exception("频率变更下发基础参数失败")
+        self._save_current_params()
+
+    def _on_left_freq_changed(self, index: int) -> None:
+        self._update_freq_value_label()
+        self._on_left_freq_released()
+
+    def _on_left_scheme_changed(self, index: int) -> None:
+        if not self._interaction_allowed():
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        try:
+            self._send_basic_params()
+        except Exception:
+            self._logger.exception("方案变更下发基础参数失败")
+        self._save_current_params()
+
+    def _on_pulse_width_changed(self, index: int) -> None:
+        if not self._interaction_allowed():
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        try:
+            self._send_basic_params()
+        except Exception:
+            self._logger.exception("脉宽变更下发基础参数失败")
+        self._save_current_params()
+
+    def _on_left_grade_increase(self) -> None:
+        if not self._interaction_allowed():
+            return
+        if not self._test_running:
+            TipsDialog.show_tips(self.ui, "请先点击“开始测试”按钮")
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        current_grade = self._get_left_grade()
+        new_grade = current_grade + 1
+        self._set_left_grade(new_grade)
+        self._send_advanced_params(current_value=self._get_left_grade())
+        self._save_current_params()
+        self._refresh_stim_leg_styles()
+
+    def _on_left_grade_decrease(self) -> None:
+        if not self._interaction_allowed():
+            return
+        if not self._test_running:
+            TipsDialog.show_tips(self.ui, "请先点击“开始测试”按钮")
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        current_grade = self._get_left_grade()
+        new_grade = current_grade - 1
+        self._set_left_grade(new_grade)
+        self._send_advanced_params(current_value=self._get_left_grade())
+        self._save_current_params()
+        self._refresh_stim_leg_styles()
+
+    # ----------------- 缓存：患者绑定 -----------------
+    def _get_combo_index(self, name: str) -> int | None:
+        combo = get_ui_attr(self.ui, name)
+        if combo is None:
+            return None
+        try:
+            return int(combo.currentIndex())
+        except Exception:
+            return None
+
+    def _set_combo_index(self, name: str, idx: int | None) -> None:
+        combo = get_ui_attr(self.ui, name)
+        if idx is None or combo is None:
+            return
+        try:
+            count = int(combo.count())
+            if count <= 0:
+                return
+            idx = max(0, min(count - 1, int(idx)))
+            old_block = combo.blockSignals(True)
+            combo.setCurrentIndex(idx)
+            combo.blockSignals(old_block)
+        except Exception:
+            self._logger.exception("设置下拉框索引失败: %s", name)
+
+    def _get_freq_value(self) -> int:
+        slider = get_ui_attr(self.ui, "comboBox_left_freq")
+        if slider is None:
+            return self._FREQ_DEFAULT_MS
+        try:
+            value_getter = getattr(slider, "value", None)
+            if callable(value_getter):
+                return self._normalize_freq_value(int(value_getter()))
+            current_index_getter = getattr(slider, "currentIndex", None)
+            if callable(current_index_getter):
+                return self._normalize_freq_value(int(current_index_getter()))
+        except Exception:
+            self._logger.exception("读取频率值失败")
+        return self._FREQ_DEFAULT_MS
+
+    def _set_freq_value(self, value: int | None) -> None:
+        slider = get_ui_attr(self.ui, "comboBox_left_freq")
+        if slider is None:
+            return
+        freq = self._normalize_freq_value(value)
+        try:
+            if hasattr(slider, "setMinimum"):
+                slider.setMinimum(self._FREQ_MIN_MS)
+            if hasattr(slider, "setMaximum"):
+                slider.setMaximum(self._FREQ_MAX_MS)
+            old_block = slider.blockSignals(True)
+            set_value = getattr(slider, "setValue", None)
+            if callable(set_value):
+                set_value(freq)
+            else:
+                set_index = getattr(slider, "setCurrentIndex", None)
+                if callable(set_index):
+                    set_index(freq)
+            slider.blockSignals(old_block)
+            self._update_freq_value_label(freq)
+        except Exception:
+            self._logger.exception("设置频率值失败")
+
+    def _normalize_freq_value(self, value: int | None) -> int:
+        if value is None:
+            return self._FREQ_DEFAULT_MS
+        return max(self._FREQ_MIN_MS, min(self._FREQ_MAX_MS, int(value)))
+
+    def _update_freq_value_label(self, value: int | None = None) -> None:
+        label = get_ui_attr(self.ui, "label_left_freq_value")
+        if label is None:
+            return
+        freq = self._get_freq_value() if value is None else self._normalize_freq_value(value)
+        safe_call(self._logger, getattr(label, "setText", None), f"{freq} ms")
+
+    def _is_stim_duration_scroll(self, name: str) -> bool:
+        return name == self._STIM_DURATION_SCROLL_NAME
+
+    def _time_scroll_min(self, name: str) -> int:
+        return self._STIM_DURATION_MIN if self._is_stim_duration_scroll(name) else self._TIME_MIN_TENTHS
+
+    def _time_scroll_max(self, name: str) -> int:
+        return self._STIM_DURATION_MAX if self._is_stim_duration_scroll(name) else self._TIME_MAX_TENTHS
+
+    def _default_time_scroll_value(self, name: str) -> int:
+        if self._is_stim_duration_scroll(name):
+            return self._STIM_DURATION_DEFAULT
+        raw = self._TIME_DEFAULT_TENTHS_BY_SCROLLBAR.get(name, self._TIME_DEFAULT_TENTHS)
+        return self._normalize_time_tenths(raw)
+
+    def _normalize_time_scroll_value(self, name: str, value: int | None) -> int:
+        if self._is_stim_duration_scroll(name):
+            if value is None:
+                return self._STIM_DURATION_DEFAULT
+            return max(self._STIM_DURATION_MIN, min(self._STIM_DURATION_MAX, int(value)))
+        return self._normalize_time_tenths(value)
+
+    def _format_time_scroll_display(self, name: str, value: int) -> str:
+        v = self._normalize_time_scroll_value(name, value)
+        if self._is_stim_duration_scroll(name):
+            return f"{v}s"
+        seconds = v / 10
+        return f"{seconds:g}s"
+
+    def _init_time_scrollbars(self) -> None:
+        for name in (
+            "horizontalScrollBar_time_stim",
+            "horizontalScrollBar_time_rise",
+            "horizontalScrollBar_time_down",
+        ):
+            scrollbar = get_ui_attr(self.ui, name)
+            if scrollbar is None:
+                continue
+            try:
+                scrollbar.setMinimum(self._time_scroll_min(name))
+                scrollbar.setMaximum(self._time_scroll_max(name))
+                scrollbar.setSingleStep(1)
+                scrollbar.setPageStep(1)
+                scrollbar.setValue(self._default_time_scroll_value(name))
+                scrollbar.setStyleSheet(self._time_scrollbar_style())
+                safe_connect(
+                    self._logger,
+                    getattr(scrollbar, "valueChanged", None),
+                    lambda value, n=name: self._on_time_scrollbar_changed(n, value),
+                )
+                safe_connect(
+                    self._logger,
+                    getattr(scrollbar, "sliderReleased", None),
+                    self._on_time_scrollbar_slider_released,
+                )
+                self._ensure_time_scrollbar_aux_widgets(name)
+                self._update_time_scrollbar_display(name, scrollbar.value())
+            except Exception:
+                self._logger.exception("初始化时间拖条失败: %s", name)
+
+    def _time_scrollbar_style(self) -> str:
+        return """
+QScrollBar:horizontal {
+    background: #EAF1FF;
+    border: none;
+    border-radius: 11px;
+    height: 22px;
+    margin: 0px;
+}
+QScrollBar::sub-page:horizontal {
+    background: #AFC4FF;
+    border-radius: 11px;
+}
+QScrollBar::add-page:horizontal {
+    background: #EAF1FF;
+    border-radius: 11px;
+}
+QScrollBar::handle:horizontal {
+    background: #FFFFFF;
+    border: 4px solid #7DA1FF;
+    border-radius: 11px;
+    min-width: 22px;
+}
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    height: 0px;
+}
+"""
+
+    def _ensure_time_scrollbar_aux_widgets(self, name: str) -> None:
+        if name in self._time_scroll_widgets:
+            return
+        scrollbar = get_ui_attr(self.ui, name)
+        parent = scrollbar.parent() if scrollbar is not None else None
+        if scrollbar is None or parent is None:
+            return
+
+        tip = QLabel(parent)
+        tip.setAlignment(Qt.AlignCenter)
+        tip.setStyleSheet(
+            "QLabel { background: #789EFF; color: white; border-radius: 4px; padding: 2px 6px; }"
+        )
+
+        tick_labels: list[QLabel] = []
+        tick_texts = (
+            ("1", "2", "3", "4")
+            if self._is_stim_duration_scroll(name)
+            else ("0.5s", "1s", "1.5s", "2s")
+        )
+        for text in tick_texts:
+            tick = QLabel(parent)
+            tick.setText(text)
+            tick.setAlignment(Qt.AlignCenter)
+            tick.setStyleSheet("QLabel { color: #333333; font-size: 13px; }")
+            tick_labels.append(tick)
+
+        minus = QPushButton("-", parent)
+        value_label = QLabel(parent)
+        plus = QPushButton("+", parent)
+        for button in (minus, plus):
+            button.setCursor(Qt.PointingHandCursor)
+            button.setStyleSheet(
+                "QPushButton { background: #F7F7F7; color: #789EFF; border: 1px solid #E5E5E5; "
+                "font-size: 20px; } QPushButton:pressed { background: #EEF3FF; }"
+            )
+        value_label.setAlignment(Qt.AlignCenter)
+        value_label.setStyleSheet(
+            "QLabel { background: #F7F7F7; color: #789EFF; border-top: 1px solid #E5E5E5; "
+            "border-bottom: 1px solid #E5E5E5; font-size: 18px; }"
+        )
+        safe_connect(self._logger, getattr(minus, "clicked", None), lambda _=False, n=name: self._step_time_scrollbar(n, -1))
+        safe_connect(self._logger, getattr(plus, "clicked", None), lambda _=False, n=name: self._step_time_scrollbar(n, 1))
+
+        self._time_scroll_widgets[name] = {
+            "tip": tip,
+            "ticks": tick_labels,
+            "minus": minus,
+            "value": value_label,
+            "plus": plus,
+        }
+        self._layout_time_scrollbar_aux_widgets(name)
+
+    def _layout_time_scrollbar_aux_widgets(self, name: str) -> None:
+        scrollbar = get_ui_attr(self.ui, name)
+        widgets = self._time_scroll_widgets.get(name)
+        if scrollbar is None or not widgets:
+            return
+        geom = scrollbar.geometry()
+        tick_y = geom.y() + geom.height() + 6
+        tick_values = (1, 2, 3, 4) if self._is_stim_duration_scroll(name) else (5, 10, 15, 20)
+        for tick, tick_value in zip(widgets["ticks"], tick_values):
+            x = self._time_value_to_x(geom.x(), geom.width(), name, tick_value) - 24
+            tick.setGeometry(x, tick_y, 48, 18)
+            tick.show()
+
+        panel_y = geom.y() + geom.height() + 36
+        panel_x = geom.x() + max(0, (geom.width() - 210) // 2)
+        widgets["minus"].setGeometry(panel_x, panel_y, 60, 34)
+        widgets["value"].setGeometry(panel_x + 60, panel_y, 90, 34)
+        widgets["plus"].setGeometry(panel_x + 150, panel_y, 60, 34)
+        for key in ("minus", "value", "plus", "tip"):
+            widgets[key].show()
+
+    def _time_value_to_x(self, left: int, width: int, name: str, value: int) -> int:
+        vmin = self._time_scroll_min(name)
+        vmax = self._time_scroll_max(name)
+        span = max(1, vmax - vmin)
+        v = self._normalize_time_scroll_value(name, value)
+        ratio = (v - vmin) / span
+        return int(left + ratio * width)
+
+    def _on_time_scrollbar_changed(self, name: str, value: int) -> None:
+        self._update_time_scrollbar_display(name, value)
+
+    def _on_time_scrollbar_slider_released(self) -> None:
+        """拖动滑条松手后下发 0x02 高级参数帧（刺激/上升/下降时间）。"""
+        if not self._interaction_allowed():
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        try:
+            self._send_advanced_params(current_value=self._get_left_grade())
+            self._save_current_params()
+        except Exception:
+            self._logger.exception("时间拖条松手下发失败")
+
+    def _step_time_scrollbar(self, name: str, step: int) -> None:
+        scrollbar = get_ui_attr(self.ui, name)
+        if scrollbar is None:
+            return
+        if not self._interaction_allowed():
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        scrollbar.setValue(
+            self._normalize_time_scroll_value(name, int(scrollbar.value()) + int(step))
+        )
+        try:
+            self._send_advanced_params(current_value=self._get_left_grade())
+            self._save_current_params()
+        except Exception:
+            self._logger.exception("时间步进下发失败")
+
+    def _reset_time_scrollbars(self) -> None:
+        for name in (
+            "horizontalScrollBar_time_stim",
+            "horizontalScrollBar_time_rise",
+            "horizontalScrollBar_time_down",
+        ):
+            scrollbar = get_ui_attr(self.ui, name)
+            if scrollbar is None:
+                continue
+            try:
+                old_block = scrollbar.blockSignals(True)
+                scrollbar.setValue(self._default_time_scroll_value(name))
+                scrollbar.blockSignals(old_block)
+                self._update_time_scrollbar_display(name, scrollbar.value())
+            except Exception:
+                self._logger.exception("重置时间拖条失败: %s", name)
+
+    def _normalize_time_tenths(self, value: int | None) -> int:
+        if value is None:
+            return self._TIME_DEFAULT_TENTHS
+        return max(self._TIME_MIN_TENTHS, min(self._TIME_MAX_TENTHS, int(value)))
+
+    def _update_time_scrollbar_display(self, name: str, value: int) -> None:
+        scrollbar = get_ui_attr(self.ui, name)
+        widgets = self._time_scroll_widgets.get(name)
+        if scrollbar is None or not widgets:
+            return
+        norm = self._normalize_time_scroll_value(name, value)
+        text = self._format_time_scroll_display(name, norm)
+        widgets["value"].setText(text)
+        widgets["tip"].setText(text)
+
+        geom = scrollbar.geometry()
+        tip_width = 58
+        tip_x = self._time_value_to_x(geom.x(), geom.width(), name, norm) - tip_width // 2
+        tip_x = max(geom.x(), min(geom.x() + geom.width() - tip_width, tip_x))
+        widgets["tip"].setGeometry(tip_x, geom.y() - 34, tip_width, 24)
+        widgets["tip"].raise_()
+
+    def _set_time_aux_controls_enabled(self, enabled: bool) -> None:
+        for widgets in self._time_scroll_widgets.values():
+            for key in ("minus", "plus"):
+                widget = widgets.get(key)
+                safe_call(self._logger, getattr(widget, "setEnabled", None), enabled)
+
+    def _extract_patient_id(self, patient: dict | None) -> str | None:
+        if not patient:
+            return None
+        return str(patient.get("PatientId") or patient.get("Name") or "")
+
+    def _load_current_treat_params(self) -> Optional[PatientTreatParams]:
+        pid = self._current_patient_id
+        if not pid or not self.session_app:
+            return None
+        try:
+            return self.session_app.load_treat_params(pid)
+        except Exception:
+            self._logger.exception("加载治疗参数失败: %s", pid)
+            return None
+
+    def _apply_cached_params(self, channel: Optional[str] = None) -> None:
+        pid = self._current_patient_id
+        if not pid:
+            self._set_left_grade(0)
+            return
+        params = self._load_current_treat_params()
+
+        if params is None:
+            params = PatientTreatParams(
+                patient_id=pid,
+                left_grade=0,
+                right_grade=0,
+                left_scheme_idx=self._default_params.get("left_scheme_idx", 0),
+                right_scheme_idx=self._default_params.get("left_scheme_idx", 0),
+                left_freq_idx=self._default_params.get("left_freq_idx", 0),
+                right_freq_idx=self._default_params.get("left_freq_idx", 0),
+                left_pulse_width_idx=0,
+                right_pulse_width_idx=0,
+                stim_time_byte=self._get_time_scrollbar_value("horizontalScrollBar_time_stim"),
+            )
+            if self.session_app:
+                try:
+                    self.session_app.save_treat_params(params)
+                except Exception:
+                    self._logger.exception("初始化治疗参数失败: %s", pid)
+
+        self._set_time_scrollbar_value(
+            "horizontalScrollBar_time_stim",
+            getattr(params, "stim_time_byte", None),
+        )
+
+        selected = channel or self._selected_leg_channel()
+        if selected == "right":
+            self._set_left_grade(getattr(params, "right_grade", 0))
+            self._set_combo_index("comboBox_left_scheme", getattr(params, "right_scheme_idx", 0))
+            self._set_freq_value(getattr(params, "right_freq_idx", self._FREQ_DEFAULT_MS))
+            self._set_combo_index("comboBox_pulse_width", getattr(params, "right_pulse_width_idx", 0))
+            return
+        self._set_left_grade(getattr(params, "left_grade", 0))
+        self._set_combo_index("comboBox_left_scheme", getattr(params, "left_scheme_idx", 0))
+        self._set_freq_value(getattr(params, "left_freq_idx", self._FREQ_DEFAULT_MS))
+        self._set_combo_index("comboBox_pulse_width", getattr(params, "left_pulse_width_idx", 0))
+
+    def _save_current_params(self) -> None:
+        pid = self._current_patient_id
+        if not pid or not self.session_app:
+            return
+        try:
+            params = self._load_current_treat_params()
+            if params is None:
+                params = PatientTreatParams(
+                    patient_id=pid,
+                    left_grade=0,
+                    right_grade=0,
+                    left_scheme_idx=self._default_params.get("left_scheme_idx", 0),
+                    right_scheme_idx=self._default_params.get("left_scheme_idx", 0),
+                    left_freq_idx=self._default_params.get("left_freq_idx", 0),
+                    right_freq_idx=self._default_params.get("left_freq_idx", 0),
+                    left_pulse_width_idx=0,
+                    right_pulse_width_idx=0,
+                )
+            current_grade = self._get_left_grade()
+            current_scheme_idx = self._get_combo_index("comboBox_left_scheme") or 0
+            current_freq_idx = self._get_freq_value()
+            current_pulse_width_idx = self._get_combo_index("comboBox_pulse_width") or 0
+            current_stim_time_byte = self._get_time_scrollbar_value("horizontalScrollBar_time_stim")
+            if self._selected_leg_channel() == "right":
+                left_grade = getattr(params, "left_grade", 0)
+                left_scheme_idx = getattr(params, "left_scheme_idx", self._default_params.get("left_scheme_idx", 0))
+                left_freq_idx = getattr(params, "left_freq_idx", self._default_params.get("left_freq_idx", 0))
+                left_pulse_width_idx = getattr(params, "left_pulse_width_idx", 0)
+                right_grade = current_grade
+                right_scheme_idx = current_scheme_idx
+                right_freq_idx = current_freq_idx
+                right_pulse_width_idx = current_pulse_width_idx
+            else:
+                left_grade = current_grade
+                left_scheme_idx = current_scheme_idx
+                left_freq_idx = current_freq_idx
+                left_pulse_width_idx = current_pulse_width_idx
+                right_grade = getattr(params, "right_grade", 0)
+                right_scheme_idx = getattr(params, "right_scheme_idx", self._default_params.get("left_scheme_idx", 0))
+                right_freq_idx = getattr(params, "right_freq_idx", self._default_params.get("left_freq_idx", 0))
+                right_pulse_width_idx = getattr(params, "right_pulse_width_idx", 0)
+            self.session_app.save_treat_params(
+                PatientTreatParams(
+                    patient_id=pid,
+                    left_grade=left_grade,
+                    right_grade=right_grade,
+                    left_scheme_idx=left_scheme_idx,
+                    right_scheme_idx=right_scheme_idx,
+                    left_freq_idx=left_freq_idx,
+                    right_freq_idx=right_freq_idx,
+                    left_pulse_width_idx=left_pulse_width_idx,
+                    right_pulse_width_idx=right_pulse_width_idx,
+                    stim_time_byte=current_stim_time_byte,
+                )
+            )
+        except Exception:
+            self._logger.exception("保存治疗参数失败: %s", pid)
+
+    # ----------------- 对外：用于上层导航判断 -----------------
+    def ensure_stopped_before_next(self) -> bool:
+        """若仍在运行，弹提示并返回 False。"""
+        # 下位机离线：允许直接进入下一步（避免被运行态卡住）
+        if not self._hardware_online:
+            return True
+        if not self._test_running:
+            return True
+        try:
+            TipsDialog.show_tips(self.ui, "请先点击“停止测试”，停止后才能进入下一步")
+        except Exception:
+            self._logger.exception("弹出提示失败")
+        return False
+
+
+class _CircleMaskResizeFilter(QObject):
+    """Resize 时重新为 host 设置圆形 mask。"""
+
+    def __init__(self, host):
+        super().__init__(host)
+        self._host = host
+
+    def eventFilter(self, obj, event) -> bool:
+        if obj == self._host and event.type() == QEvent.Resize:
+            w, h = self._host.width(), self._host.height()
+            if w > 0 and h > 0:
+                d = min(w, h)
+                x, y = (w - d) // 2, (h - d) // 2
+                self._host.setMask(QRegion(x, y, d, d, QRegion.Ellipse))
+        return False
