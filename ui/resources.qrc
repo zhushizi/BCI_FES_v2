@@ -71,6 +71,9 @@
         <file>pic/icon_ssmvep.png</file>
         <file>pic/icon_hosipital.png</file>
         <file>pic/icon_stim_position.png</file>
+        <file>pic/icon_mA.png</file>
+        <file>pic/icon_wave.png</file>
+        <file>pic/icon_time.png</file>
 
     </qresource>
 

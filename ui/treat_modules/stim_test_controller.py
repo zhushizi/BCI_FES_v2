@@ -361,6 +361,8 @@ class StimTestController:
         safe_connect(self._logger, getattr(reset_btn, "clicked", None), self._on_reset_stim_clicked)
 
         self._init_left_circle_widget()
+        self._ensure_left_grade_controls_visible()
+        QTimer.singleShot(0, self._ensure_left_grade_controls_visible)
         self._hide_right_channel_widgets()
         self._update_freq_value_label()
         self._init_time_scrollbars()
@@ -428,6 +430,15 @@ class StimTestController:
         y = (h - d) // 2
         region = QRegion(x, y, d, d, QRegion.Ellipse)
         host.setMask(region)
+
+    def _ensure_left_grade_controls_visible(self) -> None:
+        """确保强度加减分段条不被背景或运行时控件覆盖。"""
+        for name in ("pushButton_left_turnsmall", "label_left_grade", "pushButton_left_turnbig"):
+            widget = get_ui_attr(self.ui, name)
+            if widget is None:
+                continue
+            safe_call(self._logger, getattr(widget, "setVisible", None), True)
+            safe_call(self._logger, getattr(widget, "raise_", None))
 
     def set_current_patient(self, patient: dict | None) -> None:
         """设置当前患者并恢复缓存参数（患者绑定）。"""
@@ -554,6 +565,7 @@ class StimTestController:
         app = QApplication.instance()
         if app is not None:
             app.processEvents()
+        self._ensure_left_grade_controls_visible()
 
     def _interaction_allowed(self) -> bool:
         """开始/停止与参数调节交叉冷却中则拒绝操作。"""
