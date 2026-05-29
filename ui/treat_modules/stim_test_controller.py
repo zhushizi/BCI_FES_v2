@@ -411,13 +411,12 @@ class StimTestController:
             layout = QVBoxLayout(host)
             layout.setContentsMargins(0, 0, 0, 0)
         self._left_circle_widget = CircleLevelWidget(host)
-        self._left_circle_widget.set_level_range(0, 99)
+        self._left_circle_widget.set_level_range(0, self._CURRENT_MAX_OUTPUT)
         self._left_circle_widget.set_read_only(True)
         self._left_circle_widget.set_level(self._get_left_grade())
         layout.addWidget(self._left_circle_widget)
 
-        host.installEventFilter(_CircleMaskResizeFilter(host))
-        QTimer.singleShot(0, lambda: self._apply_circle_mask_to_host(host))
+        host.clearMask()
 
     def _apply_circle_mask_to_host(self, host) -> None:
         """将 host 裁剪为圆形显示与点击区域（以短边为直径居中）。"""
