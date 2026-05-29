@@ -89,9 +89,7 @@ class TreatRecordDialog(BaseUiDialog):
         records = self.session_app.get_patient_treat_sessions_by_patient(self.patient_id)
         self._table.load_records(
             records,
-            on_pdf_clicked=self._on_pdf_clicked,
-            on_export_pdf_clicked=self._on_export_pdf_clicked,
-            on_print_clicked=self._on_print_clicked,
+            on_view_clicked=self._on_pdf_clicked,
             patient_name=self.patient_name or "",
         )
 

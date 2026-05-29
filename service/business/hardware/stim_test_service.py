@@ -5,6 +5,7 @@ from enum import Enum
 from typing import Optional
 
 from infrastructure.hardware import SerialHardware
+from infrastructure.hardware.serial_port_catalog import SerialPortEntry, enumerate_serial_ports
 from service.business.protocol.stim_frame import StimFrame
 
 
@@ -79,7 +80,14 @@ class StimTestService:
     # --------- 串口管理（供应用层调用） ---------
     def list_available_ports(self) -> list[str]:
         try:
-            return [port.device for port in SerialHardware.list_available_ports()]
+            return [entry.device for entry in self.list_port_entries()]
+        except Exception as exc:
+            self.logger.warning("获取串口列表失败: %s", exc)
+            return []
+
+    def list_port_entries(self) -> list[SerialPortEntry]:
+        try:
+            return list(enumerate_serial_ports())
         except Exception as exc:
             self.logger.warning("获取串口列表失败: %s", exc)
             return []

@@ -34,27 +34,26 @@
   <widget class="QLabel" name="label_logo">
    <property name="geometry">
     <rect>
-     <x>47</x>
-     <y>24</y>
-     <width>201</width>
-     <height>54</height>
+     <x>24</x>
+     <y>31</y>
+     <width>40</width>
+     <height>34</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>123</width>
-     <height>54</height>
+     <width>40</width>
+     <height>34</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>1230</width>
-     <height>54</height>
+     <width>40</width>
+     <height>34</height>
     </size>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-image: url(:/main/pic/main_logo.png);
-border-image: url(:/login/pic/login_HW.png);</string>
+    <string notr="true">border-image: url(:/login/pic/login_zenith.png);</string>
    </property>
    <property name="text">
     <string/>
@@ -63,33 +62,58 @@ border-image: url(:/login/pic/login_HW.png);</string>
   <widget class="QLabel" name="label_chanpinName">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>20</y>
-     <width>831</width>
-     <height>61</height>
+     <x>80</x>
+     <y>22</y>
+     <width>441</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>271</width>
+     <height>31</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>3000</width>
+     <height>31</height>
+    </size>
    </property>
    <property name="font">
     <font>
-     <pointsize>36</pointsize>
+     <pointsize>18</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: white;
+    <string notr="true">color: black;
 </string>
    </property>
    <property name="text">
-    <string>非侵入式脑机接口下肢康复训练系统</string>
+    <string>非侵入式脑机接口下肢功能性电刺激系统</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>1572</x>
-     <y>30</y>
-     <width>111</width>
-     <height>41</height>
+     <x>1657</x>
+     <y>31</y>
+     <width>56</width>
+     <height>34</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>56</width>
+     <height>34</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>56</width>
+     <height>34</height>
+    </size>
    </property>
    <property name="styleSheet">
     <string notr="true">border-image: url(:/main/pic/main_status_rect.png);</string>
@@ -101,22 +125,22 @@ border-image: url(:/login/pic/login_HW.png);</string>
   <widget class="QLabel" name="label_pingpong">
    <property name="geometry">
     <rect>
-     <x>1592</x>
-     <y>39</y>
-     <width>25</width>
-     <height>25</height>
+     <x>1753</x>
+     <y>41</y>
+     <width>16</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>25</width>
-     <height>25</height>
+     <width>16</width>
+     <height>16</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>25</width>
-     <height>25</height>
+     <width>16</width>
+     <height>16</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -129,22 +153,22 @@ border-image: url(:/login/pic/login_HW.png);</string>
   <widget class="QLabel" name="label_wifi">
    <property name="geometry">
     <rect>
-     <x>1634</x>
-     <y>41</y>
-     <width>30</width>
-     <height>20</height>
+     <x>1677</x>
+     <y>40</y>
+     <width>17</width>
+     <height>18</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>30</width>
-     <height>20</height>
+     <width>17</width>
+     <height>18</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>30</width>
-     <height>20</height>
+     <width>17</width>
+     <height>18</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -157,22 +181,22 @@ border-image: url(:/login/pic/login_HW.png);</string>
   <widget class="QPushButton" name="pushButton_quit">
    <property name="geometry">
     <rect>
-     <x>1860</x>
-     <y>40</y>
-     <width>22</width>
-     <height>22</height>
+     <x>1870</x>
+     <y>39</y>
+     <width>20</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>22</width>
-     <height>22</height>
+     <width>20</width>
+     <height>20</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>22</width>
-     <height>22</height>
+     <width>20</width>
+     <height>20</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -185,22 +209,22 @@ border-image: url(:/login/pic/login_HW.png);</string>
   <widget class="QPushButton" name="pushButton_small">
    <property name="geometry">
     <rect>
-     <x>1793</x>
-     <y>51</y>
-     <width>22</width>
-     <height>4</height>
+     <x>1821</x>
+     <y>40</y>
+     <width>20</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>22</width>
-     <height>4</height>
+     <width>20</width>
+     <height>20</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>22</width>
-     <height>4</height>
+     <width>20</width>
+     <height>20</height>
     </size>
    </property>
    <property name="styleSheet">
@@ -208,52 +232,6 @@ border-image: url(:/login/pic/login_HW.png);</string>
    </property>
    <property name="text">
     <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_10">
-   <property name="geometry">
-    <rect>
-     <x>1729</x>
-     <y>134</y>
-     <width>175</width>
-     <height>48</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>175</width>
-     <height>48</height>
-    </size>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border-image: url(:/treat/pic/treat_patient.png);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_patient">
-   <property name="geometry">
-    <rect>
-     <x>1787</x>
-     <y>142</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #959595;</string>
-   </property>
-   <property name="text">
-    <string>未选择患者</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QTabWidget" name="tabWidget_main">
@@ -284,7 +262,7 @@ QTabWidget#tabWidget_main QTabBar::tab {
 }</string>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -293,11 +271,23 @@ QTabWidget#tabWidget_main QTabBar::tab {
     <widget class="QPushButton" name="pushButton_treat">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>40</x>
        <y>10</y>
-       <width>141</width>
-       <height>121</height>
+       <width>77</width>
+       <height>77</height>
       </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
      </property>
      <property name="styleSheet">
       <string notr="true">border-image: url(:/main/pic/main_treat_on.png);</string>
@@ -309,10 +299,10 @@ QTabWidget#tabWidget_main QTabBar::tab {
     <widget class="QTabWidget" name="tabWidget">
      <property name="geometry">
       <rect>
-       <x>300</x>
-       <y>-9</y>
-       <width>1648</width>
-       <height>990</height>
+       <x>150</x>
+       <y>0</y>
+       <width>1831</width>
+       <height>1021</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -323,8 +313,8 @@ QTabWidget#tabWidget_main QTabBar::tab {
      </property>
      <property name="maximumSize">
       <size>
-       <width>1648</width>
-       <height>990</height>
+       <width>16480</width>
+       <height>9999</height>
       </size>
      </property>
      <property name="tabletTracking">
@@ -364,49 +354,656 @@ QTabWidget#tabWidget QTabBar::tab {
       <attribute name="title">
        <string>Tab 1</string>
       </attribute>
-      <widget class="QPushButton" name="pushButton_tab1home">
-       <property name="geometry">
-        <rect>
-         <x>51</x>
-         <y>45</y>
-         <width>41</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/treat/pic/treat_home.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
       <widget class="QPushButton" name="pushButton_tab1select">
        <property name="geometry">
         <rect>
-         <x>180</x>
-         <y>45</y>
-         <width>151</width>
-         <height>41</height>
+         <x>20</x>
+         <y>20</y>
+         <width>161</width>
+         <height>40</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/treat/pic/treat_select.png);</string>
+        <string notr="true">QPushButton#pushButton_tab1select {
+    background: transparent;
+    border: none;
+    color: #1F1F1F;
+    text-align: left;
+    padding-left: 8px;
+}</string>
        </property>
        <property name="text">
-        <string/>
+        <string>选择患者</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_tab1new">
        <property name="geometry">
         <rect>
-         <x>370</x>
-         <y>45</y>
-         <width>151</width>
-         <height>41</height>
+         <x>200</x>
+         <y>24</y>
+         <width>90</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#pushButton_tab1new {
+    background-color: transparent;
+    border: 1px solid #4B86FC;
+    border-radius: 10px;
+    color: #4B86FC;
+    padding: 4px 10px;
+}
+QPushButton#pushButton_tab1new:hover {
+    background-color: rgba(75, 134, 252, 0.12);
+    border: 1px solid #6B9BFD;
+    color: #3A6FE0;
+}
+QPushButton#pushButton_tab1new:pressed {
+    background-color: rgba(75, 134, 252, 0.24);
+    border: 1px solid #3A6FE0;
+    color: #2A5FD0;
+    padding-top: 5px;
+    padding-bottom: 3px;
+}</string>
+       </property>
+       <property name="text">
+        <string>+ 新建</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_10">
+       <property name="geometry">
+        <rect>
+         <x>360</x>
+         <y>10</y>
+         <width>215</width>
+         <height>215</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>215</width>
+         <height>215</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>215</width>
+         <height>215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/treat/pic/treat_patient.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_patient">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>180</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #959595;</string>
+       </property>
+       <property name="text">
+        <string>未选择患者</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_8">
+       <property name="geometry">
+        <rect>
+         <x>590</x>
+         <y>10</y>
+         <width>1141</width>
+         <height>215</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1141</width>
+         <height>215</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>1141</width>
+         <height>215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 8px</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QWidget" name="widget_patient_select" native="true">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>301</width>
+         <height>841</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/treat/pic/treat_new.png);</string>
+        <string notr="true">QWidget#widget_patient_select {
+    background: transparent;
+}</string>
+       </property>
+      </widget>
+      <widget class="Line" name="line_3">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>240</y>
+         <width>1441</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_4">
+       <property name="geometry">
+        <rect>
+         <x>323</x>
+         <y>-10</y>
+         <width>20</width>
+         <height>971</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_16">
+       <property name="geometry">
+        <rect>
+         <x>710</x>
+         <y>40</y>
+         <width>48</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/patient/pic/patient_icon_high_weight.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_32">
+       <property name="geometry">
+        <rect>
+         <x>1100</x>
+         <y>40</y>
+         <width>48</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/patient/pic/patient_icon_sex.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_45">
+       <property name="geometry">
+        <rect>
+         <x>710</x>
+         <y>140</y>
+         <width>48</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/patient/pic/patient_icon_birthday.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_46">
+       <property name="geometry">
+        <rect>
+         <x>1100</x>
+         <y>140</y>
+         <width>48</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/patient/pic/patient_icon_age.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_52">
+       <property name="geometry">
+        <rect>
+         <x>1450</x>
+         <y>140</y>
+         <width>48</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/patient/pic/patient_icon_treat_time.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_53">
+       <property name="geometry">
+        <rect>
+         <x>1450</x>
+         <y>40</y>
+         <width>48</width>
+         <height>48</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>48</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+border-image: url(:/patient/pic/patient_icon_number.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_54">
+       <property name="geometry">
+        <rect>
+         <x>770</x>
+         <y>40</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>身高、体重</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_55">
+       <property name="geometry">
+        <rect>
+         <x>1160</x>
+         <y>40</y>
+         <width>31</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>性别</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_56">
+       <property name="geometry">
+        <rect>
+         <x>1510</x>
+         <y>40</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>就诊编号</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_57">
+       <property name="geometry">
+        <rect>
+         <x>770</x>
+         <y>140</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>出生日期</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_58">
+       <property name="geometry">
+        <rect>
+         <x>1160</x>
+         <y>140</y>
+         <width>53</width>
+         <height>15</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>年龄</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_59">
+       <property name="geometry">
+        <rect>
+         <x>1510</x>
+         <y>140</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>就诊时间</string>
+       </property>
+      </widget>
+      <widget class="Line" name="line_5">
+       <property name="geometry">
+        <rect>
+         <x>980</x>
+         <y>50</y>
+         <width>20</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_6">
+       <property name="geometry">
+        <rect>
+         <x>1350</x>
+         <y>40</y>
+         <width>16</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_height_weight">
+       <property name="geometry">
+        <rect>
+         <x>770</x>
+         <y>60</y>
+         <width>157</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F3F6;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_sex">
+       <property name="geometry">
+        <rect>
+         <x>1160</x>
+         <y>60</y>
+         <width>157</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F3F6;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_patient_id">
+       <property name="geometry">
+        <rect>
+         <x>1510</x>
+         <y>60</y>
+         <width>157</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F3F6;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_birthday">
+       <property name="geometry">
+        <rect>
+         <x>770</x>
+         <y>160</y>
+         <width>157</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F3F6;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_age">
+       <property name="geometry">
+        <rect>
+         <x>1160</x>
+         <y>160</y>
+         <width>157</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F3F6;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_visit_time">
+       <property name="geometry">
+        <rect>
+         <x>1510</x>
+         <y>160</y>
+         <width>157</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>157</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F3F6;</string>
        </property>
        <property name="text">
         <string/>
@@ -415,11 +1012,23 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QPushButton" name="pushButton_gou_ssvep">
        <property name="geometry">
         <rect>
-         <x>640</x>
-         <y>170</y>
-         <width>311</width>
-         <height>341</height>
+         <x>830</x>
+         <y>270</y>
+         <width>443</width>
+         <height>310</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -428,7 +1037,7 @@ QTabWidget#tabWidget QTabBar::tab {
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#pushButton_gou_ssvep { background-color: #ffffff; border-radius: 42px; border: none; }</string>
+        <string notr="true">QPushButton#pushButton_gou_ssvep { background-color: #ffffff; border-radius: 8px; border: none; }</string>
        </property>
        <property name="text">
         <string/>
@@ -437,11 +1046,23 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QPushButton" name="pushButton_gou_ssmvep">
        <property name="geometry">
         <rect>
-         <x>150</x>
-         <y>170</y>
-         <width>311</width>
-         <height>341</height>
+         <x>360</x>
+         <y>270</y>
+         <width>443</width>
+         <height>310</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -450,7 +1071,7 @@ QTabWidget#tabWidget QTabBar::tab {
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#pushButton_gou_ssmvep { background-color: #ffffff; border-radius: 42px; border: none; }</string>
+        <string notr="true">QPushButton#pushButton_gou_ssmvep { background-color: #ffffff; border-radius: 8px; border: none; }</string>
        </property>
        <property name="text">
         <string/>
@@ -459,11 +1080,23 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QPushButton" name="pushButton_gou_mi">
        <property name="geometry">
         <rect>
-         <x>1140</x>
-         <y>170</y>
-         <width>311</width>
-         <height>341</height>
+         <x>1300</x>
+         <y>270</y>
+         <width>443</width>
+         <height>310</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -472,7 +1105,7 @@ QTabWidget#tabWidget QTabBar::tab {
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#pushButton_gou_mi { background-color: #ffffff; border-radius: 42px; border: none; }</string>
+        <string notr="true">QPushButton#pushButton_gou_mi { background-color: #ffffff; border-radius: 8px; border: none; }</string>
        </property>
        <property name="text">
         <string/>
@@ -481,11 +1114,23 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QPushButton" name="pushButton_tai_ssvep">
        <property name="geometry">
         <rect>
-         <x>640</x>
-         <y>570</y>
-         <width>311</width>
-         <height>341</height>
+         <x>830</x>
+         <y>620</y>
+         <width>443</width>
+         <height>310</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -494,7 +1139,7 @@ QTabWidget#tabWidget QTabBar::tab {
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#pushButton_tai_ssvep { background-color: #ffffff; border-radius: 42px; border: none; }</string>
+        <string notr="true">QPushButton#pushButton_tai_ssvep { background-color: #ffffff; border-radius: 8px; border: none; }</string>
        </property>
        <property name="text">
         <string/>
@@ -503,11 +1148,23 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QPushButton" name="pushButton_tai_ssmvep">
        <property name="geometry">
         <rect>
-         <x>150</x>
-         <y>570</y>
-         <width>311</width>
-         <height>341</height>
+         <x>360</x>
+         <y>620</y>
+         <width>443</width>
+         <height>310</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -516,7 +1173,7 @@ QTabWidget#tabWidget QTabBar::tab {
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#pushButton_tai_ssmvep { background-color: #ffffff; border-radius: 42px; border: none; }</string>
+        <string notr="true">QPushButton#pushButton_tai_ssmvep { background-color: #ffffff; border-radius: 8px; border: none; }</string>
        </property>
        <property name="text">
         <string/>
@@ -525,11 +1182,23 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QPushButton" name="pushButton_tai_mi">
        <property name="geometry">
         <rect>
-         <x>1140</x>
-         <y>570</y>
-         <width>311</width>
-         <height>341</height>
+         <x>1300</x>
+         <y>620</y>
+         <width>443</width>
+         <height>310</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>443</width>
+         <height>310</height>
+        </size>
        </property>
        <property name="font">
         <font>
@@ -538,7 +1207,7 @@ QTabWidget#tabWidget QTabBar::tab {
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#pushButton_tai_mi { background-color: #ffffff; border-radius: 42px; border: none; }</string>
+        <string notr="true">QPushButton#pushButton_tai_mi { background-color: #ffffff; border-radius: 8px; border: none; }</string>
        </property>
        <property name="text">
         <string/>
@@ -547,8 +1216,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_23">
        <property name="geometry">
         <rect>
-         <x>710</x>
-         <y>420</y>
+         <x>970</x>
+         <y>500</y>
          <width>161</width>
          <height>31</height>
         </rect>
@@ -572,8 +1241,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_24">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>430</y>
+         <x>510</x>
+         <y>520</y>
          <width>141</width>
          <height>21</height>
         </rect>
@@ -597,8 +1266,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_25">
        <property name="geometry">
         <rect>
-         <x>1230</x>
-         <y>420</y>
+         <x>1450</x>
+         <y>500</y>
          <width>131</width>
          <height>31</height>
         </rect>
@@ -622,8 +1291,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_27">
        <property name="geometry">
         <rect>
-         <x>710</x>
-         <y>830</y>
+         <x>980</x>
+         <y>860</y>
          <width>161</width>
          <height>31</height>
         </rect>
@@ -647,8 +1316,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_28">
        <property name="geometry">
         <rect>
-         <x>240</x>
-         <y>830</y>
+         <x>520</x>
+         <y>870</y>
          <width>141</width>
          <height>31</height>
         </rect>
@@ -672,8 +1341,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_29">
        <property name="geometry">
         <rect>
-         <x>1230</x>
-         <y>830</y>
+         <x>1460</x>
+         <y>860</y>
          <width>131</width>
          <height>31</height>
         </rect>
@@ -697,8 +1366,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_icon_ssvep_gou">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>240</y>
+         <x>970</x>
+         <y>330</y>
          <width>146</width>
          <height>135</height>
         </rect>
@@ -725,8 +1394,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_icon_ssvep_tai">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>640</y>
+         <x>980</x>
+         <y>700</y>
          <width>146</width>
          <height>135</height>
         </rect>
@@ -753,8 +1422,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_icon_ssmvep_gou">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>230</y>
+         <x>510</x>
+         <y>320</y>
          <width>138</width>
          <height>146</height>
         </rect>
@@ -781,8 +1450,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_icon_ssmvep_tai">
        <property name="geometry">
         <rect>
-         <x>240</x>
-         <y>640</y>
+         <x>510</x>
+         <y>700</y>
          <width>138</width>
          <height>146</height>
         </rect>
@@ -809,8 +1478,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_icon_mi_gou">
        <property name="geometry">
         <rect>
-         <x>1220</x>
-         <y>230</y>
+         <x>1440</x>
+         <y>330</y>
          <width>156</width>
          <height>141</height>
         </rect>
@@ -837,8 +1506,8 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QLabel" name="label_icon_mi_tai">
        <property name="geometry">
         <rect>
-         <x>1220</x>
-         <y>640</y>
+         <x>1440</x>
+         <y>680</y>
          <width>156</width>
          <height>141</height>
         </rect>
@@ -870,45 +1539,54 @@ QTabWidget#tabWidget QTabBar::tab {
       <widget class="QTableWidget" name="tableWidget_patient_2">
        <property name="geometry">
         <rect>
-         <x>-24</x>
-         <y>113</y>
+         <x>80</x>
+         <y>100</y>
          <width>1651</width>
          <height>831</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>-1</pointsize>
         </font>
        </property>
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">QTableWidget#tableWidget_patient_2 QHeaderView::section {
-	background-color: #EDF3FF;
-	color: #929292;
-	border: none;
-	padding: 8px;
-	font-size: 18px;
-}
-QTableWidget#tableWidget_patient_2 {
+        <string notr="true">QTableWidget#tableWidget_patient_2 {
     outline: none;
+    border: 1px solid #E6EAF2;
+    border-radius: 8px;
+    gridline-color: transparent;
+    background-color: #FFFFFF;
+    alternate-background-color: #F7F7F7;
+    selection-background-color: #E8F1FF;
+    selection-color: #1F1F1F;
+    font-size: 16px;
+}
+QTableWidget#tableWidget_patient_2 QHeaderView::section {
+    background-color: #EDF3FF;
+    color: #6B7A99;
     border: none;
+    border-bottom: 1px solid #D6E4FF;
+    padding: 12px 8px;
+    font-size: 16px;
+    font-weight: 600;
 }
 QTableWidget#tableWidget_patient_2::item {
-    outline: none;
+    padding: 12px 8px;
     border: none;
-}
-QTableWidget#tableWidget_patient_2::item:focus {
-    outline: none;
-    border: none;
-    background: transparent;
+    color: #333333;
 }
 QTableWidget#tableWidget_patient_2::item:selected {
-    outline: none;
-    border: none;
-    background: transparent;
+    background-color: #E8F1FF;
+    color: #1F1F1F;
+}
+QTableWidget#tableWidget_patient_2::item:selected:active,
+QTableWidget#tableWidget_patient_2::item:selected:!active {
+    background-color: #E8F1FF;
+    color: #1F1F1F;
 }</string>
        </property>
        <property name="horizontalScrollBarPolicy">
@@ -917,11 +1595,14 @@ QTableWidget#tableWidget_patient_2::item:selected {
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
        <property name="selectionMode">
         <enum>QAbstractItemView::NoSelection</enum>
        </property>
        <property name="showGrid">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="horizontalHeaderDefaultSectionSize">
         <number>205</number>
@@ -991,63 +1672,120 @@ QTableWidget#tableWidget_patient_2::item:selected {
       <widget class="QPushButton" name="pushButton_patient_in">
        <property name="geometry">
         <rect>
-         <x>29</x>
-         <y>43</y>
-         <width>71</width>
+         <x>1473</x>
+         <y>40</y>
+         <width>72</width>
          <height>41</height>
         </rect>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/patient/pic/patient_in.png);</string>
+        <string notr="true">QPushButton {
+background: transparent;
+border: 1px solid #4B86FC;
+color: #4B86FC;
+border-radius: 10px;
+padding: 6px 12px;
+}
+QPushButton:hover { background: rgba(75,134,252,0.08); }
+QPushButton:pressed { background: rgba(75,134,252,0.16); }</string>
        </property>
        <property name="text">
-        <string/>
+        <string>导入</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_patient_out">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>43</y>
+         <x>1560</x>
+         <y>40</y>
          <width>71</width>
          <height>41</height>
         </rect>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/patient/pic/patient_out.png);</string>
+        <string notr="true">QPushButton {
+background: transparent;
+border: 1px solid #4B86FC;
+color: #4B86FC;
+border-radius: 10px;
+padding: 6px 12px;
+}
+QPushButton:hover { background: rgba(75,134,252,0.08); }
+QPushButton:pressed { background: rgba(75,134,252,0.16); }</string>
        </property>
        <property name="text">
-        <string/>
+        <string>导出</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_new">
        <property name="geometry">
         <rect>
-         <x>240</x>
-         <y>43</y>
-         <width>141</width>
+         <x>80</x>
+         <y>35</y>
+         <width>120</width>
          <height>41</height>
         </rect>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>41</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>41</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/patient/pic/patient_new.png);</string>
+        <string notr="true">QPushButton#pushButton_new {
+background-color: transparent;
+border: 1px solid #4B86FC;
+border-radius: 10px;
+color: #4B86FC;
+padding: 4px 10px;
+}
+QPushButton#pushButton_new:hover {
+background-color: rgba(75, 134, 252, 0.12);
+border: 1px solid #6B9BFD;
+color: #3A6FE0;
+}
+QPushButton#pushButton_new:pressed {
+background-color: rgba(75, 134, 252, 0.24);
+border: 1px solid #3A6FE0;
+color: #2A5FD0;
+padding-top: 5px;
+padding-bottom: 3px;
+}</string>
        </property>
        <property name="text">
-        <string/>
+        <string>新建患者</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_search">
        <property name="geometry">
         <rect>
-         <x>732</x>
-         <y>43</y>
-         <width>700</width>
+         <x>260</x>
+         <y>34</y>
+         <width>277</width>
          <height>40</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>700</width>
+         <width>0</width>
          <height>40</height>
         </size>
        </property>
@@ -1064,8 +1802,11 @@ QTableWidget#tableWidget_patient_2::item:selected {
        </property>
        <property name="styleSheet">
         <string notr="true">QLineEdit#lineEdit_search {
+	background-color: #DDDDDD;
 	border: none;
 	border-radius: 10px;
+	color: #999999;
+	padding: 4px 10px;
 }</string>
        </property>
        <property name="text">
@@ -1078,15 +1819,15 @@ QTableWidget#tableWidget_patient_2::item:selected {
       <widget class="QLabel" name="label_search_2">
        <property name="geometry">
         <rect>
-         <x>668</x>
-         <y>38</y>
-         <width>785</width>
+         <x>242</x>
+         <y>30</y>
+         <width>341</width>
          <height>48</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>785</width>
+         <width>0</width>
          <height>48</height>
         </size>
        </property>
@@ -1099,8 +1840,9 @@ QTableWidget#tableWidget_patient_2::item:selected {
        <property name="styleSheet">
         <string notr="true">
 QLabel#label_search_2 {
-	background-color: rgb(255, 255, 255);
+	background-color: #DDDDDD;
 	border-radius: 24.37px;
+	color: #DDDDDD;
 }</string>
        </property>
        <property name="text">
@@ -1110,24 +1852,30 @@ QLabel#label_search_2 {
       <widget class="QPushButton" name="pushButton_reset">
        <property name="geometry">
         <rect>
-         <x>1486</x>
-         <y>41</y>
+         <x>600</x>
+         <y>34</y>
          <width>81</width>
          <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/patient/pic/patient_reset.png);</string>
+        <string notr="true">QPushButton {
+background: transparent;
+border: 1px solid #BDBDBD;
+color: #999999;
+border-radius: 10px;
+padding: 6px 12px;
+}</string>
        </property>
        <property name="text">
-        <string/>
+        <string>重置</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_13">
        <property name="geometry">
         <rect>
-         <x>686</x>
-         <y>48</y>
+         <x>540</x>
+         <y>40</y>
          <width>31</width>
          <height>31</height>
         </rect>
@@ -1139,31 +1887,75 @@ QLabel#label_search_2 {
         <string/>
        </property>
       </widget>
-      <widget class="QLabel" name="label_32">
+      <widget class="QPushButton" name="pushButton">
        <property name="geometry">
         <rect>
-         <x>1400</x>
-         <y>10</y>
-         <width>231</width>
-         <height>101</height>
+         <x>1646</x>
+         <y>40</y>
+         <width>71</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/main/pic/main_color.png);</string>
+        <string notr="true">QPushButton {
+background: transparent;
+border: 1px solid #F04438;
+color: #F04438;
+border-radius: 10px;
+padding: 6px 12px;
+}
+QPushButton:hover { background: rgba(240,68,56,0.08); }
+QPushButton:pressed { background: rgba(240,68,56,0.16); }</string>
+       </property>
+       <property name="text">
+        <string>删除</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_67">
+       <property name="geometry">
+        <rect>
+         <x>22</x>
+         <y>10</y>
+         <width>1745</width>
+         <height>941</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1745</width>
+         <height>941</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>1745</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 8px;</string>
        </property>
        <property name="text">
         <string/>
        </property>
       </widget>
+      <zorder>label_67</zorder>
       <zorder>tableWidget_patient_2</zorder>
       <zorder>pushButton_patient_in</zorder>
       <zorder>pushButton_patient_out</zorder>
       <zorder>pushButton_new</zorder>
-      <zorder>label_32</zorder>
       <zorder>pushButton_reset</zorder>
       <zorder>label_search_2</zorder>
       <zorder>label_13</zorder>
       <zorder>lineEdit_search</zorder>
+      <zorder>pushButton</zorder>
      </widget>
      <widget class="QWidget" name="tab_plan">
       <attribute name="title">
@@ -1172,8 +1964,8 @@ QLabel#label_search_2 {
       <widget class="QTableWidget" name="tableWidget_plan">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>113</y>
+         <x>60</x>
+         <y>80</y>
          <width>1611</width>
          <height>791</height>
         </rect>
@@ -1283,8 +2075,8 @@ QTableWidget#tableWidget_plan::item:selected {
       <widget class="QPushButton" name="pushButton_plan_in">
        <property name="geometry">
         <rect>
-         <x>29</x>
-         <y>43</y>
+         <x>60</x>
+         <y>20</y>
          <width>71</width>
          <height>41</height>
         </rect>
@@ -1299,8 +2091,8 @@ QTableWidget#tableWidget_plan::item:selected {
       <widget class="QPushButton" name="pushButton_plan_out">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>43</y>
+         <x>150</x>
+         <y>20</y>
          <width>71</width>
          <height>41</height>
         </rect>
@@ -1316,7 +2108,7 @@ QTableWidget#tableWidget_plan::item:selected {
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>43</y>
+         <y>20</y>
          <width>141</width>
          <height>41</height>
         </rect>
@@ -1328,492 +2120,1152 @@ QTableWidget#tableWidget_plan::item:selected {
         <string/>
        </property>
       </widget>
-      <widget class="QLabel" name="label_45">
-       <property name="geometry">
-        <rect>
-         <x>1340</x>
-         <y>0</y>
-         <width>301</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/main/pic/main_color.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
      </widget>
      <widget class="QWidget" name="tab_set">
       <attribute name="title">
        <string>Tab 4</string>
       </attribute>
-      <widget class="QLabel" name="label_informationbackgro">
+      <widget class="QTabWidget" name="tabWidget_set">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>240</y>
-         <width>491</width>
-         <height>541</height>
+         <x>24</x>
+         <y>20</y>
+         <width>1701</width>
+         <height>900</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background: #FFFFFF;
-border-radius: 19.43px;</string>
+        <string notr="true">QTabWidget#tabWidget_set {
+    background: transparent;
+    border: none;
+}
+QTabWidget#tabWidget_set::pane {
+    border: none;
+    background: transparent;
+}
+QWidget#tab_set_system,
+QWidget#tab_set_account,
+QWidget#tab_set_other {
+    background: transparent;
+}
+QTabBar::tab {
+    min-width: 110px;
+    height: 34px;
+    margin-right: 10px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: #4A4A4A;
+}
+QTabBar::tab:selected {
+    background: #789EFF;
+    color: #FFFFFF;
+}
+QTabBar::tab:hover:!selected {
+    background: #EEF4FF;
+    color: #4B86FC;
+}</string>
        </property>
-       <property name="text">
-        <string/>
+       <property name="currentIndex">
+        <number>2</number>
        </property>
-      </widget>
-      <widget class="QLabel" name="label_baseinformation">
-       <property name="geometry">
-        <rect>
-         <x>270</x>
-         <y>270</y>
-         <width>81</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>基础信息</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_line">
-       <property name="geometry">
-        <rect>
-         <x>270</x>
-         <y>330</y>
-         <width>400</width>
-         <height>3</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>400</width>
-         <height>3</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>400</width>
-         <height>3</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/login/pic/login_line.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_11">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>390</y>
-         <width>61</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>公司名称：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_7">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>460</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>软件名称：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_9">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>530</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>发布版本：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_12">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>590</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>完整版本：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_14">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>650</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>版权声明：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_companyname">
-       <property name="geometry">
-        <rect>
-         <x>475</x>
-         <y>390</y>
-         <width>181</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>南京华伟智脑康联科技有限公司</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_softwarename">
-       <property name="geometry">
-        <rect>
-         <x>432</x>
-         <y>457</y>
-         <width>241</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>非侵入式脑机接口--下肢康复训练系统软件</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_releaseversion">
-       <property name="geometry">
-        <rect>
-         <x>550</x>
-         <y>530</y>
-         <width>21</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>V1</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_fullreleaseversion">
-       <property name="geometry">
-        <rect>
-         <x>540</x>
-         <y>590</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>V1.0.0.0</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_15">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>660</y>
-         <width>391</width>
-         <height>91</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>南京华伟智脑康联科技有限公司对本软件拥有一切法定权利、所有权和利益，严禁对本软件进行各种形式的复制和修改，违者将追究其法律责任最终解释权归南京华伟智脑康联科技有限公司所有。</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_informationbackgro_2">
-       <property name="geometry">
-        <rect>
-         <x>810</x>
-         <y>240</y>
-         <width>471</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background: #FFFFFF;
-border-radius: 19.43px;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_16">
-       <property name="geometry">
-        <rect>
-         <x>830</x>
-         <y>260</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>重置密码</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="lineEdit_resetpwd">
-       <property name="geometry">
-        <rect>
-         <x>890</x>
-         <y>310</y>
-         <width>311</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid #789EFF;
-border-radius: 5px;</string>
-       </property>
-       <property name="placeholderText">
-        <string>请输入管理员密码</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_resetpwdcomfirm">
-       <property name="geometry">
-        <rect>
-         <x>1160</x>
-         <y>360</y>
-         <width>101</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background: #789EFF;
-color: #FFFFFF;
+       <widget class="QWidget" name="tab_set_system">
+        <attribute name="title">
+         <string>系统信息</string>
+        </attribute>
+        <widget class="QLabel" name="label_11">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>34</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>公司名称:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_companyname">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>34</y>
+           <width>360</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>南京华伟智脑康联科技有限公司</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_7">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>86</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>软件名称:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_softwarename">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>86</y>
+           <width>420</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>非侵入式脑机接口神经肌肉电刺激系统</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_9">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>190</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>发布版本:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_releaseversion">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>190</y>
+           <width>111</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>V1</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_12">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>242</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>完整版本:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_fullreleaseversion">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>242</y>
+           <width>141</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>V1.0.0.0</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_14">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>294</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>版权声明:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_15">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>294</y>
+           <width>910</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>南京华伟智脑康联科技有限公司对本软件拥有一切法定权利、所有权和利益，严禁对本软件进行各种形式的复制和修改，违者将追究其法律责任。最终解释权归南京华伟华智脑康联科技有限公司所有。</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_set_watermark_1">
+         <property name="geometry">
+          <rect>
+           <x>980</x>
+           <y>120</y>
+           <width>695</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/set/pic/big_icon.png);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_26">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>138</y>
+           <width>71</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>外控型软件：</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_31">
+         <property name="geometry">
+          <rect>
+           <x>100</x>
+           <y>138</y>
+           <width>191</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>ZNKL-MFR11AK-V1.0.0.0</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_34">
+         <property name="geometry">
+          <rect>
+           <x>440</x>
+           <y>138</y>
+           <width>71</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>嵌入式软件：</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_42">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>138</y>
+           <width>191</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>ZNKL-MFR11A-V1.0.0.0</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_43">
+         <property name="geometry">
+          <rect>
+           <x>440</x>
+           <y>242</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>完整版本:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_releaseversion_2">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>190</y>
+           <width>111</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>V1</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_49">
+         <property name="geometry">
+          <rect>
+           <x>440</x>
+           <y>190</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>发布版本:</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_fullreleaseversion_2">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>242</y>
+           <width>141</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #4A4A4A;</string>
+         </property>
+         <property name="text">
+          <string>V1.0.0.0</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_set_account">
+        <attribute name="title">
+         <string>账号管理</string>
+        </attribute>
+        <widget class="QLabel" name="label_account_title">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>28</y>
+           <width>100</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #1F1F1F;
+font-size: 16px;
+font-weight: 600;</string>
+         </property>
+         <property name="text">
+          <string>密码管理</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_account_adminpwd">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>88</y>
+           <width>100</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>管理员密码:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_resetpwd">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>82</y>
+           <width>320</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;</string>
+         </property>
+         <property name="placeholderText">
+          <string>请输入管理员密码</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_account_oldpwd">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>142</y>
+           <width>100</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>输入旧密码:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_set_oldpwd">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>136</y>
+           <width>320</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;</string>
+         </property>
+         <property name="placeholderText">
+          <string>请输入旧密码</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_account_newpwd">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>196</y>
+           <width>100</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>输入新密码:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_set_newpwd">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>190</y>
+           <width>320</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;</string>
+         </property>
+         <property name="placeholderText">
+          <string>请输入新密码</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_account_confirmpwd">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>250</y>
+           <width>100</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #6B7280;</string>
+         </property>
+         <property name="text">
+          <string>确认新密码:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="lineEdit_set_confirmpwd">
+         <property name="geometry">
+          <rect>
+           <x>140</x>
+           <y>244</y>
+           <width>320</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;</string>
+         </property>
+         <property name="placeholderText">
+          <string>请确认新密码</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_set_cancel">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>308</y>
+           <width>80</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+background: #FFFFFF;
+border: 1px solid #AEB8C5;
+border-radius: 8px;
+color: #6B7280;
+}</string>
+         </property>
+         <property name="text">
+          <string>取消</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_resetpwdcomfirm">
+         <property name="geometry">
+          <rect>
+           <x>116</x>
+           <y>308</y>
+           <width>80</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+background: #789EFF;
 border: none;
-border-radius: 8px;</string>
-       </property>
-       <property name="text">
-        <string>确定</string>
-       </property>
+border-radius: 8px;
+color: #FFFFFF;
+}</string>
+         </property>
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_set_watermark_2">
+         <property name="geometry">
+          <rect>
+           <x>980</x>
+           <y>120</y>
+           <width>695</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/set/pic/big_icon.png);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_logout">
+         <property name="geometry">
+          <rect>
+           <x>380</x>
+           <y>308</y>
+           <width>80</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>36</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+background: #e84716;
+border: none;
+border-radius: 8px;
+color: #FFFFFF;
+}</string>
+         </property>
+         <property name="text">
+          <string>退出登录</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_set_other">
+        <attribute name="title">
+         <string>其他设置</string>
+        </attribute>
+        <widget class="QFrame" name="frame_hospital_info">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>24</y>
+           <width>760</width>
+           <height>171</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#frame_hospital_info {
+background: #FFFFFF;
+border: 1px solid #EEF1F5;
+border-radius: 12px;
+}</string>
+         </property>
+         <widget class="QLabel" name="label_hospital_info_title">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>16</y>
+            <width>120</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #1F1F1F;
+font-size: 16px;
+font-weight: 600;</string>
+          </property>
+          <property name="text">
+           <string>医院机构信息</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_hospital_name">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>56</y>
+            <width>61</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #6B7280;</string>
+          </property>
+          <property name="text">
+           <string>医院名称:</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="lineEdit_hospital_name">
+          <property name="geometry">
+           <rect>
+            <x>96</x>
+            <y>50</y>
+            <width>320</width>
+            <height>36</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;</string>
+          </property>
+          <property name="placeholderText">
+           <string>医院名称</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_department_name">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>102</y>
+            <width>61</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #6B7280;</string>
+          </property>
+          <property name="text">
+           <string>科室名称:</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="lineEdit_department_name">
+          <property name="geometry">
+           <rect>
+            <x>96</x>
+            <y>96</y>
+            <width>320</width>
+            <height>36</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;</string>
+          </property>
+          <property name="placeholderText">
+           <string>科室名称</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_other_reset">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>136</y>
+            <width>80</width>
+            <height>28</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+background: #FFFFFF;
+border: 1px solid #AEB8C5;
+border-radius: 8px;
+color: #6B7280;
+}</string>
+          </property>
+          <property name="text">
+           <string>重置</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_other_confirm">
+          <property name="geometry">
+           <rect>
+            <x>112</x>
+            <y>136</y>
+            <width>80</width>
+            <height>28</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+background: #789EFF;
+border: none;
+border-radius: 8px;
+color: #FFFFFF;
+}</string>
+          </property>
+          <property name="text">
+           <string>确认</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QFrame" name="frame_volume">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>226</y>
+           <width>760</width>
+           <height>150</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#frame_volume {
+background: #FFFFFF;
+border: 1px solid #EEF1F5;
+border-radius: 12px;
+}</string>
+         </property>
+         <widget class="QLabel" name="label_17">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>16</y>
+            <width>80</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #1F1F1F;
+font-size: 16px;
+font-weight: 600;</string>
+          </property>
+          <property name="text">
+           <string>音量设置</string>
+          </property>
+         </widget>
+         <widget class="QFrame" name="frame_volume_inner">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>54</y>
+            <width>360</width>
+            <height>52</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QFrame#frame_volume_inner {
+background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+}</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_vol_shutopen">
+          <property name="geometry">
+           <rect>
+            <x>34</x>
+            <y>66</y>
+            <width>24</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: url(:/set/pic/set_volumeopen.png);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_vol_minus">
+          <property name="geometry">
+           <rect>
+            <x>68</x>
+            <y>66</y>
+            <width>24</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: url(:/set/pic/set_volumedown.png);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+         <widget class="QSlider" name="horizontalSlider_volume">
+          <property name="geometry">
+           <rect>
+            <x>108</x>
+            <y>68</y>
+            <width>210</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_vol_add">
+          <property name="geometry">
+           <rect>
+            <x>332</x>
+            <y>66</y>
+            <width>24</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: url(:/set/pic/set_volumeup.png);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QFrame" name="frame_hardware_ports">
+         <property name="geometry">
+          <rect>
+           <x>24</x>
+           <y>408</y>
+           <width>760</width>
+           <height>191</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#frame_hardware_ports {
+background: #FFFFFF;
+border: 1px solid #EEF1F5;
+border-radius: 12px;
+}</string>
+         </property>
+         <widget class="QLabel" name="label_hardware_title">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>16</y>
+            <width>120</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #1F1F1F;
+font-size: 16px;
+font-weight: 600;</string>
+          </property>
+          <property name="text">
+           <string>设备串口</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_40">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>56</y>
+            <width>100</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #6B7280;</string>
+          </property>
+          <property name="text">
+           <string>头环</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="comboBox_decoder_port">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>50</y>
+            <width>280</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QComboBox {
+background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;
+}</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_41">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>100</y>
+            <width>130</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #6B7280;</string>
+          </property>
+          <property name="text">
+           <string>电刺激设备</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="comboBox_NES_port">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>94</y>
+            <width>280</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QComboBox {
+background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;
+}</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_nes_port_2">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>144</y>
+            <width>130</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: #6B7280;</string>
+          </property>
+          <property name="text">
+           <string>电刺激设备(右)</string>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="comboBox_NES_port_2">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>138</y>
+            <width>280</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QComboBox {
+background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+padding-left: 12px;
+}</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_refresh_serial_ports">
+          <property name="geometry">
+           <rect>
+            <x>640</x>
+            <y>144</y>
+            <width>100</width>
+            <height>28</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+background: #F7F8FC;
+border: 1px solid #EEF1F5;
+border-radius: 8px;
+color: #1F1F1F;
+font-size: 13px;
+}
+QPushButton:hover {
+background: #EEF2FF;
+border-color: #C7D2FE;
+}</string>
+          </property>
+          <property name="text">
+           <string>刷新串口</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QLabel" name="label_set_watermark_3">
+         <property name="geometry">
+          <rect>
+           <x>980</x>
+           <y>120</y>
+           <width>695</width>
+           <height>600</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/set/pic/big_icon.png);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
       </widget>
-      <widget class="QLabel" name="label_informationbackgro_3">
+     </widget>
+     <widget class="QWidget" name="tab_6">
+      <attribute name="title">
+       <string>Tab 5</string>
+      </attribute>
+      <widget class="QWidget" name="widget_patients_record" native="true">
        <property name="geometry">
         <rect>
-         <x>810</x>
-         <y>440</y>
+         <x>60</x>
+         <y>60</y>
+         <width>411</width>
+         <height>851</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QWidget" name="widget_patient_treat_record" native="true">
+       <property name="geometry">
+        <rect>
+         <x>560</x>
+         <y>60</y>
+         <width>1161</width>
+         <height>851</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_60">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>30</y>
          <width>471</width>
-         <height>141</height>
+         <height>911</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background: #FFFFFF;
-border-radius: 19.43px;</string>
+        <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 10px;</string>
        </property>
        <property name="text">
         <string/>
        </property>
       </widget>
-      <widget class="QLabel" name="label_17">
+      <widget class="QLabel" name="label_61">
        <property name="geometry">
         <rect>
-         <x>840</x>
-         <y>460</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>音量设置</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="horizontalSlider_volume">
-       <property name="geometry">
-        <rect>
-         <x>1000</x>
-         <y>515</y>
-         <width>191</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_vol_minus">
-       <property name="geometry">
-        <rect>
-         <x>930</x>
-         <y>510</y>
-         <width>31</width>
-         <height>31</height>
+         <x>530</x>
+         <y>30</y>
+         <width>1221</width>
+         <height>911</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/set/pic/set_volumedown.png);</string>
+        <string notr="true">background-color: rgb(255, 255, 255);
+border-radius: 10px;</string>
        </property>
        <property name="text">
         <string/>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_vol_shutopen">
-       <property name="geometry">
-        <rect>
-         <x>890</x>
-         <y>510</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/set/pic/set_volumeshut.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_vol_add">
-       <property name="geometry">
-        <rect>
-         <x>1220</x>
-         <y>510</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/set/pic/set_volumeup.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_informationbackgro_4">
-       <property name="geometry">
-        <rect>
-         <x>810</x>
-         <y>610</y>
-         <width>471</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background: #FFFFFF;
-border-radius: 19.43px;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_40">
-       <property name="geometry">
-        <rect>
-         <x>910</x>
-         <y>660</y>
-         <width>71</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>脑机接口设备</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_41">
-       <property name="geometry">
-        <rect>
-         <x>900</x>
-         <y>700</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>下肢康复设备串口左</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboBox_decoder_port">
-       <property name="geometry">
-        <rect>
-         <x>1130</x>
-         <y>660</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboBox_NES_port">
-       <property name="geometry">
-        <rect>
-         <x>1130</x>
-         <y>700</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_46">
-       <property name="geometry">
-        <rect>
-         <x>1340</x>
-         <y>0</y>
-         <width>301</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/main/pic/main_color.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_48">
-       <property name="geometry">
-        <rect>
-         <x>900</x>
-         <y>740</y>
-         <width>111</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>下肢康复设备串口右</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboBox_NES_port_2">
-       <property name="geometry">
-        <rect>
-         <x>1130</x>
-         <y>740</y>
-         <width>81</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
+      <zorder>label_61</zorder>
+      <zorder>label_60</zorder>
+      <zorder>widget_patients_record</zorder>
+      <zorder>widget_patient_treat_record</zorder>
      </widget>
     </widget>
     <widget class="QPushButton" name="pushButton_patient">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>160</y>
-       <width>141</width>
-       <height>121</height>
+       <x>40</x>
+       <y>110</y>
+       <width>77</width>
+       <height>77</height>
       </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
      </property>
      <property name="styleSheet">
       <string notr="true">
@@ -1826,11 +3278,26 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
     <widget class="QPushButton" name="pushButton_plan">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>310</y>
-       <width>141</width>
-       <height>121</height>
+       <x>40</x>
+       <y>410</y>
+       <width>77</width>
+       <height>77</height>
       </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
+     </property>
+     <property name="visible">
+      <bool>false</bool>
      </property>
      <property name="styleSheet">
       <string notr="true">border-image: url(:/main/pic/main_plan_off.png);</string>
@@ -1842,11 +3309,23 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
     <widget class="QPushButton" name="pushButton_set">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>460</y>
-       <width>141</width>
-       <height>121</height>
+       <x>40</x>
+       <y>310</y>
+       <width>77</width>
+       <height>77</height>
       </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
      </property>
      <property name="styleSheet">
       <string notr="true">border-image: url(:/main/pic/main_set_off.png);</string>
@@ -1855,59 +3334,73 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
       <string/>
      </property>
     </widget>
-    <widget class="QLabel" name="label_usertitle">
+    <widget class="QLabel" name="label_userProphoto">
      <property name="geometry">
       <rect>
-       <x>129</x>
-       <y>857</y>
-       <width>53</width>
-       <height>15</height>
+       <x>67</x>
+       <y>811</y>
+       <width>34</width>
+       <height>34</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
+     <property name="minimumSize">
+      <size>
+       <width>34</width>
+       <height>34</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>34</width>
+       <height>34</height>
+      </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: #959595;</string>
-     </property>
-     <property name="text">
-      <string>用户职称</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_logout">
-     <property name="geometry">
-      <rect>
-       <x>203</x>
-       <y>823</y>
-       <width>41</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-image: url(:/main/pic/main_logout.png);</string>
+      <string notr="true">border-image: url(:/set/pic/icon_hosipital.png);</string>
      </property>
      <property name="text">
       <string/>
      </property>
     </widget>
-    <widget class="QLabel" name="label_userProphoto">
+    <widget class="QPushButton" name="pushButton_report">
      <property name="geometry">
       <rect>
-       <x>50</x>
-       <y>812</y>
-       <width>61</width>
-       <height>61</height>
+       <x>40</x>
+       <y>210</y>
+       <width>77</width>
+       <height>77</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>26</pointsize>
-      </font>
+     <property name="minimumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>77</width>
+       <height>77</height>
+      </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/main/pic/main_name_rect.png);</string>
+      <string notr="true">border-image: url(:/main/pic/main_report_off.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_hosipital">
+     <property name="geometry">
+      <rect>
+       <x>29</x>
+       <y>860</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #666666;</string>
      </property>
      <property name="text">
       <string/>
@@ -1916,53 +3409,34 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_username">
+    <widget class="QLabel" name="label_department">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>812</y>
-       <width>61</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: #FFFFFF;</string>
-     </property>
-     <property name="text">
-      <string>用户名</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_8">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>291</width>
-       <height>991</height>
+       <x>39</x>
+       <y>890</y>
+       <width>91</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/main/pic/main_buttonbackgro.png);</string>
+      <string notr="true">color: #666666;</string>
      </property>
      <property name="text">
       <string/>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
-    <zorder>label_8</zorder>
+    <zorder>tabWidget</zorder>
     <zorder>pushButton_treat</zorder>
     <zorder>pushButton_patient</zorder>
     <zorder>pushButton_plan</zorder>
     <zorder>pushButton_set</zorder>
-    <zorder>label_usertitle</zorder>
-    <zorder>pushButton_logout</zorder>
-    <zorder>label_username</zorder>
     <zorder>label_userProphoto</zorder>
-    <zorder>tabWidget</zorder>
+    <zorder>pushButton_report</zorder>
+    <zorder>label_hosipital</zorder>
+    <zorder>label_department</zorder>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -1971,11 +3445,23 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
     <widget class="QPushButton" name="pushButton_return">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>24</y>
-       <width>51</width>
-       <height>51</height>
+       <x>70</x>
+       <y>20</y>
+       <width>10</width>
+       <height>18</height>
       </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>10</width>
+       <height>18</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>10</width>
+       <height>18</height>
+      </size>
      </property>
      <property name="styleSheet">
       <string notr="true">border-image: url(:/preprocess/pic/preprocess_return.png);</string>
@@ -1987,16 +3473,16 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
     <widget class="QLabel" name="label_title">
      <property name="geometry">
       <rect>
-       <x>490</x>
-       <y>20</y>
-       <width>840</width>
-       <height>59</height>
+       <x>100</x>
+       <y>8</y>
+       <width>251</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="minimumSize">
       <size>
-       <width>840</width>
-       <height>59</height>
+       <width>0</width>
+       <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -2005,20 +3491,25 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
        <height>59</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/preprocess/pic/preprocess_eletitle.png);</string>
+      <string notr="true"/>
      </property>
      <property name="text">
-      <string/>
+      <string>电刺激强度适应性测试</string>
      </property>
     </widget>
     <widget class="QTabWidget" name="tabWidget_2">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>80</y>
+       <y>60</y>
        <width>1920</width>
-       <height>981</height>
+       <height>1001</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -2034,7 +3525,7 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -2790,16 +4281,16 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QLabel" name="label_18">
        <property name="geometry">
         <rect>
-         <x>1170</x>
-         <y>120</y>
-         <width>552</width>
-         <height>594</height>
+         <x>1390</x>
+         <y>380</y>
+         <width>421</width>
+         <height>451</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>552</width>
-         <height>594</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -2818,20 +4309,19 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QRadioButton" name="radioButton_checksafe">
        <property name="geometry">
         <rect>
-         <x>1221</x>
-         <y>545</y>
-         <width>271</width>
-         <height>24</height>
+         <x>1426</x>
+         <y>700</y>
+         <width>291</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <pointsize>12</pointsize>
-         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: #ff0000;
+        <string notr="true">color: #939393;
 QRadioButton::indicator { width: 16px; height: 16px; }</string>
        </property>
        <property name="text">
@@ -2841,8 +4331,8 @@ QRadioButton::indicator { width: 16px; height: 16px; }</string>
       <widget class="QPushButton" name="pushButton_startevaluate">
        <property name="geometry">
         <rect>
-         <x>1510</x>
-         <y>620</y>
+         <x>890</x>
+         <y>790</y>
          <width>141</width>
          <height>41</height>
         </rect>
@@ -2865,8 +4355,8 @@ border-radius: 8px;</string>
       <widget class="QLabel" name="label_Electrode_P7">
        <property name="geometry">
         <rect>
-         <x>450</x>
-         <y>530</y>
+         <x>770</x>
+         <y>490</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -2906,8 +4396,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF8">
        <property name="geometry">
         <rect>
-         <x>770</x>
-         <y>240</y>
+         <x>1090</x>
+         <y>200</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -2947,8 +4437,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_19">
        <property name="geometry">
         <rect>
-         <x>350</x>
-         <y>110</y>
+         <x>670</x>
+         <y>70</y>
          <width>591</width>
          <height>591</height>
         </rect>
@@ -2975,8 +4465,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Fpz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>200</y>
+         <x>950</x>
+         <y>160</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3016,8 +4506,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Fp2">
        <property name="geometry">
         <rect>
-         <x>700</x>
-         <y>210</y>
+         <x>1020</x>
+         <y>170</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3057,8 +4547,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F8">
        <property name="geometry">
         <rect>
-         <x>810</x>
-         <y>290</y>
+         <x>1130</x>
+         <y>250</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3098,8 +4588,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_T8">
        <property name="geometry">
         <rect>
-         <x>850</x>
-         <y>410</y>
+         <x>1170</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3139,8 +4629,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P8">
        <property name="geometry">
         <rect>
-         <x>820</x>
-         <y>530</y>
+         <x>1140</x>
+         <y>490</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3180,8 +4670,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_O2">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>610</y>
+         <x>1040</x>
+         <y>570</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3221,8 +4711,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_OZ">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>630</y>
+         <x>950</x>
+         <y>590</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3262,8 +4752,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_O1">
        <property name="geometry">
         <rect>
-         <x>550</x>
-         <y>610</y>
+         <x>870</x>
+         <y>570</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3302,8 +4792,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Fp1">
        <property name="geometry">
         <rect>
-         <x>560</x>
-         <y>210</y>
+         <x>880</x>
+         <y>170</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3343,8 +4833,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F7">
        <property name="geometry">
         <rect>
-         <x>460</x>
-         <y>280</y>
+         <x>780</x>
+         <y>240</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3384,8 +4874,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_T7">
        <property name="geometry">
         <rect>
-         <x>410</x>
-         <y>410</y>
+         <x>730</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3425,8 +4915,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F3">
        <property name="geometry">
         <rect>
-         <x>546</x>
-         <y>307</y>
+         <x>866</x>
+         <y>265</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3466,8 +4956,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F4">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>306</y>
+         <x>1040</x>
+         <y>266</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3507,8 +4997,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Fz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>310</y>
+         <x>950</x>
+         <y>270</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3548,8 +5038,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_C3">
        <property name="geometry">
         <rect>
-         <x>510</x>
-         <y>410</y>
+         <x>830</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3589,8 +5079,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Cz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>410</y>
+         <x>950</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3630,8 +5120,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_C4">
        <property name="geometry">
         <rect>
-         <x>750</x>
-         <y>410</y>
+         <x>1070</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3671,8 +5161,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P3">
        <property name="geometry">
         <rect>
-         <x>540</x>
-         <y>510</y>
+         <x>857</x>
+         <y>471</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3712,8 +5202,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Pz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>510</y>
+         <x>950</x>
+         <y>470</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3753,8 +5243,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P4">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>510</y>
+         <x>1044</x>
+         <y>471</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3794,8 +5284,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FT9">
        <property name="geometry">
         <rect>
-         <x>370</x>
-         <y>330</y>
+         <x>690</x>
+         <y>290</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3835,8 +5325,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P9">
        <property name="geometry">
         <rect>
-         <x>410</x>
-         <y>570</y>
+         <x>730</x>
+         <y>530</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3876,8 +5366,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_T9">
        <property name="geometry">
         <rect>
-         <x>360</x>
-         <y>420</y>
+         <x>680</x>
+         <y>380</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3917,8 +5407,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F5">
        <property name="geometry">
         <rect>
-         <x>500</x>
-         <y>300</y>
+         <x>820</x>
+         <y>257</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3958,8 +5448,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF6">
        <property name="geometry">
         <rect>
-         <x>732</x>
-         <y>245</y>
+         <x>1052</x>
+         <y>205</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -3999,8 +5489,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AFz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>258</y>
+         <x>950</x>
+         <y>218</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4040,8 +5530,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF1">
        <property name="geometry">
         <rect>
-         <x>600</x>
-         <y>255</y>
+         <x>920</x>
+         <y>215</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4081,8 +5571,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF3">
        <property name="geometry">
         <rect>
-         <x>570</x>
-         <y>253</y>
+         <x>890</x>
+         <y>213</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4122,8 +5612,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FT10">
        <property name="geometry">
         <rect>
-         <x>890</x>
-         <y>320</y>
+         <x>1210</x>
+         <y>280</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4163,8 +5653,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF5">
        <property name="geometry">
         <rect>
-         <x>538</x>
-         <y>251</y>
+         <x>857</x>
+         <y>210</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4204,8 +5694,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF2">
        <property name="geometry">
         <rect>
-         <x>665</x>
-         <y>255</y>
+         <x>985</x>
+         <y>215</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4245,8 +5735,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F1">
        <property name="geometry">
         <rect>
-         <x>590</x>
-         <y>310</y>
+         <x>910</x>
+         <y>270</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4286,8 +5776,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_TP9">
        <property name="geometry">
         <rect>
-         <x>370</x>
-         <y>500</y>
+         <x>690</x>
+         <y>460</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4327,8 +5817,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F9">
        <property name="geometry">
         <rect>
-         <x>420</x>
-         <y>240</y>
+         <x>740</x>
+         <y>200</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4368,8 +5858,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Nz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>140</y>
+         <x>950</x>
+         <y>100</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4409,8 +5899,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO9">
        <property name="geometry">
         <rect>
-         <x>470</x>
-         <y>630</y>
+         <x>790</x>
+         <y>590</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4450,8 +5940,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF4">
        <property name="geometry">
         <rect>
-         <x>700</x>
-         <y>250</y>
+         <x>1020</x>
+         <y>210</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4491,8 +5981,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F10">
        <property name="geometry">
         <rect>
-         <x>842</x>
-         <y>240</y>
+         <x>1160</x>
+         <y>200</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4532,8 +6022,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_AF7">
        <property name="geometry">
         <rect>
-         <x>500</x>
-         <y>240</y>
+         <x>820</x>
+         <y>200</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4573,8 +6063,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_TP10">
        <property name="geometry">
         <rect>
-         <x>890</x>
-         <y>500</y>
+         <x>1210</x>
+         <y>460</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4614,8 +6104,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO10">
        <property name="geometry">
         <rect>
-         <x>810</x>
-         <y>620</y>
+         <x>1130</x>
+         <y>580</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4657,8 +6147,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_I2">
        <property name="geometry">
         <rect>
-         <x>730</x>
-         <y>670</y>
+         <x>1050</x>
+         <y>630</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4698,8 +6188,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_Iz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>690</y>
+         <x>950</x>
+         <y>650</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4739,8 +6229,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_I1">
        <property name="geometry">
         <rect>
-         <x>550</x>
-         <y>670</y>
+         <x>870</x>
+         <y>630</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4780,8 +6270,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_T10">
        <property name="geometry">
         <rect>
-         <x>900</x>
-         <y>410</y>
+         <x>1220</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4821,8 +6311,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P10">
        <property name="geometry">
         <rect>
-         <x>860</x>
-         <y>560</y>
+         <x>1180</x>
+         <y>520</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4862,8 +6352,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F2">
        <property name="geometry">
         <rect>
-         <x>680</x>
-         <y>310</y>
+         <x>1000</x>
+         <y>270</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4903,8 +6393,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_F6">
        <property name="geometry">
         <rect>
-         <x>760</x>
-         <y>300</y>
+         <x>1084</x>
+         <y>260</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4944,8 +6434,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FT7">
        <property name="geometry">
         <rect>
-         <x>430</x>
-         <y>340</y>
+         <x>750</x>
+         <y>300</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -4985,8 +6475,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FC7">
        <property name="geometry">
         <rect>
-         <x>480</x>
-         <y>350</y>
+         <x>800</x>
+         <y>310</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5026,8 +6516,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FC5">
        <property name="geometry">
         <rect>
-         <x>540</x>
-         <y>360</y>
+         <x>857</x>
+         <y>318</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5067,8 +6557,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FCz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>360</y>
+         <x>950</x>
+         <y>320</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5108,8 +6598,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FC3">
        <property name="geometry">
         <rect>
-         <x>590</x>
-         <y>360</y>
+         <x>907</x>
+         <y>320</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5149,8 +6639,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FC2">
        <property name="geometry">
         <rect>
-         <x>680</x>
-         <y>360</y>
+         <x>1000</x>
+         <y>320</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5190,8 +6680,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FC4">
        <property name="geometry">
         <rect>
-         <x>740</x>
-         <y>350</y>
+         <x>1053</x>
+         <y>312</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5231,8 +6721,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FC6">
        <property name="geometry">
         <rect>
-         <x>790</x>
-         <y>340</y>
+         <x>1107</x>
+         <y>306</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5272,8 +6762,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_FT8">
        <property name="geometry">
         <rect>
-         <x>840</x>
-         <y>340</y>
+         <x>1160</x>
+         <y>300</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5313,8 +6803,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_C5">
        <property name="geometry">
         <rect>
-         <x>460</x>
-         <y>410</y>
+         <x>780</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5354,8 +6844,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_C1">
        <property name="geometry">
         <rect>
-         <x>570</x>
-         <y>410</y>
+         <x>890</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5395,8 +6885,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_C2">
        <property name="geometry">
         <rect>
-         <x>690</x>
-         <y>410</y>
+         <x>1010</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5436,8 +6926,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_C6">
        <property name="geometry">
         <rect>
-         <x>800</x>
-         <y>410</y>
+         <x>1120</x>
+         <y>370</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5477,8 +6967,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO6">
        <property name="geometry">
         <rect>
-         <x>743</x>
-         <y>564</y>
+         <x>1063</x>
+         <y>524</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5518,8 +7008,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_TP7">
        <property name="geometry">
         <rect>
-         <x>420</x>
-         <y>480</y>
+         <x>740</x>
+         <y>440</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5559,8 +7049,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CP5">
        <property name="geometry">
         <rect>
-         <x>470</x>
-         <y>470</y>
+         <x>790</x>
+         <y>430</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5600,8 +7090,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CP3">
        <property name="geometry">
         <rect>
-         <x>520</x>
-         <y>460</y>
+         <x>840</x>
+         <y>421</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5641,8 +7131,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CP1">
        <property name="geometry">
         <rect>
-         <x>570</x>
-         <y>460</y>
+         <x>894</x>
+         <y>418</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5682,8 +7172,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CPz">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>460</y>
+         <x>950</x>
+         <y>420</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5723,8 +7213,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CP2">
        <property name="geometry">
         <rect>
-         <x>680</x>
-         <y>460</y>
+         <x>1000</x>
+         <y>420</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5764,8 +7254,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CP6">
        <property name="geometry">
         <rect>
-         <x>790</x>
-         <y>460</y>
+         <x>1110</x>
+         <y>424</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5805,8 +7295,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_CP4">
        <property name="geometry">
         <rect>
-         <x>740</x>
-         <y>460</y>
+         <x>1056</x>
+         <y>420</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5846,8 +7336,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_TP8">
        <property name="geometry">
         <rect>
-         <x>840</x>
-         <y>470</y>
+         <x>1160</x>
+         <y>430</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5887,8 +7377,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P5">
        <property name="geometry">
         <rect>
-         <x>490</x>
-         <y>520</y>
+         <x>810</x>
+         <y>480</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5928,8 +7418,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P1">
        <property name="geometry">
         <rect>
-         <x>580</x>
-         <y>510</y>
+         <x>900</x>
+         <y>470</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -5969,8 +7459,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P2">
        <property name="geometry">
         <rect>
-         <x>670</x>
-         <y>510</y>
+         <x>995</x>
+         <y>468</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6010,8 +7500,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_P6">
        <property name="geometry">
         <rect>
-         <x>770</x>
-         <y>520</y>
+         <x>1090</x>
+         <y>479</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6051,8 +7541,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO7">
        <property name="geometry">
         <rect>
-         <x>490</x>
-         <y>580</y>
+         <x>810</x>
+         <y>540</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6092,8 +7582,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO5">
        <property name="geometry">
         <rect>
-         <x>530</x>
-         <y>570</y>
+         <x>850</x>
+         <y>530</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6133,8 +7623,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO3">
        <property name="geometry">
         <rect>
-         <x>560</x>
-         <y>563</y>
+         <x>880</x>
+         <y>523</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6174,8 +7664,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO1">
        <property name="geometry">
         <rect>
-         <x>595</x>
-         <y>560</y>
+         <x>915</x>
+         <y>520</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6215,8 +7705,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_POZ">
        <property name="geometry">
         <rect>
-         <x>630</x>
-         <y>560</y>
+         <x>950</x>
+         <y>520</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6256,8 +7746,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO8">
        <property name="geometry">
         <rect>
-         <x>780</x>
-         <y>570</y>
+         <x>1100</x>
+         <y>530</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6297,8 +7787,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO2">
        <property name="geometry">
         <rect>
-         <x>670</x>
-         <y>560</y>
+         <x>990</x>
+         <y>520</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6338,8 +7828,8 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_Electrode_PO4">
        <property name="geometry">
         <rect>
-         <x>710</x>
-         <y>560</y>
+         <x>1030</x>
+         <y>520</y>
          <width>28</width>
          <height>28</height>
         </rect>
@@ -6376,6 +7866,35 @@ padding: 0px;</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
+      <widget class="QLabel" name="label_21">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>0</y>
+         <width>1881</width>
+         <height>901</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>813</width>
+         <height>659</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>8130</width>
+         <height>6590</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 10px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <zorder>label_21</zorder>
       <zorder>label_19</zorder>
       <zorder>label_18</zorder>
       <zorder>radioButton_checksafe</zorder>
@@ -6470,196 +7989,393 @@ padding: 0px;</string>
       <attribute name="title">
        <string>Tab 3</string>
       </attribute>
-      <widget class="QLabel" name="label_PatientInfo">
+      <widget class="QLabel" name="label_train_patient_avatar">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>140</y>
-         <width>311</width>
-         <height>131</height>
+         <x>210</x>
+         <y>80</y>
+         <width>107</width>
+         <height>107</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
+       <property name="minimumSize">
+        <size>
+         <width>107</width>
+         <height>107</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>107</width>
+         <height>107</height>
+        </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
+        <string notr="true">border-image: url(:/treat/pic/treat_patient_touxiang.png);</string>
        </property>
        <property name="text">
-        <string>患者信息/训练信息等</string>
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_name_title">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>210</y>
+         <width>90</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #333333; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>姓名</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_sex_title">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>210</y>
+         <width>90</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #333333; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>性别</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_age_title">
+       <property name="geometry">
+        <rect>
+         <x>372</x>
+         <y>210</y>
+         <width>90</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #333333; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>年龄</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_name_value">
+       <property name="geometry">
+        <rect>
+         <x>39</x>
+         <y>240</y>
+         <width>127</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F4F8; color: #333333; border-radius: 4px; padding-left: 8px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_sex_value">
+       <property name="geometry">
+        <rect>
+         <x>201</x>
+         <y>240</y>
+         <width>127</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F4F8; color: #333333; border-radius: 4px; padding-left: 8px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_age_value">
+       <property name="geometry">
+        <rect>
+         <x>362</x>
+         <y>240</y>
+         <width>127</width>
+         <height>28</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F2F4F8; color: #333333; border-radius: 4px; padding-left: 8px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_trial_card">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>385</y>
+         <width>127</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F5F6F9; border-radius: 4px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_complete_card">
+       <property name="geometry">
+        <rect>
+         <x>201</x>
+         <y>385</y>
+         <width>127</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F5F6F9; border-radius: 4px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_avg_card">
+       <property name="geometry">
+        <rect>
+         <x>362</x>
+         <y>385</y>
+         <width>128</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>128</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #F5F6F9; border-radius: 4px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_complete_value">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>304</y>
+         <width>127</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #3478F6; font-size: 18px; border: 1px solid #D9D9D9; border-radius: 4px; background-color: #FFFFFF;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_avg_value">
+       <property name="geometry">
+        <rect>
+         <x>363</x>
+         <y>305</y>
+         <width>127</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #3478F6; font-size: 18px; border: 1px solid #D9D9D9; border-radius: 4px; background-color: #FFFFFF;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_complete_caption">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>390</y>
+         <width>110</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #333333; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>任务完成率</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_avg_caption">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>390</y>
+         <width>110</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #333333; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>平均反应时间</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QWidget" name="widget_BCIWave" native="true">
        <property name="geometry">
         <rect>
-         <x>560</x>
-         <y>140</y>
-         <width>1321</width>
-         <height>671</height>
+         <x>630</x>
+         <y>80</y>
+         <width>1241</width>
+         <height>731</height>
         </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_99">
-       <property name="geometry">
-        <rect>
-         <x>250</x>
-         <y>320</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string>任务完成率：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_100">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>360</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string>本次反应时间：</string>
        </property>
       </widget>
       <widget class="QWidget" name="widget_PowerBar" native="true">
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>570</y>
-         <width>351</width>
-         <height>271</height>
+         <y>540</y>
+         <width>421</width>
+         <height>301</height>
         </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_21">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>320</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string>试次：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_trial">
-       <property name="geometry">
-        <rect>
-         <x>130</x>
-         <y>320</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_complete_rate">
-       <property name="geometry">
-        <rect>
-         <x>330</x>
-         <y>320</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_reaction_rate">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>360</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string/>
        </property>
       </widget>
       <widget class="QLabel" name="label_36">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>470</y>
-         <width>430</width>
-         <height>411</height>
+         <x>20</x>
+         <y>462</y>
+         <width>490</width>
+         <height>439</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>430</width>
-         <height>0</height>
+         <width>490</width>
+         <height>439</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>430</width>
-         <height>500</height>
+         <width>490</width>
+         <height>439</height>
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 20px;</string>
+        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 10px;</string>
        </property>
        <property name="text">
         <string/>
@@ -6668,14 +8384,20 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_35">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>50</y>
-         <width>431</width>
-         <height>401</height>
+         <x>20</x>
+         <y>1</y>
+         <width>490</width>
+         <height>438</height>
         </rect>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>490</width>
+         <height>435</height>
+        </size>
+       </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 20px;</string>
+        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 10px;</string>
        </property>
        <property name="text">
         <string/>
@@ -6684,14 +8406,14 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_37">
        <property name="geometry">
         <rect>
-         <x>480</x>
-         <y>50</y>
-         <width>1421</width>
-         <height>831</height>
+         <x>530</x>
+         <y>0</y>
+         <width>1371</width>
+         <height>901</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 20px;</string>
+        <string notr="true">background-color: rgb(255, 255, 255); border-radius: 10px;</string>
        </property>
        <property name="text">
         <string/>
@@ -6700,16 +8422,16 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_38">
        <property name="geometry">
         <rect>
-         <x>1075</x>
-         <y>70</y>
-         <width>234</width>
-         <height>54</height>
+         <x>610</x>
+         <y>30</y>
+         <width>101</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>234</width>
-         <height>54</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -6720,7 +8442,8 @@ padding: 0px;</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>33</pointsize>
+         <pointsize>12</pointsize>
+         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
@@ -6733,10 +8456,10 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_39">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>70</y>
-         <width>191</width>
-         <height>41</height>
+         <x>90</x>
+         <y>40</y>
+         <width>101</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -6754,8 +8477,8 @@ padding: 0px;</string>
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
-         <pointsize>24</pointsize>
-         <bold>false</bold>
+         <pointsize>12</pointsize>
+         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
@@ -6765,103 +8488,19 @@ padding: 0px;</string>
         <string>患者训练信息</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_42">
-       <property name="geometry">
-        <rect>
-         <x>250</x>
-         <y>360</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string>平均反应时间：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_43">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>400</y>
-         <width>131</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string>本次训练剩余时间：</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_reaction_rate_aver">
-       <property name="geometry">
-        <rect>
-         <x>350</x>
-         <y>360</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_Countdown">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>403</y>
-         <width>53</width>
-         <height>15</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: #939393;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_44">
        <property name="geometry">
         <rect>
-         <x>150</x>
-         <y>503</y>
-         <width>164</width>
-         <height>41</height>
+         <x>90</x>
+         <y>490</y>
+         <width>81</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>164</width>
-         <height>41</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -6872,7 +8511,8 @@ padding: 0px;</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>24</pointsize>
+         <pointsize>12</pointsize>
+         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
@@ -6885,22 +8525,22 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_22">
        <property name="geometry">
         <rect>
-         <x>70</x>
-         <y>70</y>
-         <width>43</width>
-         <height>40</height>
+         <x>60</x>
+         <y>40</y>
+         <width>18</width>
+         <height>18</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>43</width>
-         <height>40</height>
+         <width>18</width>
+         <height>18</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>43</width>
-         <height>40</height>
+         <width>18</width>
+         <height>18</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -6910,39 +8550,11 @@ padding: 0px;</string>
         <string/>
        </property>
       </widget>
-      <widget class="QLabel" name="label_31">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>297</y>
-         <width>300</width>
-         <height>2</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>300</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>300</width>
-         <height>2</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-image: url(:/login/pic/login_line.png);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
       <widget class="QPushButton" name="pushButton_start_stop">
        <property name="geometry">
         <rect>
-         <x>1460</x>
-         <y>820</y>
+         <x>1070</x>
+         <y>830</y>
          <width>180</width>
          <height>50</height>
         </rect>
@@ -6974,8 +8586,8 @@ padding: 0px;</string>
       <widget class="QPushButton" name="pushButton_paradigm_shut_down">
        <property name="geometry">
         <rect>
-         <x>1700</x>
-         <y>820</y>
+         <x>1280</x>
+         <y>830</y>
          <width>180</width>
          <height>50</height>
         </rect>
@@ -7007,22 +8619,22 @@ padding: 0px;</string>
       <widget class="QLabel" name="label_47">
        <property name="geometry">
         <rect>
-         <x>70</x>
-         <y>496</y>
-         <width>57</width>
-         <height>47</height>
+         <x>60</x>
+         <y>490</y>
+         <width>18</width>
+         <height>18</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>57</width>
-         <height>47</height>
+         <width>18</width>
+         <height>18</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>57</width>
-         <height>47</height>
+         <width>18</width>
+         <height>18</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -7032,44 +8644,225 @@ padding: 0px;</string>
         <string/>
        </property>
       </widget>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>570</x>
+         <y>40</y>
+         <width>18</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>18</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>18</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/treat/pic/treat_wave_logo.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_trial_caption">
+       <property name="geometry">
+        <rect>
+         <x>43</x>
+         <y>390</y>
+         <width>110</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #333333; font-size: 12px;</string>
+       </property>
+       <property name="text">
+        <string>试次</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_train_trial_value">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>304</y>
+         <width>127</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>127</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>127</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #3478F6; font-size: 18px; border: 1px solid #D9D9D9; border-radius: 4px; background-color: #FFFFFF;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
       <zorder>label_37</zorder>
       <zorder>label_35</zorder>
       <zorder>label_36</zorder>
-      <zorder>label_PatientInfo</zorder>
+      <zorder>label_train_trial_card</zorder>
+      <zorder>label_train_complete_card</zorder>
+      <zorder>label_train_avg_card</zorder>
+      <zorder>label_train_patient_avatar</zorder>
+      <zorder>label_train_name_title</zorder>
+      <zorder>label_train_sex_title</zorder>
+      <zorder>label_train_age_title</zorder>
+      <zorder>label_train_name_value</zorder>
+      <zorder>label_train_sex_value</zorder>
+      <zorder>label_train_age_value</zorder>
+      <zorder>label_train_complete_value</zorder>
+      <zorder>label_train_avg_value</zorder>
+      <zorder>label_train_complete_caption</zorder>
+      <zorder>label_train_avg_caption</zorder>
       <zorder>widget_BCIWave</zorder>
-      <zorder>label_99</zorder>
-      <zorder>label_100</zorder>
       <zorder>widget_PowerBar</zorder>
-      <zorder>label_21</zorder>
-      <zorder>label_trial</zorder>
-      <zorder>label_complete_rate</zorder>
-      <zorder>label_reaction_rate</zorder>
       <zorder>label_38</zorder>
       <zorder>label_39</zorder>
-      <zorder>label_42</zorder>
-      <zorder>label_43</zorder>
-      <zorder>label_reaction_rate_aver</zorder>
-      <zorder>label_Countdown</zorder>
       <zorder>label_44</zorder>
       <zorder>label_22</zorder>
-      <zorder>label_31</zorder>
       <zorder>pushButton_start_stop</zorder>
       <zorder>pushButton_paradigm_shut_down</zorder>
       <zorder>label_47</zorder>
+      <zorder>label_5</zorder>
+      <zorder>label_train_trial_caption</zorder>
+      <zorder>label_train_trial_value</zorder>
      </widget>
     </widget>
    </widget>
   </widget>
-  <zorder>label_10</zorder>
-  <zorder>label_patient</zorder>
+  <widget class="QLabel" name="label_chanpinName_en">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>50</y>
+     <width>541</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Non-invasive Brain-Computer Interface Lower Limb Functional Electrical Stimulation System</string>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>-10</x>
+     <y>85</y>
+     <width>1941</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_66">
+   <property name="geometry">
+    <rect>
+     <x>1733</x>
+     <y>31</y>
+     <width>56</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>56</width>
+     <height>34</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>56</width>
+     <height>34</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-image: url(:/main/pic/main_status_rect.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_68">
+   <property name="geometry">
+    <rect>
+     <x>1820</x>
+     <y>48</y>
+     <width>20</width>
+     <height>2</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>20</width>
+     <height>2</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>20</width>
+     <height>2</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(51, 51, 51);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="Line" name="line_2">
+   <property name="geometry">
+    <rect>
+     <x>121</x>
+     <y>92</y>
+     <width>20</width>
+     <height>991</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <zorder>label_66</zorder>
   <zorder>label_4</zorder>
-  <zorder>label_logo</zorder>
   <zorder>label_chanpinName</zorder>
   <zorder>label_pingpong</zorder>
   <zorder>label_wifi</zorder>
   <zorder>pushButton_quit</zorder>
-  <zorder>pushButton_small</zorder>
   <zorder>tabWidget_main</zorder>
+  <zorder>label_logo</zorder>
+  <zorder>label_chanpinName_en</zorder>
+  <zorder>line</zorder>
+  <zorder>label_68</zorder>
+  <zorder>line_2</zorder>
+  <zorder>pushButton_small</zorder>
  </widget>
  <resources>
   <include location="resources.qrc"/>

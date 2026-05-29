@@ -6,6 +6,12 @@ from typing import Optional
 from application.config_app import ConfigApp
 from application.hardware_app import HardwareApp
 from application.decoder_app import DecoderApp
+from infrastructure.hardware.serial_port_catalog import (
+    AutoPortAssignment,
+    SerialPortEntry,
+    auto_assign_ports,
+    enumerate_serial_ports,
+)
 
 
 class HardwareConfigApp:
@@ -24,30 +30,53 @@ class HardwareConfigApp:
         self._logger = logger or logging.getLogger(__name__)
 
     def list_available_ports(self) -> list[str]:
-        if not self._hardware_app:
-            return []
+        return [entry.device for entry in self.list_port_entries()]
+
+    def list_port_entries(self) -> list[SerialPortEntry]:
         try:
-            return list(self._hardware_app.list_available_ports())
+            if self._hardware_app:
+                return list(self._hardware_app.list_port_entries())
+            return list(enumerate_serial_ports())
         except Exception as exc:
             self._logger.warning("读取串口列表失败: %s", exc)
             return []
 
     def list_available_port_details(self) -> list[dict[str, str]]:
-        if not self._hardware_app:
-            return []
-        try:
-            return list(self._hardware_app.list_available_port_details())
-        except Exception as exc:
-            self._logger.warning("读取串口详情失败: %s", exc)
-            return []
+        return [
+            {
+                "device": entry.device,
+                "description": entry.description,
+                "manufacturer": entry.manufacturer,
+                "hwid": entry.hwid,
+            }
+            for entry in self.list_port_entries()
+        ]
+
+    def refresh_and_auto_connect(self) -> tuple[list[SerialPortEntry], AutoPortAssignment, bool]:
+        """刷新串口列表并按识别结果自动连接头环与电刺激设备。"""
+        entries = self.list_port_entries()
+        assignment = auto_assign_ports(entries)
+        applied = False
+        if assignment.head_ring:
+            if self.set_decoder_port(assignment.head_ring):
+                applied = True
+                self._logger.info("已自动连接头环串口: %s", assignment.head_ring)
+        if assignment.stim:
+            if self.set_nes_port(assignment.stim):
+                applied = True
+                self._logger.info("已自动连接电刺激串口(左): %s", assignment.stim)
+        stim_ports = [e.device for e in entries if auto_assign_ports([e]).stim]
+        second_stim = next((p for p in stim_ports if p != assignment.stim), None)
+        if second_stim and self.get_nes_port_2() != second_stim:
+            if self.set_nes_port_2(second_stim):
+                applied = True
+                self._logger.info("已自动连接电刺激串口(右): %s", second_stim)
+        if not applied and not entries:
+            self._logger.warning("未发现可用串口")
+        return entries, assignment, applied
 
     @staticmethod
     def classify_ports(port_details: list[dict[str, str]]) -> dict[str, Optional[str]]:
-        """
-        根据串口描述特征分类：
-        - description/manufacturer/hwid 含“串行设备” -> decoder_port（脑机设备）
-        - description/manufacturer/hwid 含“CH340” -> NES_port（神经肌肉电刺激设备）
-        """
         decoder_port: Optional[str] = None
         nes_port: Optional[str] = None
         for item in port_details:

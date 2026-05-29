@@ -128,9 +128,7 @@ class TreatRecordTable:
     def load_records(
         self,
         records: Iterable[dict],
-        on_pdf_clicked: Callable[[int], None],
-        on_export_pdf_clicked: Callable[[int], None],
-        on_print_clicked: Callable[[int], None],
+        on_view_clicked: Callable[[int], None],
         patient_name: str = "",
     ) -> None:
         table = self._get_table()
@@ -160,7 +158,7 @@ class TreatRecordTable:
             set_text_item(table, row, 5, self._map_stim_interval(record.get("StimFreqAB", "")))
             set_text_item(table, row, 6, record.get("TotalTrainDuration", ""))
             set_text_item(table, row, 7, record.get("UpdateTime", ""))
-            self._set_action_button(table, row, 8, on_pdf_clicked, on_export_pdf_clicked, on_print_clicked)
+            self._set_action_button(table, row, 8, on_view_clicked)
 
         self._block_item_changed = False
         self.update_header_check_state()
@@ -320,32 +318,18 @@ class TreatRecordTable:
         table,
         row: int,
         col: int,
-        on_pdf_clicked: Callable[[int], None],
-        on_export_pdf_clicked: Callable[[int], None],
-        on_print_clicked: Callable[[int], None],
+        on_view_clicked: Callable[[int], None],
     ) -> None:
-        btn_pdf = QPushButton("PDF")
-        btn_pdf.setCursor(Qt.PointingHandCursor)
-        btn_pdf.setStyleSheet("color: #4B86FC; background: transparent; border: none;")
-        btn_pdf.clicked.connect(lambda checked, r=row: on_pdf_clicked(r))
-
-        btn_export = QPushButton("导出")
-        btn_export.setCursor(Qt.PointingHandCursor)
-        btn_export.setStyleSheet("color: #4B86FC; background: transparent; border: none;")
-        btn_export.clicked.connect(lambda checked, r=row: on_export_pdf_clicked(r))
-
-        btn_print = QPushButton("打印")
-        btn_print.setCursor(Qt.PointingHandCursor)
-        btn_print.setStyleSheet("color: #4B86FC; background: transparent; border: none;")
-        btn_print.clicked.connect(lambda checked, r=row: on_print_clicked(r))
+        btn_view = QPushButton("查看")
+        btn_view.setCursor(Qt.PointingHandCursor)
+        btn_view.setStyleSheet("color: #4B86FC; background: transparent; border: none;")
+        btn_view.clicked.connect(lambda checked, r=row: on_view_clicked(r))
 
         container = QWidget()
         layout = QHBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(10)
+        layout.setSpacing(0)
         layout.addStretch()
-        layout.addWidget(btn_pdf, alignment=Qt.AlignCenter)
-        layout.addWidget(btn_export, alignment=Qt.AlignCenter)
-        layout.addWidget(btn_print, alignment=Qt.AlignCenter)
+        layout.addWidget(btn_view, alignment=Qt.AlignCenter)
         layout.addStretch()
         table.setCellWidget(row, col, container)

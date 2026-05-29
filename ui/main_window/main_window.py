@@ -7,10 +7,12 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from PySide6.QtWidgets import QWidget, QMessageBox, QLabel
+from PySide6.QtWidgets import QWidget, QLabel
 from PySide6.QtCore import Signal, QFile, Qt
 from PySide6.QtUiTools import QUiLoader
+from PySide6.QtGui import QIcon
 
+from ui.dialogs.tips_dialog import TipsDialog
 from ui.core.app_icon import apply_window_icon
 from ui.core.resource_loader import ensure_resources_loaded
 from ui.core.utils import get_ui_attr, safe_call, safe_connect
@@ -18,6 +20,7 @@ from ui.main_window.main_window_treat import TreatPageController
 from ui.main_window.main_window_patient import PatientPageController
 from ui.main_window.main_window_plan import PlanPageController
 from ui.main_window.main_window_set import SetPageController
+from ui.main_window.main_window_report import MainWindowReportPage
 from ui.main_window.main_window_sections import (
     MainWindowNavigation,
     MainWindowUserInfo,
@@ -104,6 +107,7 @@ class MainWindow(QWidget):
 
         self._selected_patient = None
         self._current_tab_index = 0
+        self._report_selected = False
         # 关闭主窗口时需要向下位机发送左右通道关闭命令；用一次性标记避免重复发送
         self._hw_shutdown_sent = False
 
@@ -144,6 +148,7 @@ class MainWindow(QWidget):
             self.logger,
             decoder_port=self.decoder_port,
             hardware_config_app=self.hardware_config_app,
+            user_app=self.user_app,
         )
 
         # 主窗口拆分模块
@@ -151,6 +156,7 @@ class MainWindow(QWidget):
         self._user_info = MainWindowUserInfo(self)
         self._device_status = MainWindowDeviceStatus(self)
         self._treat_flow = MainWindowTreatFlow(self)
+        self.report_controller = MainWindowReportPage(self)
 
         self._setup_connections()
         self._init_ui()
@@ -186,6 +192,7 @@ class MainWindow(QWidget):
         # 导航与治疗入口
         self._nav.bind()
         self._treat_flow.bind()
+        self._user_info.bind()
 
         # 登出
         button_logout = get_ui_attr(self.ui, "pushButton_logout")
@@ -198,6 +205,16 @@ class MainWindow(QWidget):
         # 窗口控制
         minimize_btn = get_ui_attr(self.ui, "pushButton_small") or get_ui_attr(self.ui, "pushButton_2")
         quit_btn = get_ui_attr(self.ui, "pushButton_quit") or get_ui_attr(self.ui, "pushButton")
+        safe_call(self.logger, getattr(minimize_btn, "setText", None), "")
+        safe_call(self.logger, getattr(minimize_btn, "setIcon", None), QIcon())
+        safe_call(
+            self.logger,
+            getattr(minimize_btn, "setStyleSheet", None),
+            "background-color: transparent; border: none; border-image: none;",
+        )
+        safe_call(self.logger, getattr(minimize_btn, "setFlat", None), True)
+        safe_call(self.logger, getattr(minimize_btn, "setCursor", None), Qt.PointingHandCursor)
+        safe_call(self.logger, getattr(quit_btn, "setCursor", None), Qt.PointingHandCursor)
         safe_connect(self.logger, getattr(minimize_btn, "clicked", None), self.showMinimized)
         safe_connect(self.logger, getattr(quit_btn, "clicked", None), self.close)
 
@@ -259,6 +276,12 @@ class MainWindow(QWidget):
         self.patient_controller.init_ui()
         self.plan_controller.init_ui()
         self.set_controller.init_ui()
+        self._user_info.init_org_info()
+        self.report_controller.init_ui()
+
+    def open_patient_treat_records(self, patient: dict) -> None:
+        """从患者管理等入口打开诊疗记录模块并定位到指定患者。"""
+        self.report_controller.open_for_patient(patient)
 
     def _switch_tab(self, tab_index: int):
         """切换顶级标签页 (0=治疗, 1=患者, 2=方案, 3=设置)"""
@@ -318,6 +341,10 @@ class MainWindow(QWidget):
             label_fallback = get_ui_attr(self.ui, "label_11")
             safe_call(self.logger, getattr(label_fallback, "setText", None), "未选择患者")
         self._selected_patient = None
+        try:
+            self._treat_flow.clear_patient_selection()
+        except Exception:
+            self.logger.exception("清空患者选择面板状态失败")
 
         if self.session_app:
             try:
@@ -382,17 +409,11 @@ class MainWindow(QWidget):
         self._device_status.update_treat_controls_by_pingpong()
 
     def _handle_logout(self):
-        reply = QMessageBox.question(
-            self,
-            "确认登出",
-            "确定要退出登录吗？",
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No,
-        )
-        if reply == QMessageBox.Yes:
-            self.user_app.logout()
-            self.logout_requested.emit()
-            self.close()
+        if not TipsDialog.show_confirm(self, "确定要退出登录吗？"):
+            return
+        self.user_app.logout()
+        self.logout_requested.emit()
+        self.close()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

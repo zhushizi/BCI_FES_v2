@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1360</width>
+    <height>920</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1360</width>
+    <height>920</height>
+   </size>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#Form {
+	background-color: #FFFFFF;
+	border: 2px solid #4B86FC;
+	border-radius: 16px;
+}</string>
+  </property>
+  <widget class="QPushButton" name="pushButton_close">
+   <property name="geometry">
+    <rect>
+     <x>1308</x>
+     <y>12</y>
+     <width>36</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: none;
+	background: transparent;
+	color: #8E8E93;
+	font-size: 18px;
+}</string>
+   </property>
+   <property name="text">
+    <string>×</string>
+   </property>
+  </widget>
+  <widget class="QFrame" name="frame_left">
+   <property name="geometry">
+    <rect>
+     <x>16</x>
+     <y>56</y>
+     <width>660</width>
+     <height>848</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QFrame#frame_left {
+	background: #FFFFFF;
+	border: 1px solid #E8ECF3;
+	border-radius: 12px;
+}</string>
+   </property>
+   <widget class="QLabel" name="label_left_title">
+    <property name="geometry">
+     <rect>
+      <x>18</x>
+      <y>14</y>
+      <width>120</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #1F1F1F; font-size: 18px; font-weight: 600; border: none;</string>
+    </property>
+    <property name="text">
+     <string>横向对比</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget_compare_records">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>56</y>
+      <width>628</width>
+      <height>716</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {
+	border: none;
+	background: transparent;
+}
+QHeaderView::section {
+	background: #EDF3FF;
+	color: #929292;
+	border: none;
+	padding: 8px;
+	font-size: 15px;
+}
+QTableWidget::item {
+	border: none;
+	padding: 8px;
+}
+QTableWidget::item:selected {
+	background: #EEF4FF;
+	color: #4B86FC;
+}</string>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="showGrid">
+     <bool>false</bool>
+    </property>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>180</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>50</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string/>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>治疗时间（按时间排序）</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>模式类型</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="pushButton_print">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>790</y>
+      <width>96</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background: #FFFFFF;
+	border: 1px solid #7CA0FF;
+	border-radius: 8px;
+	color: #4B86FC;
+}
+QPushButton:hover { background: #EEF4FF; }</string>
+    </property>
+    <property name="text">
+     <string>打印</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_export">
+    <property name="geometry">
+     <rect>
+      <x>532</x>
+      <y>790</y>
+      <width>96</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	background: #FFFFFF;
+	border: 1px solid #7CA0FF;
+	border-radius: 8px;
+	color: #4B86FC;
+}
+QPushButton:hover { background: #EEF4FF; }</string>
+    </property>
+    <property name="text">
+     <string>导出</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_right">
+   <property name="geometry">
+    <rect>
+     <x>692</x>
+     <y>56</y>
+     <width>652</width>
+     <height>848</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QFrame#frame_right {
+	background: #FFFFFF;
+	border: 1px solid #E8ECF3;
+	border-radius: 12px;
+}</string>
+   </property>
+   <widget class="QTextBrowser" name="textBrowser_report">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>16</y>
+      <width>620</width>
+      <height>768</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTextBrowser {
+	border: none;
+	background: #FFFFFF;
+	padding: 4px;
+}</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_prev">
+    <property name="geometry">
+     <rect>
+      <x>536</x>
+      <y>798</y>
+      <width>32</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton { border: none; background: transparent; color: #8E8E93; font-size: 16px; }</string>
+    </property>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_page_info">
+    <property name="geometry">
+     <rect>
+      <x>572</x>
+      <y>798</y>
+      <width>42</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #8E8E93; border: none;</string>
+    </property>
+    <property name="text">
+     <string>1/1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_next">
+    <property name="geometry">
+     <rect>
+      <x>616</x>
+      <y>798</y>
+      <width>32</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton { border: none; background: transparent; color: #8E8E93; font-size: 16px; }</string>
+    </property>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

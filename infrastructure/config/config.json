@@ -40,5 +40,7 @@
             "main": "INFO"
         }
     },
-    "websocket_exe": "@runtime/websocket_server/websocket_server.exe"
+    "websocket_exe": "@runtime/websocket_server/websocket_server.exe",
+    "hospital_name": "",
+    "department_name": ""
 }

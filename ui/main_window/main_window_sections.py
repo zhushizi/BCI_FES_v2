@@ -4,15 +4,16 @@
 
 from __future__ import annotations
 
+import re
 from typing import Callable, Optional
 
-from PySide6.QtCore import Qt, QRect, QTimer, QObject, QEvent
+from PySide6.QtCore import Qt, QRect, QTimer, QObject, QEvent, QPoint
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QMessageBox, QGraphicsDropShadowEffect, QLabel
+from PySide6.QtWidgets import QGraphicsDropShadowEffect, QLabel, QFrame, QVBoxLayout
 
 from ui.core.utils import get_ui_attr, safe_call, safe_connect
-from ui.dialogs.patient_select import PatientSelectDialog
 from ui.dialogs.tips_dialog import TipsDialog
+from ui.main_window.patient_select_panel import PatientSelectPanel
 
 
 class MainWindowNavigation:
@@ -30,6 +31,7 @@ class MainWindowNavigation:
         connect_click("pushButton_patient", lambda: self.switch_tab(1))
         connect_click("pushButton_plan", lambda: self.switch_tab(2))
         connect_click("pushButton_set", lambda: self.switch_tab(3))
+        connect_click("pushButton_report", self._on_report_clicked)
         connect_click("pushButton_tab2home", self.switch_treat_tab_to_first)
 
         tab_widget = get_ui_attr(self.ui, "tabWidget")
@@ -39,9 +41,13 @@ class MainWindowNavigation:
         tab_main = get_ui_attr(self.ui, "tabWidget_main")
         if tab_main:
             safe_call(self.logger, tab_main.tabBar().hide)
+            safe_connect(self.logger, getattr(tab_main, "currentChanged", None), lambda _: self._update_line2_visibility())
+        plan_btn = get_ui_attr(self.ui, "pushButton_plan")
+        safe_call(self.logger, getattr(plan_btn, "setVisible", None), False)
 
     def init_ui(self) -> None:
         self._host.setWindowTitle("BCI硬件控制系统")
+        self._host._report_selected = False
         tab_widget = get_ui_attr(self.ui, "tabWidget")
         if tab_widget:
             tab_widget.setCurrentIndex(0)
@@ -55,6 +61,8 @@ class MainWindowNavigation:
             tab_main.setCurrentIndex(0)
         label_patient = get_ui_attr(self.ui, "label_patient")
         safe_call(self.logger, getattr(label_patient, "setAlignment", None), Qt.AlignCenter)
+        self._host._treat_flow.refresh_patient_select_panel()
+        self._update_line2_visibility()
 
     def switch_tab(self, tab_index: int) -> None:
         tab_widget = get_ui_attr(self.ui, "tabWidget")
@@ -63,28 +71,41 @@ class MainWindowNavigation:
         if getattr(self._host, "_current_tab_index", 0) == 0 and tab_index != 0:
             self._host.treat_controller.on_exit_treat_page()
         if 0 <= tab_index < tab_widget.count():
+            self._host._report_selected = False
             tab_widget.setCurrentIndex(tab_index)
             self._host._current_tab_index = tab_index
+            self._update_line2_visibility()
             self.update_button_states()
-            if tab_index == 1:
+            if tab_index == 0:
+                self._host._treat_flow.refresh_patient_select_panel()
+            elif tab_index == 1:
                 self._host.patient_controller.refresh()
             elif tab_index == 2:
                 self._host.plan_controller.refresh()
             elif tab_index == 3:
                 self._host.set_controller.refresh()
+            elif tab_index == getattr(getattr(self._host, "report_controller", None), "REPORT_TAB_INDEX", -1):
+                self._host.report_controller.refresh()
 
     def on_tab_changed(self, index: int) -> None:
         previous_index = getattr(self._host, "_current_tab_index", 0)
         self._host._current_tab_index = index
+        self._update_line2_visibility()
+        report_tab_index = getattr(getattr(self._host, "report_controller", None), "REPORT_TAB_INDEX", -1)
+        self._host._report_selected = index == report_tab_index
         if previous_index == 0 and index != 0:
             self._host.treat_controller.on_exit_treat_page()
         self.update_button_states()
-        if index == 1:
+        if index == 0:
+            self._host._treat_flow.refresh_patient_select_panel()
+        elif index == 1:
             self._host.patient_controller.refresh()
         elif index == 2:
             self._host.plan_controller.refresh()
         elif index == 3:
             self._host.set_controller.refresh()
+        elif index == report_tab_index:
+            self._host.report_controller.refresh()
 
     def switch_treat_tab_to_first(self) -> None:
         tab_widget = get_ui_attr(self.ui, "tabWidget")
@@ -94,7 +115,24 @@ class MainWindowNavigation:
         if tab_main:
             tab_main.setCurrentIndex(0)
         self._host._current_tab_index = 0
+        self._host._report_selected = False
+        self._update_line2_visibility()
         self.update_button_states()
+        self._host._treat_flow.refresh_patient_select_panel()
+
+    def _update_line2_visibility(self) -> None:
+        line_2 = get_ui_attr(self.ui, "line_2")
+        if line_2 is None:
+            return
+        tab_widget_main = get_ui_attr(self.ui, "tabWidget_main")
+        tab_2 = get_ui_attr(self.ui, "tab_2")
+        in_preprocess_page = False
+        if tab_widget_main is not None and tab_2 is not None:
+            try:
+                in_preprocess_page = tab_widget_main.currentWidget() is tab_2
+            except Exception:
+                in_preprocess_page = False
+        safe_call(self.logger, getattr(line_2, "setVisible", None), not in_preprocess_page)
 
     def update_button_states(self) -> None:
         button_configs = [
@@ -115,12 +153,94 @@ class MainWindowNavigation:
                 f"    border: none;"
                 f"}}"
             )
+        self._update_report_button_state(bool(getattr(self._host, "_report_selected", False)))
+
+    def _on_report_clicked(self) -> None:
+        tab_widget = get_ui_attr(self.ui, "tabWidget")
+        report_tab_index = getattr(getattr(self._host, "report_controller", None), "REPORT_TAB_INDEX", -1)
+        if tab_widget is not None and 0 <= report_tab_index < tab_widget.count():
+            if getattr(self._host, "_current_tab_index", 0) == 0:
+                self._host.treat_controller.on_exit_treat_page()
+            self._host._report_selected = True
+            self._host._current_tab_index = report_tab_index
+            tab_widget.setCurrentIndex(report_tab_index)
+            self._host.report_controller.refresh()
+        self._update_report_button_state(True)
+
+    def _update_report_button_state(self, selected: bool) -> None:
+        button_name = "pushButton_report"
+        button = get_ui_attr(self.ui, button_name)
+        if button is None:
+            return
+        image_name = "main_report_on.png" if selected else "main_report_off.png"
+        button.setStyleSheet(
+            f"QPushButton#{button_name} {{"
+            f"    border-image: url(:/main/pic/{image_name});"
+            f"    background: transparent;"
+            f"    border: none;"
+            f"}}"
+        )
 
 
 class MainWindowUserInfo:
+    _CONFIG_KEY_HOSPITAL = "hospital_name"
+    _CONFIG_KEY_DEPARTMENT = "department_name"
+
     def __init__(self, host):
         self._host = host
         self.ui = host.ui
+
+    def bind(self) -> None:
+        btn_confirm = get_ui_attr(self.ui, "pushButton_other_confirm")
+        safe_connect(
+            self._host.logger,
+            getattr(btn_confirm, "clicked", None),
+            self._on_other_confirm,
+        )
+
+    def init_org_info(self) -> None:
+        config_app = getattr(self._host, "config_app", None)
+        if not config_app:
+            return
+        hospital = str(config_app.get(self._CONFIG_KEY_HOSPITAL, "") or "").strip()
+        department = str(config_app.get(self._CONFIG_KEY_DEPARTMENT, "") or "").strip()
+        self._apply_org_info(hospital, department)
+
+    def _apply_org_info(self, hospital: str, department: str) -> None:
+        hospital_edit = get_ui_attr(self.ui, "lineEdit_hospital_name")
+        hospital_label = get_ui_attr(self.ui, "label_hosipital")
+        if hospital_edit:
+            safe_call(self._host.logger, getattr(hospital_edit, "setText", None), hospital)
+        if hospital_label:
+            safe_call(self._host.logger, getattr(hospital_label, "setText", None), hospital)
+        department_edit = get_ui_attr(self.ui, "lineEdit_department_name")
+        department_label = get_ui_attr(self.ui, "label_department")
+        if department_edit:
+            safe_call(self._host.logger, getattr(department_edit, "setText", None), department)
+        if department_label:
+            safe_call(
+                self._host.logger,
+                getattr(department_label, "setText", None),
+                department,
+            )
+
+    def _on_other_confirm(self) -> None:
+        hospital_edit = get_ui_attr(self.ui, "lineEdit_hospital_name")
+        department_edit = get_ui_attr(self.ui, "lineEdit_department_name")
+        hospital = hospital_edit.text().strip() if hospital_edit else ""
+        department = department_edit.text().strip() if department_edit else ""
+        self._apply_org_info(hospital, department)
+        config_app = getattr(self._host, "config_app", None)
+        if not config_app:
+            return
+        ok = config_app.update(
+            {
+                self._CONFIG_KEY_HOSPITAL: hospital,
+                self._CONFIG_KEY_DEPARTMENT: department,
+            }
+        )
+        if not ok:
+            self._host.logger.warning("保存医院/科室配置失败")
 
     def get_first_char(self, text: str) -> str:
         if not text:
@@ -161,15 +281,21 @@ class MainWindowDeviceStatus:
         self._host = host
         self.ui = host.ui
         self._ws_timer: Optional[QTimer] = None
+        self._status_tip_filter: Optional[_StatusIndicatorTipFilter] = None
 
     def init_device_status(self) -> None:
         label_pingpong = get_ui_attr(self.ui, "label_pingpong")
         if label_pingpong:
             label_pingpong.setText("")
+            label_pingpong.setToolTip("")
+            label_pingpong.setProperty("status_ok", False)
             self.set_pingpong_indicator(is_alive=False)
             self.update_treat_controls_by_pingpong()
         label_wifi = get_ui_attr(self.ui, "label_wifi")
         safe_call(self._host.logger, getattr(label_wifi, "setText", None), "")
+        safe_call(self._host.logger, getattr(label_wifi, "setToolTip", None), "")
+        safe_call(self._host.logger, getattr(label_wifi, "setProperty", None), "status_ok", False)
+        self._install_status_tips()
         self._init_ws_status()
 
         if self._host.pingpong_service:
@@ -208,12 +334,11 @@ class MainWindowDeviceStatus:
         label_pingpong = get_ui_attr(self.ui, "label_pingpong")
         if label_pingpong is None:
             return
+        label_pingpong.setProperty("status_ok", bool(is_alive))
         if is_alive:
             label_pingpong.setStyleSheet("border-image: url(:/main/pic/main_pingpong_on.png);")
-            label_pingpong.setToolTip("心跳正常")
         else:
             label_pingpong.setStyleSheet("border-image: url(:/main/pic/main_pingpong_off.png);")
-            label_pingpong.setToolTip("心跳超时")
 
     def _init_ws_status(self) -> None:
         self._set_wifi_indicator(False)
@@ -239,12 +364,11 @@ class MainWindowDeviceStatus:
         label_wifi = get_ui_attr(self.ui, "label_wifi")
         if label_wifi is None:
             return
+        label_wifi.setProperty("status_ok", bool(is_connected))
         if is_connected:
             label_wifi.setStyleSheet("border-image: url(:/main/pic/main_wifi_on.png);")
-            label_wifi.setToolTip("服务器连接正常")
         else:
             label_wifi.setStyleSheet("border-image: url(:/main/pic/main_wifi_off.png);")
-            label_wifi.setToolTip("服务器未连接")
 
     def on_pingpong_status_changed(self, is_alive: bool, last_seen_sec) -> None:
         self.set_pingpong_indicator(bool(is_alive))
@@ -255,7 +379,7 @@ class MainWindowDeviceStatus:
         if label_pingpong is None:
             return True
         try:
-            return label_pingpong.toolTip() == "心跳正常"
+            return bool(label_pingpong.property("status_ok"))
         except Exception:
             return True
 
@@ -267,6 +391,65 @@ class MainWindowDeviceStatus:
         except Exception:
             pass
 
+    def _install_status_tips(self) -> None:
+        if self._status_tip_filter is None:
+            self._status_tip_filter = _StatusIndicatorTipFilter(self.ui)
+        label_pingpong = get_ui_attr(self.ui, "label_pingpong")
+        label_wifi = get_ui_attr(self.ui, "label_wifi")
+        if label_pingpong is not None:
+            label_pingpong.installEventFilter(self._status_tip_filter)
+        if label_wifi is not None:
+            label_wifi.installEventFilter(self._status_tip_filter)
+
+
+class _StatusIndicatorTipFilter(QObject):
+    """状态图标专用悬浮提示。"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._popup = QFrame(None, Qt.ToolTip | Qt.FramelessWindowHint)
+        self._popup.setObjectName("statusIndicatorPopup")
+        self._popup.setStyleSheet(
+            "QFrame#statusIndicatorPopup {"
+            "background: #FFFFFF;"
+            "border: 1px solid #D0D5DD;"
+            "border-radius: 8px;"
+            "}"
+            "QLabel {"
+            "color: #1F2937;"
+            "font-size: 12px;"
+            "padding: 6px 10px;"
+            "background: transparent;"
+            "}"
+        )
+        layout = QVBoxLayout(self._popup)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self._label = QLabel("")
+        layout.addWidget(self._label)
+
+    def eventFilter(self, watched, event):
+        name = getattr(watched, "objectName", lambda: "")()
+        if name not in ("label_wifi", "label_pingpong"):
+            return super().eventFilter(watched, event)
+        if event.type() == QEvent.Enter:
+            self._show_tip(watched, name)
+        elif event.type() in (QEvent.Leave, QEvent.Hide):
+            self._popup.hide()
+        return super().eventFilter(watched, event)
+
+    def _show_tip(self, widget, name: str) -> None:
+        is_ok = bool(widget.property("status_ok"))
+        if name == "label_wifi":
+            text = "上位机通讯正常" if is_ok else "上位机通讯不正常"
+        else:
+            text = "下位机连接正常" if is_ok else "下位机连接不正常"
+        self._label.setText(text)
+        self._popup.adjustSize()
+        x = max(0, (widget.width() - self._popup.width()) // 2)
+        pos = widget.mapToGlobal(QPoint(x, widget.height() + 8))
+        self._popup.move(pos)
+        self._popup.show()
+
 
 class MainWindowTreatFlow:
     def __init__(self, host):
@@ -274,6 +457,7 @@ class MainWindowTreatFlow:
         self.ui = host.ui
         self.logger = host.logger
         self._hover_filters: list[_HoverShadowFilter] = []
+        self._patient_select_panel: Optional[PatientSelectPanel] = None
         self._hover_mapping: dict[str, tuple[str, str]] = {
             "pushButton_gou_ssvep": ("label_icon_ssvep_gou", "label_23"),
             "pushButton_gou_ssmvep": ("label_icon_ssmvep_gou", "label_24"),
@@ -289,6 +473,8 @@ class MainWindowTreatFlow:
             safe_connect(self.logger, getattr(button, "clicked", None), slot)
 
         connect_click("pushButton_tab1select", self.open_patient_select_dialog)
+        self._ensure_patient_select_panel()
+        self._set_paradigm_overlays_mouse_transparent()
 
         treat_buttons = [
             "pushButton_gou_ssvep",
@@ -314,16 +500,51 @@ class MainWindowTreatFlow:
         start_evaluate_btn = get_ui_attr(self.ui, "pushButton_startevaluate")
         safe_connect(self.logger, getattr(start_evaluate_btn, "clicked", None), self.on_start_evaluate_clicked)
 
-    def _build_treat_button_style(self, button_name: str, border_color: str) -> str:
-        return (
-            f"QPushButton#{button_name} {{ "
-            f"background-color: #ffffff; border-radius: 42px; border: 2px solid {border_color}; "
-            f"}}"
+    def _set_paradigm_overlays_mouse_transparent(self) -> None:
+        # 仅让覆盖在按钮上的图标/文字标签穿透鼠标事件，不能把按钮本身设为穿透
+        names = [name for _, (icon, text) in self._hover_mapping.items() for name in (icon, text)]
+        for name in names:
+            label = get_ui_attr(self.ui, name)
+            if isinstance(label, QLabel):
+                label.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+
+    def _ensure_patient_select_panel(self) -> None:
+        if self._patient_select_panel is not None:
+            return
+        container = get_ui_attr(self.ui, "widget_patient_select")
+        if container is None:
+            return
+        layout = container.layout()
+        if layout is None:
+            layout = QVBoxLayout(container)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.setSpacing(0)
+        self._patient_select_panel = PatientSelectPanel(
+            patient_app=self._host.patient_app,
+            parent=container,
+            logger=self.logger,
         )
+        layout.addWidget(self._patient_select_panel)
+        safe_connect(self.logger, self._patient_select_panel.patient_selected, self.on_patient_selected)
+        safe_connect(self.logger, self._patient_select_panel.patient_cleared, self.on_patient_deselected)
+
+    def _build_treat_button_style(self, button, border_color: str) -> str:
+        """仅调整边框颜色，保留 .ui 中定义的 background / border-radius。"""
+        base = getattr(button, "_paradigm_base_style", button.styleSheet() or "")
+        if re.search(r"border\s*:", base):
+            return re.sub(
+                r"border\s*:\s*[^;]+;",
+                f"border: 2px solid {border_color};",
+                base,
+                count=1,
+            )
+        name = button.objectName()
+        return f"{base}\nQPushButton#{name} {{ border: 2px solid {border_color}; }}"
 
     def _attach_hover_shadow(self, button, button_name: str) -> None:
-        # 默认灰色边框（悬浮时再变淡）
-        button.setStyleSheet(self._build_treat_button_style(button_name, "#C8C8C8"))
+        button._paradigm_base_style = button.styleSheet() or ""
+        # 默认灰色边框（悬浮时再变淡）；不覆盖 UI 中的倒角设置
+        button.setStyleSheet(self._build_treat_button_style(button, "#C8C8C8"))
         effect = QGraphicsDropShadowEffect(button)
         effect.setBlurRadius(18)
         effect.setOffset(0, 0)
@@ -336,8 +557,8 @@ class MainWindowTreatFlow:
         hover_filter = _HoverShadowFilter(
             button=button,
             effect=effect,
-            normal_style=self._build_treat_button_style(button_name, "#C8C8C8"),
-            hover_style=self._build_treat_button_style(button_name, "#E2E2E2"),
+            normal_style=self._build_treat_button_style(button, "#C8C8C8"),
+            hover_style=self._build_treat_button_style(button, "#E2E2E2"),
             icon_label=icon_label,
             text_label=text_label,
         )
@@ -346,9 +567,10 @@ class MainWindowTreatFlow:
 
 
     def open_patient_select_dialog(self) -> None:
-        dialog = PatientSelectDialog(self._host, self._host.patient_app)
-        dialog.patient_selected.connect(self.on_patient_selected)
-        dialog.exec()
+        self._ensure_patient_select_panel()
+        self.refresh_patient_select_panel()
+        if self._patient_select_panel:
+            self._patient_select_panel.focus_search()
 
     def on_patient_selected(self, patient: dict) -> None:
         patient_name = patient.get("Name", "")
@@ -358,8 +580,77 @@ class MainWindowTreatFlow:
         else:
             label_fallback = get_ui_attr(self.ui, "label_11")
             safe_call(self.logger, getattr(label_fallback, "setText", None), patient_name)
+        self._fill_patient_info_labels(patient)
         self._host._selected_patient = patient
+        if self._patient_select_panel:
+            self._patient_select_panel.refresh_patients(selected_patient=patient)
         self._host.treat_controller.set_current_patient(patient)
+
+    def refresh_patient_select_panel(self) -> None:
+        self._ensure_patient_select_panel()
+        if self._patient_select_panel:
+            self._patient_select_panel.refresh_patients(selected_patient=self._host._selected_patient)
+
+    def on_patient_deselected(self) -> None:
+        if not self._host._selected_patient:
+            return
+        self._apply_no_patient_selected()
+
+    def clear_patient_selection(self) -> None:
+        self._apply_no_patient_selected()
+
+    def _apply_no_patient_selected(self) -> None:
+        self._host._selected_patient = None
+        label_patient = get_ui_attr(self.ui, "label_patient")
+        if label_patient:
+            label_patient.setText("未选择患者")
+        else:
+            label_fallback = get_ui_attr(self.ui, "label_11")
+            safe_call(self.logger, getattr(label_fallback, "setText", None), "未选择患者")
+        if self._patient_select_panel:
+            self._patient_select_panel.set_selected_patient(None)
+        self._fill_patient_info_labels(None)
+        if getattr(self._host, "treat_controller", None):
+            self._host.treat_controller.set_current_patient(None)
+
+    def _fill_patient_info_labels(self, patient: dict | None) -> None:
+        patient = patient or {}
+
+        def _txt(value) -> str:
+            text = str(value or "").strip()
+            return text if text else "--"
+
+        def _birthday_text() -> str:
+            for key in ("Birthday", "BirthDay", "birth_day", "birthdate"):
+                value = patient.get(key)
+                if value not in (None, ""):
+                    return _txt(value)
+            return "--"
+
+        def _height_weight_text() -> str:
+            height_raw = patient.get("Height")
+            weight_raw = patient.get("Weight")
+            height = "" if height_raw in (None, "") else str(height_raw).strip()
+            weight = "" if weight_raw in (None, "") else str(weight_raw).strip()
+            if height and weight:
+                return f"{height}/{weight}"
+            if height:
+                return height
+            if weight:
+                return weight
+            return "--"
+
+        label_values = {
+            "label_patient_id": _txt(patient.get("PatientId")),
+            "label_sex": _txt(patient.get("Sex")),
+            "label_birthday": _birthday_text(),
+            "label_height_weight": _height_weight_text(),
+            "label_visit_time": _txt(patient.get("VisitTime")).replace("/", "-"),
+            "label_age": _txt(patient.get("Age")),
+        }
+        for label_name, text in label_values.items():
+            label = get_ui_attr(self.ui, label_name)
+            safe_call(self.logger, getattr(label, "setText", None), f"  {text}")
 
     @staticmethod
     def extract_patient_id(patient: dict | None) -> str | None:
