@@ -3904,23 +3904,26 @@ border-radius: 12px;</string>
       <widget class="QLabel" name="label_left_grade">
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>650</y>
-         <width>151</width>
-         <height>61</height>
+         <x>317</x>
+         <y>665</y>
+         <width>148</width>
+         <height>39</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>36</pointsize>
+         <pointsize>10</pointsize>
          <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(88, 122, 244);</string>
+        <string notr="true">background-color: rgb(248, 248, 248);
+border-left: 1px solid rgb(235, 235, 235);
+border-right: 1px solid rgb(235, 235, 235);
+color: rgb(88, 122, 244);</string>
        </property>
        <property name="text">
-        <string>0级</string>
+        <string>0mA</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -3932,33 +3935,59 @@ border-radius: 12px;</string>
       <widget class="QPushButton" name="pushButton_left_turnsmall">
        <property name="geometry">
         <rect>
-         <x>220</x>
-         <y>650</y>
-         <width>71</width>
-         <height>71</height>
+         <x>243</x>
+         <y>665</y>
+         <width>74</width>
+         <height>39</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/preprocess/pic/preprocess_eleTurnSmall.png);</string>
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled { color: rgb(180, 190, 215); }</string>
        </property>
        <property name="text">
-        <string/>
+        <string>−</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_left_turnbig">
        <property name="geometry">
         <rect>
-         <x>490</x>
-         <y>650</y>
-         <width>71</width>
-         <height>71</height>
+         <x>465</x>
+         <y>665</y>
+         <width>74</width>
+         <height>39</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/preprocess/pic/preprocess_eleTurnBig.png);</string>
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled { color: rgb(180, 190, 215); }</string>
        </property>
        <property name="text">
-        <string/>
+        <string>+</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_next">

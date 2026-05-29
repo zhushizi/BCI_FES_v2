@@ -621,7 +621,7 @@ class StimTestController:
             return 0
         text = label.text()
         try:
-            grade_str = text.replace("级", "").strip()
+            grade_str = text.replace("级", "").replace("mA", "").replace("MA", "").strip()
             return int(grade_str)
         except (ValueError, AttributeError):
             return 0
@@ -631,7 +631,7 @@ class StimTestController:
         if label is None:
             return
         grade = max(0, min(self._CURRENT_MAX_OUTPUT, grade))
-        safe_call(self._logger, getattr(label, "setText", None), f"{grade}级")
+        safe_call(self._logger, getattr(label, "setText", None), f"{grade}mA")
         if self._left_circle_widget is not None:
             self._left_circle_widget.set_level(grade)
 
