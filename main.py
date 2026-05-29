@@ -423,6 +423,7 @@ def run_login_flow(
     sub_window: Optional[SubWindow] = None
 
     def show_login() -> None:
+        login_window.clear_password_field()
         login_window.showFullScreen()
         set_window_on_screen(login_window, 1 if swap_screens else 0)
         login_window.raise_()

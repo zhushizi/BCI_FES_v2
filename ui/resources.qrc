@@ -16,6 +16,7 @@
         <file>pic/login_welcome.png</file>
         <file>pic/login_checked.png</file>
         <file>pic/login_pwdopen.png</file>
+        <file>pic/login_zenith.png</file>
     </qresource>
     
     <!-- 主界面图片资源 -->
@@ -139,5 +140,6 @@
         <file>pic/set_volumeopen.png</file>
         <file>pic/set_volumedown.png</file>
         <file>pic/set_volumeup.png</file>
+        <file>pic/脑机接口-上下肢-21.png</file>
     </qresource>
 </RCC>

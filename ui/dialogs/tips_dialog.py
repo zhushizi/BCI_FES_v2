@@ -11,6 +11,7 @@ from PySide6.QtCore import Qt, QFile, QIODevice
 from PySide6.QtWidgets import QDialog, QVBoxLayout
 from PySide6.QtUiTools import QUiLoader
 
+from ui.core.dialog_overlay import OverlayDialog
 from ui.core.resource_loader import ensure_resources_loaded
 from ui.core.utils import get_ui_attr, safe_connect
 
@@ -19,7 +20,7 @@ UI_PATH_SINGLE = UI_ROOT / "tips_sigle.ui"   # 仅「确定」
 UI_PATH_QUESTION = UI_ROOT / "tips.ui"       # 「否」+「确定」
 
 
-class TipsDialog(QDialog):
+class TipsDialog(OverlayDialog):
     """单按钮提示用 tips_sigle.ui，双按钮确认用 tips.ui，无顶栏，pushButton_close 关闭。"""
 
     def __init__(self, parent=None, message: str = "", question: bool = False):

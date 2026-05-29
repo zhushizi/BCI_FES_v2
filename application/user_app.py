@@ -68,20 +68,26 @@ class UserApp:
     def get_saved_username(self) -> Optional[str]:
         """获取已保存的用户名"""
         return self.user_service.get_saved_username()
-    
-    def get_saved_password(self) -> Optional[str]:
-        """获取已保存的密码"""
-        return self.user_service.get_saved_password()
-    
-    def has_saved_credentials(self) -> bool:
-        """检查是否有保存的凭据"""
-        return self.user_service.has_saved_credentials()
-    
-    def save_credentials(self, username: str, password: str, remember: bool) -> None:
-        """保存用户凭据"""
-        self.user_service.save_credentials(username, password, remember)
+
+    def save_username(self, username: str) -> None:
+        """保存上次登录的用户名"""
+        self.user_service.save_username(username)
     
     def get_user_by_id(self, user_id: int) -> Optional[dict]:
         """根据ID获取用户信息"""
         return self.user_service.get_user_by_id(user_id)
 
+    def change_password(self, admin_password: str, old_password: str, new_password: str) -> dict:
+        """修改当前登录用户密码（需管理员密码授权）。"""
+        return self.user_service.change_password(admin_password, old_password, new_password)
+
+    @staticmethod
+    def validate_password(password: str) -> Optional[str]:
+        """校验密码格式，合法返回 None，否则返回错误提示。"""
+        from service.user.user_login_service import validate_password as _validate
+
+        return _validate(password)
+
+    def verify_current_password(self, old_password: str) -> Optional[str]:
+        """校验当前登录用户旧密码，正确返回 None，否则返回错误提示。"""
+        return self.user_service.verify_current_password(old_password)

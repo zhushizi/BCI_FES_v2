@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from PySide6.QtWidgets import QWidget, QMessageBox, QLineEdit
+from PySide6.QtWidgets import QWidget, QLineEdit
 from PySide6.QtCore import Signal, QFile
 from PySide6.QtUiTools import QUiLoader
 
@@ -72,13 +72,13 @@ class LoginWindow(QWidget):
             line_edit_uid = get_ui_attr(self.ui, "lineEdit_uid")
             safe_call(self._logger, getattr(line_edit_uid, "setText", None), username)
 
-        if self.user_app.has_saved_credentials():
-            password = self.user_app.get_saved_password()
-            if password:
-                line_edit_pwd = get_ui_attr(self.ui, "lineEdit_upwd")
-                safe_call(self._logger, getattr(line_edit_pwd, "setText", None), password)
-            checkbox = get_ui_attr(self.ui, "checkBox_remember")
-            safe_call(self._logger, getattr(checkbox, "setChecked", None), True)
+    def clear_password_field(self) -> None:
+        """清空密码输入框（登出后回到登录页时调用）。"""
+        password_input = get_ui_attr(self.ui, "lineEdit_upwd")
+        safe_call(self._logger, getattr(password_input, "clear", None))
+        if password_input and password_input.echoMode() != QLineEdit.Password:
+            password_input.setEchoMode(QLineEdit.Password)
+            self._update_password_vision_button(False)
 
     def _handle_login(self):
         username_input = get_ui_attr(self.ui, "lineEdit_uid")
@@ -99,11 +99,7 @@ class LoginWindow(QWidget):
         result = self.user_app.login(username, password)
 
         if result["success"]:
-            remember = False
-            checkbox = get_ui_attr(self.ui, "checkBox_remember")
-            if checkbox:
-                remember = bool(checkbox.isChecked())
-            self.user_app.save_credentials(username, password, remember)
+            self.user_app.save_username(username)
             self.login_success.emit(result["user"])
             self.close()
         else:
