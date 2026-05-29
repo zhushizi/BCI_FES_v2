@@ -98,7 +98,7 @@
         <file>pic/treat_shut.png</file>
         <file>pic/treat_pause.png</file>
         <file>pic/treat_power_logo.png</file>
-        
+        <file>pic/treat_patient_touxiang.png</file>
     </qresource>
 
     <!-- 主界面图片资源 -->

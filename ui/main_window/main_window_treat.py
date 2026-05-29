@@ -118,7 +118,7 @@ class TreatPageController:
         # 统一把 patient_id 往下传（范式入口按钮已在 open_treat_page 中设置）
         self.stim_ctrl.set_current_patient(patient)
         self.impedance_ctrl.set_current_patient(pid)
-        self.training_main_ctrl.set_current_patient(pid)
+        self.training_main_ctrl.set_current_patient(pid, patient)
         self.training_sub_ctrl.set_current_patient(pid)
 
     def _on_countdown_finished_return_home(self) -> None:

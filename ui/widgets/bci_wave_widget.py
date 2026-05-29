@@ -23,10 +23,10 @@ class BCIWaveWidget(QWidget):
         self._sample_interval: float | None = None
         self._window_sec = 10.0
         self._max_points = 800
-        self._bg_color = QColor(10, 10, 10)
-        self._grid_color = QColor(40, 40, 40)
-        self._wave_color = QColor(0, 200, 255)
-        self._label_color = QColor(220, 220, 220)
+        self._bg_color = QColor("#FFFFFF")
+        self._grid_color = QColor("#E8E8E8")
+        self._wave_color = QColor("#789EFF")
+        self._label_color = QColor("#789EFF")
         self._draw_labels = True
         # 由 decoder.ImpedanceValue 的 electrode 经 set_channel_labels 写入；未收到前为空
         self._channel_labels: list[str] = []
@@ -84,13 +84,13 @@ class BCIWaveWidget(QWidget):
         painter.fillRect(rect, self._bg_color)
 
         if self._eeg_data is None:
-            painter.setPen(QPen(QColor(180, 180, 180), 1))
+            painter.setPen(QPen(QColor("#999999"), 1))
             painter.drawText(rect, Qt.AlignCenter, "暂无波形数据")
             return
 
         eeg = self._to_2d_array(self._eeg_data)
         if eeg is None:
-            painter.setPen(QPen(QColor(180, 180, 180), 1))
+            painter.setPen(QPen(QColor("#999999"), 1))
             painter.drawText(rect, Qt.AlignCenter, "波形格式不支持")
             return
 

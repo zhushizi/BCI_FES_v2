@@ -8,10 +8,17 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable, Optional
 
+from PySide6.QtWidgets import QWidget
+
 
 def get_ui_attr(ui: Any, name: str) -> Any:
     """安全获取 UI 子控件，缺失时返回 None。"""
-    return getattr(ui, name, None)
+    widget = getattr(ui, name, None)
+    if widget is not None:
+        return widget
+    if isinstance(ui, QWidget):
+        return ui.findChild(QWidget, name)
+    return None
 
 
 def safe_call(
