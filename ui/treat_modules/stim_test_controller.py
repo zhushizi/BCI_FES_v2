@@ -5,7 +5,7 @@ import time
 from typing import Optional
 
 from PySide6.QtCore import QEvent, QObject, Qt, QTimer
-from PySide6.QtGui import QRegion
+from PySide6.QtGui import QPixmap, QRegion
 from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QVBoxLayout
 
 from ui.dialogs.tips_dialog import TipsDialog
@@ -48,21 +48,46 @@ class StimTestController:
     _ADVANCED_RESERVED_STIM_PAGE = 0x02
     _ADJUST_COOLDOWN_MS = 1000
 
-    _STYLE_LEG_SELECTED = (
-        "QPushButton { background-color: rgb(219, 233, 247); color: rgb(88, 122, 244); "
-        "border: 2px solid rgb(88, 122, 244); border-radius: 10px; }"
+    _STYLE_LEG_BTN_SELECTED = (
+        "QPushButton { background: transparent; border: none; color: rgb(91, 141, 239); "
+        "text-align: left; padding: 0px; }"
     )
-    _STYLE_LEG_NORMAL = (
-        "QPushButton { background-color: rgb(240, 242, 245); color: rgb(120, 120, 120); "
-        "border: 1px solid rgb(200, 200, 200); border-radius: 10px; }"
+    _STYLE_LEG_BTN_NORMAL = (
+        "QPushButton { background: transparent; border: none; color: rgb(100, 116, 139); "
+        "text-align: left; padding: 0px; }"
     )
-    _STYLE_LEG_COMPLETED = (
-        "QPushButton { background-color: rgb(232, 245, 233); color: rgb(46, 125, 50); "
-        "border: 2px solid rgb(129, 199, 132); border-radius: 10px; }"
+    _STYLE_LEG_BTN_COMPLETED = (
+        "QPushButton { background: transparent; border: none; color: rgb(46, 125, 50); "
+        "text-align: left; padding: 0px; }"
     )
-    _STYLE_LEG_COMPLETED_SELECTED = (
-        "QPushButton { background-color: rgb(220, 237, 220); color: rgb(27, 94, 32); "
-        "border: 2px solid rgb(76, 175, 80); border-radius: 10px; }"
+    _STYLE_FRAME_SELECTED = (
+        "QFrame#{name} {{ background-color: rgb(237, 244, 255); "
+        "border: 1px solid rgb(91, 141, 239); border-radius: 10px; }}"
+    )
+    _STYLE_FRAME_NORMAL = (
+        "QFrame#{name} {{ background-color: rgb(248, 250, 252); "
+        "border: 1px solid rgb(220, 228, 240); border-radius: 10px; }}"
+    )
+    _STYLE_FRAME_COMPLETED = (
+        "QFrame#{name} {{ background-color: rgb(232, 245, 233); "
+        "border: 1px solid rgb(129, 199, 132); border-radius: 10px; }}"
+    )
+    _STYLE_FRAME_COMPLETED_SELECTED = (
+        "QFrame#{name} {{ background-color: rgb(220, 237, 220); "
+        "border: 1px solid rgb(76, 175, 80); border-radius: 10px; }}"
+    )
+    _STYLE_INDICATOR_SELECTED = (
+        "background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, "
+        "stop:0 rgb(91, 141, 239), stop:0.38 rgb(91, 141, 239), stop:0.39 rgb(255, 255, 255)); "
+        "border: 2px solid rgb(91, 141, 239); border-radius: 12px;"
+    )
+    _STYLE_INDICATOR_NORMAL = (
+        "background-color: rgb(255, 255, 255); border: 2px solid rgb(208, 213, 221); "
+        "border-radius: 12px;"
+    )
+    _STYLE_INDICATOR_COMPLETED = (
+        "background-color: rgb(76, 175, 80); border: none; border-radius: 12px; "
+        "color: rgb(255, 255, 255); font-size: 14px; font-weight: bold;"
     )
 
     def __init__(self, ui, session_app: Optional[SessionApp] = None, stim_app: Optional[StimTestApp] = None):
@@ -183,30 +208,60 @@ class StimTestController:
     def _reset_stim_leg_completion_flags(self) -> None:
         self._stim_leg_stop_completed = {"left": False, "right": False}
 
+    def _style_for_leg_frame(self, channel: str, is_selected: bool) -> str:
+        frame_name = "frame_stim_leg_left" if channel == "left" else "frame_stim_leg_right"
+        if self._leg_show_completed_green(channel):
+            template = self._STYLE_FRAME_COMPLETED_SELECTED if is_selected else self._STYLE_FRAME_COMPLETED
+        elif is_selected:
+            template = self._STYLE_FRAME_SELECTED
+        else:
+            template = self._STYLE_FRAME_NORMAL
+        return template.format(name=frame_name)
+
     def _style_for_leg_button(self, channel: str, is_selected: bool) -> str:
         if self._leg_show_completed_green(channel):
-            return self._STYLE_LEG_COMPLETED_SELECTED if is_selected else self._STYLE_LEG_COMPLETED
+            return self._STYLE_LEG_BTN_COMPLETED
         if is_selected:
-            return self._STYLE_LEG_SELECTED
-        return self._STYLE_LEG_NORMAL
+            return self._STYLE_LEG_BTN_SELECTED
+        return self._STYLE_LEG_BTN_NORMAL
+
+    def _style_for_leg_indicator(self, channel: str, is_selected: bool) -> tuple[str, str | None]:
+        if self._leg_show_completed_green(channel):
+            return self._STYLE_INDICATOR_COMPLETED, "✓"
+        if is_selected:
+            return self._STYLE_INDICATOR_SELECTED, None
+        return self._STYLE_INDICATOR_NORMAL, None
+
+    def _apply_leg_card_style(self, channel: str, is_selected: bool) -> None:
+        suffix = "left" if channel == "left" else "right"
+        frame = get_ui_attr(self.ui, f"frame_stim_leg_{suffix}")
+        btn = get_ui_attr(self.ui, f"pushButton_stim_leg_{suffix}")
+        indicator = get_ui_attr(self.ui, f"label_stim_leg_indicator_{suffix}")
+        if frame:
+            safe_call(self._logger, getattr(frame, "setStyleSheet", None), self._style_for_leg_frame(channel, is_selected))
+        if btn:
+            safe_call(self._logger, getattr(btn, "setStyleSheet", None), self._style_for_leg_button(channel, is_selected))
+        if indicator:
+            style, indicator_text = self._style_for_leg_indicator(channel, is_selected)
+            safe_call(self._logger, getattr(indicator, "setStyleSheet", None), style)
+            if indicator_text:
+                safe_call(self._logger, getattr(indicator, "setPixmap", None), QPixmap())
+                safe_call(self._logger, getattr(indicator, "setText", None), indicator_text)
+            else:
+                safe_call(self._logger, getattr(indicator, "setText", None), "")
+                safe_call(self._logger, getattr(indicator, "clear", None))
 
     def _refresh_stim_leg_styles(self) -> None:
-        btn_l = get_ui_attr(self.ui, "pushButton_stim_leg_left")
-        btn_r = get_ui_attr(self.ui, "pushButton_stim_leg_right")
         mode = self._patient_leg_display_mode()
         sel = self._selected_leg_channel()
         if mode == "left":
-            if btn_l:
-                safe_call(self._logger, getattr(btn_l, "setStyleSheet", None), self._style_for_leg_button("left", True))
+            self._apply_leg_card_style("left", True)
             return
         if mode == "right":
-            if btn_r:
-                safe_call(self._logger, getattr(btn_r, "setStyleSheet", None), self._style_for_leg_button("right", True))
+            self._apply_leg_card_style("right", True)
             return
-        if btn_l:
-            safe_call(self._logger, getattr(btn_l, "setStyleSheet", None), self._style_for_leg_button("left", sel == "left"))
-        if btn_r:
-            safe_call(self._logger, getattr(btn_r, "setStyleSheet", None), self._style_for_leg_button("right", sel == "right"))
+        self._apply_leg_card_style("left", sel == "left")
+        self._apply_leg_card_style("right", sel == "right")
 
     def _set_leg_highlight(self, left_selected: bool) -> None:
         btn_l = get_ui_attr(self.ui, "pushButton_stim_leg_left")
@@ -1208,7 +1263,6 @@ QScrollBar::sub-line:horizontal {
             self._logger.exception("弹出提示失败")
         return False
 
-
 class _CircleMaskResizeFilter(QObject):
     """Resize 时重新为 host 设置圆形 mask。"""
 
@@ -1224,3 +1278,4 @@ class _CircleMaskResizeFilter(QObject):
                 x, y = (w - d) // 2, (h - d) // 2
                 self._host.setMask(QRegion(x, y, d, d, QRegion.Ellipse))
         return False
+
