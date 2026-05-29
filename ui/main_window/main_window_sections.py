@@ -261,14 +261,6 @@ class MainWindowUserInfo:
         username = current_user.get("UserName", "")
         label_username = get_ui_attr(self.ui, "label_username")
         safe_call(self._host.logger, getattr(label_username, "setText", None), username)
-        first_char = self.get_first_char(username)
-        label_photo = get_ui_attr(self.ui, "label_userProphoto")
-        if label_photo:
-            label_photo.setText(first_char)
-            label_photo.setStyleSheet(
-                "color: rgba(149, 149, 149, 1);"
-                "border-image: url(:/main/pic/main_name_rect.png);"
-            )
         user_type = current_user.get("UserType", 1)
         user_title_map = {0: "管理员", 1: "普通用户", 2: "操作员"}
         user_title = user_title_map.get(user_type, "用户")
@@ -717,20 +709,6 @@ class MainWindowTreatFlow:
                 )
         except Exception:
             pass
-        self.update_title_to_practising()
-
-    def update_title_to_practising(self, x: int = None, y: int = None, width: int = None, height: int = None) -> None:
-        label_title = get_ui_attr(self.ui, "label_title")
-        if label_title is None:
-            return
-        default_x = 860 if x is None else x
-        default_y = 20 if y is None else y
-        default_width = 270 if width is None else width
-        default_height = 59 if height is None else height
-        label_title.setGeometry(QRect(default_x, default_y, default_width, default_height))
-        label_title.setMinimumSize(default_width, default_height)
-        label_title.setMaximumSize(default_width, default_height)
-        label_title.setStyleSheet("border-image: url(:/treat/pic/treat_practising.png);")
 
 
 class _HoverShadowFilter(QObject):

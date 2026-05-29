@@ -425,18 +425,6 @@ class MainWindow(QWidget):
     def _send_impedance_close(self) -> None:
         self._treat_flow.send_impedance_close()
 
-    def _update_title_to_practising(self, x: int = None, y: int = None, width: int = None, height: int = None):
-        """
-        设置 label_title 为训练中图片
-
-        Args:
-            x: 标签的 x 坐标（可选，默认使用图片原始尺寸）
-            y: 标签的 y 坐标（可选，默认使用图片原始尺寸）
-            width: 标签的宽度（可选，默认使用图片原始尺寸）
-            height: 标签的高度（可选，默认使用图片原始尺寸）
-        """
-        self._treat_flow.update_title_to_practising(x=x, y=y, width=width, height=height)
-
     def closeEvent(self, event):
         # 主窗口关闭（销毁前）统一收口：尽量停止各模块 + 发送 paradigm.shut_down + 下位机左右通道关闭命令
         if not getattr(self, "_hw_shutdown_sent", False):

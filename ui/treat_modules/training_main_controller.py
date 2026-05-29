@@ -238,10 +238,9 @@ class TrainingMainController:
     def _apply_countdown_emphasis_style(self) -> None:
         """训练时长标题与倒计时值使用醒目的红色加粗样式。"""
         style = "color: #E53935; font-weight: bold;"
-        for name in ("label_43", "label_Countdown"):
-            label = get_ui_attr(self.ui, name)
-            if label is not None:
-                safe_call(self._logger, getattr(label, "setStyleSheet", None), style)
+        label = get_ui_attr(self.ui, "label_Countdown")
+        if label is not None:
+            safe_call(self._logger, getattr(label, "setStyleSheet", None), style)
 
     def _init_wave_widget(self) -> None:
         host = get_ui_attr(self.ui, "widget_BCIWave")

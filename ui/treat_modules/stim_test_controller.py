@@ -332,7 +332,7 @@ class StimTestController:
         return "右腿" if channel == "right" else "左腿"
 
     def _hide_right_channel_widgets(self) -> None:
-        # 单通道模式下隐藏右通道区域控件
+        # 单通道模式下隐藏右通道区域控件（勿使用 label_34/49 等，已与设置页系统信息标签重名）
         for name in (
             "widget_circle_level_right",
             "label_right_grade",
@@ -342,10 +342,6 @@ class StimTestController:
             "comboBox_right_scheme",
             "label_right_channel",
             "label_right_channel_2",
-            "label_34",
-            "label_50",
-            "label_51",
-            "label_49",
         ):
             widget = get_ui_attr(self.ui, name)
             safe_call(self._logger, getattr(widget, "setVisible", None), False)

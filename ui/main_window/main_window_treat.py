@@ -4,7 +4,7 @@ from __future__ import annotations
 治疗页控制器（页面编排层）
 
 职责边界（框架阶段已经按你说的拆成四块）：
-- TreatPageController：只做 tab 导航/标题切换/模块之间编排
+- TreatPageController：只做 tab 导航/模块之间编排
 - 业务模块控制器：
   - StimTestController（电刺激测试，tabWidget_2 index=0）
   - ImpedanceTestController（脑阻抗测试，tabWidget_2 index=1）
@@ -151,16 +151,12 @@ class TreatPageController:
         self._ws_bridge.send_impedance_open()
 
     def _on_main_tab_changed(self, index: int) -> None:
-        """主级 tab 切换时，若返回主界面，重置子页标题"""
+        """主级 tab 切换时，若返回主界面，重置子页"""
         self._nav.on_main_tab_changed(index)
 
     def _on_sub_tab_changed(self, index: int) -> None:
         """子级 tab 切换时，进入训练主屏刷新信息"""
         self._nav.on_sub_tab_changed(index)
-
-    def _update_preprocess_title(self, image_name: str) -> None:
-        """根据子页更新标题背景与位置"""
-        self._nav.update_preprocess_title(image_name)
 
     def _confirm_exit_if_session_active(self) -> bool:
         return self._session_guard.confirm_exit_if_session_active()

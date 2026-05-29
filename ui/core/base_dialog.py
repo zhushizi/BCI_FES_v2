@@ -9,13 +9,14 @@ from pathlib import Path
 from typing import Optional, Sequence
 
 from PySide6.QtCore import QFile, QIODevice
-from PySide6.QtWidgets import QDialog, QVBoxLayout
+from PySide6.QtWidgets import QVBoxLayout
 from PySide6.QtUiTools import QUiLoader
 
+from ui.core.dialog_overlay import OverlayDialog
 from ui.core.resource_loader import ensure_resources_loaded
 
 
-class BaseUiDialog(QDialog):
+class BaseUiDialog(OverlayDialog):
     """通用对话框：负责加载 .ui 并嵌入布局。"""
 
     def __init__(

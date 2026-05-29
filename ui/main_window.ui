@@ -2168,7 +2168,7 @@ QTabBar::tab:hover:!selected {
 }</string>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_set_system">
         <attribute name="title">
@@ -2235,7 +2235,7 @@ QTabBar::tab:hover:!selected {
           <string notr="true">color: #4A4A4A;</string>
          </property>
          <property name="text">
-          <string>非侵入式脑机接口神经肌肉电刺激系统</string>
+          <string>非侵入式脑机接口下肢功能性电刺激系统</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_9">
@@ -2382,7 +2382,7 @@ QTabBar::tab:hover:!selected {
           <string notr="true">color: #4A4A4A;</string>
          </property>
          <property name="text">
-          <string>ZNKL-MFR11AK-V1.0.0.0</string>
+          <string>ZNKL-MFR17AK-V1.0.0.0</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_34">
@@ -2414,7 +2414,7 @@ QTabBar::tab:hover:!selected {
           <string notr="true">color: #4A4A4A;</string>
          </property>
          <property name="text">
-          <string>ZNKL-MFR11A-V1.0.0.0</string>
+          <string>ZNKL-MFR17A-V1.0.0.0</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_43">
@@ -3356,7 +3356,8 @@ border-image: url(:/main/pic/main_patient_off.png);</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-image: url(:/set/pic/icon_hosipital.png);</string>
+      <string notr="true">
+border-image: url(:/main/pic/icon_hosipital.png);</string>
      </property>
      <property name="text">
       <string/>

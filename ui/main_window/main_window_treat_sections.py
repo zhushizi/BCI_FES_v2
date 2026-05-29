@@ -4,8 +4,6 @@
 
 from __future__ import annotations
 
-from PySide6.QtCore import QRect
-
 from ui.dialogs.tips_dialog import TipsDialog
 from ui.core.utils import get_ui_attr, safe_call, safe_connect
 
@@ -88,7 +86,6 @@ class TreatNavigation:
         sub_tab = get_ui_attr(self.ui, "tabWidget_2")
         if sub_tab:
             sub_tab.setCurrentIndex(0)
-        self.update_preprocess_title("preprocess_eletitle.png")
         self._host.stim_ctrl.on_enter()
 
     def on_preprocess_next(self) -> None:
@@ -103,7 +100,6 @@ class TreatNavigation:
         if sub_tab:
             sub_tab.setCurrentIndex(1)
         self._host.stim_ctrl.on_completed_leave_stim_tab()
-        self.update_preprocess_title("preprocess_bciImpeTitle.png")
         self._host.impedance_ctrl.on_enter()
 
     def on_preprocess_return(self) -> None:
@@ -119,13 +115,11 @@ class TreatNavigation:
                     self._logger.exception("检查训练暂停状态失败")
                 self._host._ws_bridge.send_impedance_open()
                 sub_tab.setCurrentIndex(1)
-                self.update_preprocess_title("preprocess_bciImpeTitle.png")
                 self._host.training_sub_ctrl.show_welcome_tab()
                 return
             if current == 1:
                 self._host._ws_bridge.close_impedance_mode()
                 sub_tab.setCurrentIndex(0)
-                self.update_preprocess_title("preprocess_eletitle.png")
                 self._host.stim_ctrl.refresh_stim_leg_bar()
                 return
 
@@ -140,7 +134,6 @@ class TreatNavigation:
             sub_tab = get_ui_attr(self.ui, "tabWidget_2")
             if sub_tab:
                 sub_tab.setCurrentIndex(0)
-            self.update_preprocess_title("preprocess_eletitle.png")
 
     def on_sub_tab_changed(self, index: int) -> None:
         if index == 2:
@@ -148,16 +141,3 @@ class TreatNavigation:
                 self._host.training_main_ctrl.on_enter()
             except Exception:
                 self._logger.exception("进入训练主屏失败")
-
-    def update_preprocess_title(self, image_name: str) -> None:
-        label = get_ui_attr(self.ui, "label_title")
-        if label is None:
-            return
-        if image_name == "preprocess_bciImpeTitle.png":
-            x, y, w, h = 784, 20, 333, 59
-        else:
-            x, y, w, h = 520, 20, 840, 59
-        label.setGeometry(QRect(x, y, w, h))
-        label.setMinimumSize(w, h)
-        label.setMaximumSize(w, h)
-        label.setStyleSheet(f"border-image: url(:/preprocess/pic/{image_name});")
