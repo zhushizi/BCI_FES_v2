@@ -6,10 +6,12 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QTextBrowser
+from PySide6.QtWidgets import QVBoxLayout, QPushButton, QTextBrowser
+
+from ui.core.dialog_overlay import OverlayDialog
 
 
-class HtmlViewerDialog(QDialog):
+class HtmlViewerDialog(OverlayDialog):
     """在软件内用 QTextBrowser 展示报告 HTML。"""
 
     def __init__(

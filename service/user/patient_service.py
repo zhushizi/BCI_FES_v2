@@ -18,13 +18,37 @@ class PatientService(_DbBase):
     def __init__(self, db_service: DatabaseService):
         super().__init__(db_service)
         self.logger = logging.getLogger(__name__)
+        self._ensure_patient_columns()
         self._patient_fields = (
-            "PatientId", "Name", "Sex", "Age", "VisitTime",
+            "PatientId", "Name", "Sex", "MaritalStatus", "Age", "VisitTime",
             "UserId", "PhoneNumber", "IdCard", "DoctorName",
             "Notes", "OperationDate", "Birthday",
+            "Height", "Weight",
             "DiagnosisResult", "DurationOfillness", "UnderlyingHealthCondition",
             "Leg",
         )
+
+    def _ensure_patient_columns(self) -> None:
+        """为已存在的 Patient 表补齐缺失列（轻量迁移）。"""
+        if not self.db.table_exists(self.TABLE_PATIENT):
+            return
+        try:
+            info = self.db.get_table_info(self.TABLE_PATIENT)
+            existing = {row.get("name") for row in (info or [])}
+            for col_name, col_def in (
+                ("MaritalStatus", "TEXT DEFAULT ''"),
+                ("Birthday", "TEXT DEFAULT ''"),
+                ("Height", "TEXT DEFAULT ''"),
+                ("Weight", "TEXT DEFAULT ''"),
+            ):
+                if col_name not in existing:
+                    self.db.execute_update(
+                        f"ALTER TABLE {self.TABLE_PATIENT} ADD COLUMN {col_name} {col_def}",
+                        (),
+                    )
+                    self.logger.info("Patient 表已补充列: %s", col_name)
+        except Exception as e:
+            self.logger.error("Patient 表列检查/迁移失败: %s", e)
         self._treat_record_fields = (
             "PatientId",
             "Name",
@@ -108,17 +132,19 @@ class PatientService(_DbBase):
         """
         sql = f"""
             INSERT INTO {self.TABLE_PATIENT} (
-                PatientId, Name, Sex, Age, VisitTime,
+                PatientId, Name, Sex, MaritalStatus, Age, VisitTime,
                 UserId, PhoneNumber, IdCard, DoctorName,
                 Notes, OperationDate, Birthday,
+                Height, Weight,
                 DiagnosisResult, DurationOfillness, UnderlyingHealthCondition,
                 Leg
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         params = (
             patient.get("PatientId", ""),
             patient.get("Name", ""),
             patient.get("Sex", ""),
+            patient.get("MaritalStatus", ""),
             patient.get("Age", None),
             patient.get("VisitTime", ""),
             patient.get("UserId", ""),
@@ -128,6 +154,8 @@ class PatientService(_DbBase):
             patient.get("Notes", ""),
             patient.get("OperationDate", ""),
             patient.get("Birthday", ""),
+            patient.get("Height", ""),
+            patient.get("Weight", ""),
             patient.get("DiagnosisResult", ""),
             patient.get("DurationOfillness", ""),
             patient.get("UnderlyingHealthCondition", ""),
@@ -148,6 +176,7 @@ class PatientService(_DbBase):
             UPDATE {self.TABLE_PATIENT} SET
                 Name = ?,
                 Sex = ?,
+                MaritalStatus = ?,
                 Age = ?,
                 VisitTime = ?,
                 UserId = ?,
@@ -157,6 +186,8 @@ class PatientService(_DbBase):
                 Notes = ?,
                 OperationDate = ?,
                 Birthday = ?,
+                Height = ?,
+                Weight = ?,
                 DiagnosisResult = ?,
                 DurationOfillness = ?,
                 UnderlyingHealthCondition = ?,
@@ -166,6 +197,7 @@ class PatientService(_DbBase):
         params = (
             patient.get("Name", ""),
             patient.get("Sex", ""),
+            patient.get("MaritalStatus", ""),
             patient.get("Age", None),
             patient.get("VisitTime", ""),
             patient.get("UserId", ""),
@@ -175,6 +207,8 @@ class PatientService(_DbBase):
             patient.get("Notes", ""),
             patient.get("OperationDate", ""),
             patient.get("Birthday", ""),
+            patient.get("Height", ""),
+            patient.get("Weight", ""),
             patient.get("DiagnosisResult", ""),
             patient.get("DurationOfillness", ""),
             patient.get("UnderlyingHealthCondition", ""),

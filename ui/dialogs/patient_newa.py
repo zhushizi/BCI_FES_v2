@@ -8,7 +8,8 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtGui import QDoubleValidator, QIntValidator
+from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt, QDateTime
 from ui.core.base_dialog import BaseUiDialog
 from ui.core.utils import get_ui_attr, safe_call, safe_connect
@@ -58,6 +59,27 @@ class PatientNewDialog(BaseUiDialog):
         date_edit = get_ui_attr(self.ui, "dateTimeEdit_visit")
         safe_call(self._logger, getattr(date_edit, "setDateTime", None), QDateTime.currentDateTime())
 
+        age_input = get_ui_attr(self.ui, "spinBox_age")
+        if age_input:
+            safe_call(self._logger, getattr(age_input, "setValidator", None), QIntValidator(1, 120, age_input))
+
+        height_input = get_ui_attr(self.ui, "lineEdit_height")
+        if height_input:
+            hv = QDoubleValidator(30.0, 250.0, 1, height_input)
+            hv.setNotation(QDoubleValidator.StandardNotation)
+            safe_call(self._logger, getattr(height_input, "setValidator", None), hv)
+
+        weight_input = get_ui_attr(self.ui, "lineEdit_weight")
+        if weight_input:
+            wv = QDoubleValidator(1.0, 300.0, 1, weight_input)
+            wv.setNotation(QDoubleValidator.StandardNotation)
+            safe_call(self._logger, getattr(weight_input, "setValidator", None), wv)
+
+        birth_edit = get_ui_attr(self.ui, "dateEdit_birthday")
+        if birth_edit:
+            safe_call(self._logger, getattr(birth_edit, "setSpecialValueText", None), "")
+            safe_call(self._logger, getattr(birth_edit, "setDate", None), birth_edit.minimumDate())
+
         pid_input = get_ui_attr(self.ui, "lineEdit_patientId")
         auto_pid = QDateTime.currentDateTime().toString("yyMMddHHmmss")
         safe_call(self._logger, getattr(pid_input, "setText", None), auto_pid)
@@ -94,7 +116,7 @@ class PatientNewDialog(BaseUiDialog):
             safe_connect(self._logger, ok_btn.clicked, self._on_ok)
 
         # .ui 里设的是根控件的尺寸，实际窗口是 BaseUiDialog 的外层 QDialog，需在此固定大小以防拖动调整
-        self.setFixedSize(1200, 612)
+        self.setFixedSize(1046, 608)
 
     def _apply_leg_combo_policy(self) -> None:
         """新建：左腿/右腿禁用并变淡；编辑：三项均可选。"""
@@ -140,6 +162,16 @@ class PatientNewDialog(BaseUiDialog):
             return True
         return len(t) == 11 and t.isdigit()
 
+    @staticmethod
+    def _parse_float(text: str) -> Optional[float]:
+        t = (text or "").strip()
+        if not t:
+            return None
+        try:
+            return float(t)
+        except (TypeError, ValueError):
+            return None
+
     def _on_ok(self):
         pid = self._get_text("lineEdit_patientId")
         name = self._get_text("lineEdit_name")
@@ -160,6 +192,55 @@ class PatientNewDialog(BaseUiDialog):
             phone_input = get_ui_attr(self.ui, "lineEdit_phone")
             safe_call(self._logger, getattr(phone_input, "setFocus", None))
             return
+        age_text = self._get_text("spinBox_age")
+        if age_text:
+            try:
+                age = int(age_text)
+            except (TypeError, ValueError):
+                age = None
+            if age is None or age < 1 or age > 120:
+                TipsDialog.show_tips(self, "年龄需为1-120，请重新填写")
+                age_input = get_ui_attr(self.ui, "spinBox_age")
+                safe_call(self._logger, getattr(age_input, "setFocus", None))
+                safe_call(self._logger, getattr(age_input, "selectAll", None))
+                return
+
+        height_text = self._get_text("lineEdit_height")
+        if height_text:
+            height = self._parse_float(height_text)
+            if height is None or not (30.0 <= height <= 250.0):
+                TipsDialog.show_tips(self, "身高需为 30-250 cm，请重新填写")
+                height_input = get_ui_attr(self.ui, "lineEdit_height")
+                safe_call(self._logger, getattr(height_input, "setFocus", None))
+                safe_call(self._logger, getattr(height_input, "selectAll", None))
+                return
+
+        weight_text = self._get_text("lineEdit_weight")
+        if weight_text:
+            weight = self._parse_float(weight_text)
+            if weight is None or not (1.0 <= weight <= 300.0):
+                TipsDialog.show_tips(self, "体重需为 1-300 kg，请重新填写")
+                weight_input = get_ui_attr(self.ui, "lineEdit_weight")
+                safe_call(self._logger, getattr(weight_input, "setFocus", None))
+                safe_call(self._logger, getattr(weight_input, "selectAll", None))
+                return
+
+        birth_edit = get_ui_attr(self.ui, "dateEdit_birthday")
+        if birth_edit:
+            try:
+                birth_date = birth_edit.date()
+                if (
+                    birth_date != birth_edit.minimumDate()
+                    and birth_date > QDateTime.currentDateTime().date()
+                ):
+                    TipsDialog.show_tips(self, "出生日期不能晚于今天")
+                    safe_call(self._logger, getattr(birth_edit, "setFocus", None))
+                    return
+            except Exception:
+                TipsDialog.show_tips(self, "出生日期格式不正确，请重新选择")
+                safe_call(self._logger, getattr(birth_edit, "setFocus", None))
+                return
+
         leg = self._get_combo_text("comboBox_leg")
         if not leg:
             TipsDialog.show_tips(self, "请选择患腿（必填项）")
@@ -207,6 +288,12 @@ class PatientNewDialog(BaseUiDialog):
             index = combo_gender.findText(sex)
             if index != -1:
                 safe_call(self._logger, combo_gender.setCurrentIndex, index)
+        combo_marital = get_ui_attr(self.ui, "comboBox_marital")
+        if combo_marital:
+            marital = data.get("MaritalStatus", "")
+            index = combo_marital.findText(marital)
+            if index != -1:
+                safe_call(self._logger, combo_marital.setCurrentIndex, index)
         combo_leg = get_ui_attr(self.ui, "comboBox_leg")
         if combo_leg:
             leg = data.get("Leg", "双腿") or "双腿"
@@ -230,6 +317,17 @@ class PatientNewDialog(BaseUiDialog):
         safe_call(self._logger, getattr(get_ui_attr(self.ui, "lineEdit_diagnosisResult"), "setText", None), str(data.get("DiagnosisResult", "")))
         safe_call(self._logger, getattr(get_ui_attr(self.ui, "lineEdit_durationOfIllness"), "setText", None), str(data.get("DurationOfillness", "")))
         safe_call(self._logger, getattr(get_ui_attr(self.ui, "lineEdit_underlyingHealthCondition"), "setText", None), str(data.get("UnderlyingHealthCondition", "")))
+        safe_call(self._logger, getattr(get_ui_attr(self.ui, "lineEdit_height"), "setText", None), str(data.get("Height", "") or ""))
+        safe_call(self._logger, getattr(get_ui_attr(self.ui, "lineEdit_weight"), "setText", None), str(data.get("Weight", "") or ""))
+        birth_edit = get_ui_attr(self.ui, "dateEdit_birthday")
+        if birth_edit:
+            birthday = str(data.get("Birthday", "") or "").strip()
+            if birthday:
+                for fmt in ("yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd"):
+                    dt = QDateTime.fromString(birthday, fmt)
+                    if dt.isValid():
+                        safe_call(self._logger, birth_edit.setDate, dt.date())
+                        break
 
     def get_data(self) -> Dict[str, Any]:
         """获取表单数据"""
@@ -237,6 +335,11 @@ class PatientNewDialog(BaseUiDialog):
         combo_gender = get_ui_attr(self.ui, "comboBox_gender")
         if combo_gender:
             sex = combo_gender.currentText()
+
+        marital_status = ""
+        combo_marital = get_ui_attr(self.ui, "comboBox_marital")
+        if combo_marital:
+            marital_status = combo_marital.currentText()
 
         leg = self._get_combo_text("comboBox_leg") or "双腿"
 
@@ -259,16 +362,29 @@ class PatientNewDialog(BaseUiDialog):
         if date_edit:
             visit_time = date_edit.dateTime().toString("yyyy/MM/dd HH:mm:ss")
 
+        birthday = ""
+        birth_edit = get_ui_attr(self.ui, "dateEdit_birthday")
+        if birth_edit:
+            try:
+                if birth_edit.date() != birth_edit.minimumDate():
+                    birthday = birth_edit.date().toString("yyyy/MM/dd")
+            except Exception:
+                birthday = ""
+
         return {
             "PatientId": self._get_text("lineEdit_patientId"),
             "Name": self._get_text("lineEdit_name"),
             "Sex": sex,
+            "MaritalStatus": marital_status,
             "Leg": leg,
             "Age": age,
             "VisitTime": visit_time,
             "PhoneNumber": self._get_text("lineEdit_phone"),
             "IdCard": self._get_text("lineEdit_idCard"),
             "Notes": self._get_text("lineEdit_notes"),
+            "Birthday": birthday,
+            "Height": self._get_text("lineEdit_height"),
+            "Weight": self._get_text("lineEdit_weight"),
             "DiagnosisResult": self._get_text("lineEdit_diagnosisResult"),
             "DurationOfillness": self._get_text("lineEdit_durationOfIllness"),
             "UnderlyingHealthCondition": self._get_text("lineEdit_underlyingHealthCondition"),

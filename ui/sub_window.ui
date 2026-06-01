@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1920</width>
+    <width>1922</width>
     <height>1080</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1920</width>
+    <width>1922</width>
     <height>1080</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1920</width>
+    <width>1922</width>
     <height>1080</height>
    </size>
   </property>
@@ -50,8 +50,8 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>-1</x>
-     <y>4</y>
+     <x>0</x>
+     <y>0</y>
      <width>1921</width>
      <height>1091</height>
     </rect>

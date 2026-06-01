@@ -262,7 +262,7 @@ QTabWidget#tabWidget_main QTabBar::tab {
 }</string>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -345,7 +345,7 @@ QTabWidget#tabWidget QTabBar::tab {
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <property name="tabBarAutoHide">
       <bool>false</bool>
@@ -2168,7 +2168,7 @@ QTabBar::tab:hover:!selected {
 }</string>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_set_system">
         <attribute name="title">
@@ -3081,7 +3081,7 @@ padding-left: 12px;
            <string notr="true">color: #6B7280;</string>
           </property>
           <property name="text">
-           <string>电刺激设备</string>
+           <string>电刺激设备(左)</string>
           </property>
          </widget>
          <widget class="QComboBox" name="comboBox_NES_port">
