@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import re
 from typing import Callable, Optional
 
 from PySide6.QtCore import Qt, QRect, QTimer, QObject, QEvent, QPoint
@@ -520,23 +519,10 @@ class MainWindowTreatFlow:
         safe_connect(self.logger, self._patient_select_panel.patient_selected, self.on_patient_selected)
         safe_connect(self.logger, self._patient_select_panel.patient_cleared, self.on_patient_deselected)
 
-    def _build_treat_button_style(self, button, border_color: str) -> str:
-        """仅调整边框颜色，保留 .ui 中定义的 background / border-radius。"""
-        base = getattr(button, "_paradigm_base_style", button.styleSheet() or "")
-        if re.search(r"border\s*:", base):
-            return re.sub(
-                r"border\s*:\s*[^;]+;",
-                f"border: 2px solid {border_color};",
-                base,
-                count=1,
-            )
-        name = button.objectName()
-        return f"{base}\nQPushButton#{name} {{ border: 2px solid {border_color}; }}"
-
     def _attach_hover_shadow(self, button, button_name: str) -> None:
-        button._paradigm_base_style = button.styleSheet() or ""
-        # 默认灰色边框（悬浮时再变淡）；不覆盖 UI 中的倒角设置
-        button.setStyleSheet(self._build_treat_button_style(button, "#C8C8C8"))
+        # 保留 .ui 中的 border: none，悬停仅通过阴影与图标/文字反馈
+        base_style = button.styleSheet() or ""
+        button._paradigm_base_style = base_style
         effect = QGraphicsDropShadowEffect(button)
         effect.setBlurRadius(18)
         effect.setOffset(0, 0)
@@ -549,8 +535,8 @@ class MainWindowTreatFlow:
         hover_filter = _HoverShadowFilter(
             button=button,
             effect=effect,
-            normal_style=self._build_treat_button_style(button, "#C8C8C8"),
-            hover_style=self._build_treat_button_style(button, "#E2E2E2"),
+            normal_style=base_style,
+            hover_style=base_style,
             icon_label=icon_label,
             text_label=text_label,
         )
