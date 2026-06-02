@@ -1,7 +1,7 @@
 {
     "NES_port": "COM16",
     "NES_port_2": "COM7",
-    "decoder_port": "COM4",
+    "decoder_port": "COM3",
     "ws_url": "ws://127.0.0.1:8080",
     "log_receive_enabled": true,
     "log_heartbeat_enabled": false,

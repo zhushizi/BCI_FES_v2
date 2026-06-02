@@ -7067,7 +7067,7 @@ padding: 0px;</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QLabel" name="label_Electrode_FC7">
+      <widget class="QLabel" name="label_Electrode_FC5">
        <property name="geometry">
         <rect>
          <x>800</x>
@@ -7102,13 +7102,13 @@ border-radius: 14px;
 padding: 0px;</string>
        </property>
        <property name="text">
-        <string>FC7</string>
+        <string>FC5</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QLabel" name="label_Electrode_FC5">
+      <widget class="QLabel" name="label_Electrode_FC3">
        <property name="geometry">
         <rect>
          <x>857</x>
@@ -7143,7 +7143,7 @@ border-radius: 14px;
 padding: 0px;</string>
        </property>
        <property name="text">
-        <string>FC5</string>
+        <string>FC3</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -7190,7 +7190,7 @@ padding: 0px;</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QLabel" name="label_Electrode_FC3">
+      <widget class="QLabel" name="label_Electrode_FC1">
        <property name="geometry">
         <rect>
          <x>907</x>
@@ -7225,7 +7225,7 @@ border-radius: 14px;
 padding: 0px;</string>
        </property>
        <property name="text">
-        <string>FC3</string>
+        <string>FC1</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -8545,10 +8545,10 @@ padding: 0px;</string>
       <zorder>label_Electrode_F2</zorder>
       <zorder>label_Electrode_F6</zorder>
       <zorder>label_Electrode_FT7</zorder>
-      <zorder>label_Electrode_FC7</zorder>
       <zorder>label_Electrode_FC5</zorder>
-      <zorder>label_Electrode_FCz</zorder>
       <zorder>label_Electrode_FC3</zorder>
+      <zorder>label_Electrode_FCz</zorder>
+      <zorder>label_Electrode_FC1</zorder>
       <zorder>label_Electrode_FC2</zorder>
       <zorder>label_Electrode_FC4</zorder>
       <zorder>label_Electrode_FC6</zorder>
