@@ -95,6 +95,10 @@ class SetPageController:
     def refresh(self):
         self.refresh_serial_ports(auto_connect=False)
 
+    def open_password_change_tab(self) -> None:
+        tab_widget_set = get_ui_attr(self.ui, "tabWidget_set")
+        safe_call(self.logger, getattr(tab_widget_set, "setCurrentIndex", None), 1)
+
     def refresh_serial_ports(self, *, auto_connect: bool = False) -> None:
         """刷新串口下拉列表；auto_connect 时按头环/电刺激识别结果自动连接。"""
         if not self.hardware_config_app:

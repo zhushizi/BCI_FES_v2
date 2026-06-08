@@ -19,3 +19,6 @@ HW_BCI_NES.spec
 
 # Local runtime (范式和外部 exe 等，不纳入版本库)
 runtime/
+
+# 本机首次登录标记（每台机器本地生成，不纳入版本库）
+infrastructure/config/.first_login_acknowledged

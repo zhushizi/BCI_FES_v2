@@ -18,6 +18,7 @@ sys.path.insert(0, str(project_root))
 # 日志由 main() 内根据 config 统一配置，见 infrastructure.logging_config
 logger = logging.getLogger(__name__)
 
+from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QGuiApplication
 
@@ -46,7 +47,11 @@ from infrastructure.communication.websocket_service import MainWebSocketService
 from infrastructure.decoder.decoder_manager import DecoderProcessManager
 
 # 应用层
-from application.config_paths import resolve_config_path
+from application.config_paths import (
+    is_first_login_on_machine,
+    mark_first_login_acknowledged,
+    resolve_config_path,
+)
 from application import (
     UserApp,
     PatientApp,
@@ -73,6 +78,7 @@ from infrastructure.logging_config import setup_logging
 from ui.core.resource_loader import ensure_resources_loaded
 from ui.core.decoder_log_formatter import summarize_decoder_session_info, log_json
 from ui.dialogs.login import LoginWindow
+from ui.dialogs.tips_dialog import TipsDialog
 from ui.main_window.main_window import MainWindow
 from ui.main_window.sub_window import SubWindow
 
@@ -408,6 +414,25 @@ def create_main_window(
     return main_window
 
 
+def maybe_prompt_default_password_change(main_window: MainWindow) -> None:
+    """本机首次登录成功后提醒修改默认密码（仅一次）。"""
+    if not is_first_login_on_machine():
+        return
+    try:
+        mark_first_login_acknowledged()
+    except Exception:
+        logger.exception("创建首次登录标记文件失败")
+        return
+
+    if TipsDialog.show_choice(
+        main_window,
+        "系统默认密码等级过低，建议修改密码！",
+        confirm_text="修改",
+        cancel_text="取消",
+    ):
+        main_window.open_password_change_page()
+
+
 def run_login_flow(
     apps: AppBundle,
     services: ServiceBundle,
@@ -462,6 +487,7 @@ def run_login_flow(
         main_window.logout_requested.connect(on_logout)
         main_window.showFullScreen()
         set_window_on_screen(main_window, main_screen)
+        QTimer.singleShot(0, lambda: maybe_prompt_default_password_change(main_window))
 
     def on_login_cancelled() -> None:
         sys.exit(0)
