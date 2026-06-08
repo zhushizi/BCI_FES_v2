@@ -3408,6 +3408,9 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
      <property name="text">
       <string/>
      </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -3426,6 +3429,9 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

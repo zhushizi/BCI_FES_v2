@@ -184,17 +184,46 @@ class MainWindowNavigation:
 class MainWindowUserInfo:
     _CONFIG_KEY_HOSPITAL = "hospital_name"
     _CONFIG_KEY_DEPARTMENT = "department_name"
+    _HOSPITAL_MAX_LEN = 18
+    _DEPARTMENT_MAX_LEN = 9
+    _HOSPITAL_LABEL_CHARS_PER_LINE = 9
 
     def __init__(self, host):
         self._host = host
         self.ui = host.ui
 
     def bind(self) -> None:
+        hospital_edit = get_ui_attr(self.ui, "lineEdit_hospital_name")
+        if hospital_edit:
+            safe_call(
+                self._host.logger,
+                getattr(hospital_edit, "setMaxLength", None),
+                self._HOSPITAL_MAX_LEN,
+            )
+        department_edit = get_ui_attr(self.ui, "lineEdit_department_name")
+        if department_edit:
+            safe_call(
+                self._host.logger,
+                getattr(department_edit, "setMaxLength", None),
+                self._DEPARTMENT_MAX_LEN,
+            )
+
+        for label_name in ("label_hosipital", "label_department"):
+            label = get_ui_attr(self.ui, label_name)
+            if label is not None:
+                safe_call(self._host.logger, getattr(label, "setWordWrap", None), True)
+
         btn_confirm = get_ui_attr(self.ui, "pushButton_other_confirm")
         safe_connect(
             self._host.logger,
             getattr(btn_confirm, "clicked", None),
             self._on_other_confirm,
+        )
+        btn_reset = get_ui_attr(self.ui, "pushButton_other_reset")
+        safe_connect(
+            self._host.logger,
+            getattr(btn_reset, "clicked", None),
+            self._on_other_reset,
         )
 
     def init_org_info(self) -> None:
@@ -205,13 +234,37 @@ class MainWindowUserInfo:
         department = str(config_app.get(self._CONFIG_KEY_DEPARTMENT, "") or "").strip()
         self._apply_org_info(hospital, department)
 
+    @staticmethod
+    def _limit_text(text: str, max_len: int) -> str:
+        value = str(text or "").strip()
+        if max_len <= 0:
+            return value
+        return value[:max_len]
+
+    @classmethod
+    def _wrap_hospital_label_text(cls, text: str) -> str:
+        value = cls._limit_text(text, cls._HOSPITAL_MAX_LEN)
+        if not value:
+            return ""
+        chunk = cls._HOSPITAL_LABEL_CHARS_PER_LINE
+        if len(value) <= chunk:
+            return value
+        return "\n".join(value[i : i + chunk] for i in range(0, len(value), chunk))
+
     def _apply_org_info(self, hospital: str, department: str) -> None:
+        hospital = self._limit_text(hospital, self._HOSPITAL_MAX_LEN)
+        department = self._limit_text(department, self._DEPARTMENT_MAX_LEN)
+
         hospital_edit = get_ui_attr(self.ui, "lineEdit_hospital_name")
         hospital_label = get_ui_attr(self.ui, "label_hosipital")
         if hospital_edit:
             safe_call(self._host.logger, getattr(hospital_edit, "setText", None), hospital)
         if hospital_label:
-            safe_call(self._host.logger, getattr(hospital_label, "setText", None), hospital)
+            safe_call(
+                self._host.logger,
+                getattr(hospital_label, "setText", None),
+                self._wrap_hospital_label_text(hospital),
+            )
         department_edit = get_ui_attr(self.ui, "lineEdit_department_name")
         department_label = get_ui_attr(self.ui, "label_department")
         if department_edit:
@@ -223,11 +276,16 @@ class MainWindowUserInfo:
                 department,
             )
 
+    def _on_other_reset(self) -> None:
+        self._apply_org_info("", "")
+
     def _on_other_confirm(self) -> None:
         hospital_edit = get_ui_attr(self.ui, "lineEdit_hospital_name")
         department_edit = get_ui_attr(self.ui, "lineEdit_department_name")
         hospital = hospital_edit.text().strip() if hospital_edit else ""
         department = department_edit.text().strip() if department_edit else ""
+        hospital = self._limit_text(hospital, self._HOSPITAL_MAX_LEN)
+        department = self._limit_text(department, self._DEPARTMENT_MAX_LEN)
         self._apply_org_info(hospital, department)
         config_app = getattr(self._host, "config_app", None)
         if not config_app:
