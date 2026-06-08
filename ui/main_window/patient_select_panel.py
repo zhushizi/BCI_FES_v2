@@ -139,8 +139,9 @@ class PatientSelectPanel(QWidget):
     patient_cleared = Signal()
     PAGE_SIZE = 10
     CARD_HEIGHT = 67
-    CARD_SPACING = 4
+    CARD_SPACING = 8
     LIST_TOP_GAP = 20
+    PAGINATION_TOP_GAP = 10
 
     def __init__(self, patient_app=None, parent: Optional[QWidget] = None, logger: Optional[logging.Logger] = None) -> None:
         super().__init__(parent)
@@ -197,8 +198,8 @@ class PatientSelectPanel(QWidget):
         )
 
         root_layout = QVBoxLayout(self)
-        # 给圆角容器预留内边距，避免列表卡片在底部被视觉裁切
-        root_layout.setContentsMargins(6, 10, 6, 10)
+        # 给圆角容器预留内边距；底部略小，让分页器更贴近面板底边
+        root_layout.setContentsMargins(6, 10, 6, 4)
         root_layout.setSpacing(6)
 
         search_wrap = QFrame()
@@ -315,6 +316,7 @@ class PatientSelectPanel(QWidget):
 
         pagination_layout.addWidget(QLabel("页", pagination))
         pagination_layout.addStretch()
+        root_layout.addSpacing(self.PAGINATION_TOP_GAP)
         root_layout.addWidget(pagination, 0)
 
     def _add_cards(self, cards: List[_PatientCard]) -> None:
