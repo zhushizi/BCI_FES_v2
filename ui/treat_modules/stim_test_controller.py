@@ -10,9 +10,23 @@ from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QV
 
 from ui.dialogs.tips_dialog import TipsDialog
 from ui.widgets.circle_level_widget import CircleLevelWidget
+from ui.widgets.slider_widget import SliderWidget
 from application.session_app import SessionApp, PatientTreatParams
 from application.stim_test_app import StimTestApp
 from ui.core.utils import get_ui_attr, safe_call, safe_connect
+
+
+class _SliderHostResizeFilter(QObject):
+    """宿主 widget 尺寸变化时，让内嵌 SliderWidget 始终铺满。"""
+
+    def __init__(self, slider: SliderWidget, parent: Optional[QObject] = None) -> None:
+        super().__init__(parent)
+        self._slider = slider
+
+    def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+        if event.type() == QEvent.Type.Resize:
+            self._slider.setGeometry(obj.rect())
+        return False
 
 
 class StimTestController:
@@ -110,18 +124,17 @@ class StimTestController:
         # 设备在线状态（影响控件可用性）
         self._hardware_online = True
 
-        # 频率默认 20ms。这里在绑定信号前设置，避免触发下发指令。
-        self._set_default_freq()
-
         # 记录 UI 初始默认的方案/频率值（用于患者第一次进入时初始化）
         self._default_params = {
             "left_scheme_idx": self._get_combo_index("comboBox_left_scheme") or 0,
-            "left_freq_idx": self._get_freq_value(),
+            "left_freq_idx": self._FREQ_DEFAULT_MS,
         }
 
         self._current_patient_id: Optional[str] = None
         self._left_circle_widget: Optional[CircleLevelWidget] = None
         self._right_circle_widget: Optional[CircleLevelWidget] = None
+        self._pill_sliders: dict[str, SliderWidget] = {}
+        self._pill_slider_suppress: set[str] = set()
         self._time_scroll_widgets: dict[str, dict[str, object]] = {}
         self._adjust_cooldown_until: float = 0.0
 
@@ -351,11 +364,18 @@ class StimTestController:
         left_small = get_ui_attr(self.ui, "pushButton_left_turnsmall")
         safe_connect(self._logger, getattr(left_small, "clicked", None), self._on_left_grade_decrease)
 
+        self._init_freq_pill_slider()
+        self._init_time_scrollbars()
+        self._set_default_freq()
+
         # 左通道频率/方案选择
-        left_freq = get_ui_attr(self.ui, "comboBox_left_freq")
+        left_freq = self._pill_slider("comboBox_left_freq")
         safe_connect(self._logger, getattr(left_freq, "valueChanged", None), self._on_left_freq_value_changed)
         safe_connect(self._logger, getattr(left_freq, "sliderReleased", None), self._on_left_freq_released)
-        safe_connect(self._logger, getattr(left_freq, "currentIndexChanged", None), self._on_left_freq_changed)
+        freq_small = get_ui_attr(self.ui, "pushButton_left_freq_turnsmall")
+        safe_connect(self._logger, getattr(freq_small, "clicked", None), self._on_left_freq_decrease)
+        freq_big = get_ui_attr(self.ui, "pushButton_left_freq_turnbig")
+        safe_connect(self._logger, getattr(freq_big, "clicked", None), self._on_left_freq_increase)
         left_scheme = get_ui_attr(self.ui, "comboBox_left_scheme")
         safe_connect(self._logger, getattr(left_scheme, "currentIndexChanged", None), self._on_left_scheme_changed)
         pulse_width = get_ui_attr(self.ui, "comboBox_pulse_width")
@@ -368,7 +388,6 @@ class StimTestController:
         QTimer.singleShot(0, self._ensure_left_grade_controls_visible)
         self._hide_right_channel_widgets()
         self._update_freq_value_label()
-        self._init_time_scrollbars()
         self._update_elec_status()
 
     def _on_stim_leg_clicked(self, left: bool) -> None:
@@ -580,11 +599,16 @@ class StimTestController:
             "horizontalScrollBar_time_down",
             "pushButton_left_turnbig",
             "pushButton_left_turnsmall",
+            "pushButton_left_freq_turnbig",
+            "pushButton_left_freq_turnsmall",
             "pushButton_start_test",
         ):
             widget = get_ui_attr(self.ui, name)
             safe_call(self._logger, getattr(widget, "setEnabled", None), enabled)
+            slider = self._pill_slider(name)
+            safe_call(self._logger, getattr(slider, "setEnabled", None), enabled)
         self._set_time_aux_controls_enabled(enabled)
+        self._update_freq_stepper_enabled()
         app = QApplication.instance()
         if app is not None:
             app.processEvents()
@@ -744,25 +768,20 @@ class StimTestController:
             return 1
 
     def _get_time_scrollbar_value(self, name: str) -> int:
-        scrollbar = get_ui_attr(self.ui, name)
-        if scrollbar is None:
+        slider = self._pill_slider(name)
+        if slider is None:
             return self._default_time_scroll_value(name)
         try:
-            return self._normalize_time_scroll_value(name, int(scrollbar.value()))
+            return self._normalize_time_scroll_value(name, int(slider.value()))
         except Exception:
             self._logger.exception("读取时间拖条失败: %s", name)
             return self._default_time_scroll_value(name)
 
     def _set_time_scrollbar_value(self, name: str, value: int | None) -> None:
         """回填时间拖条 UI 值。屏蔽信号避免重复下发；与缓存参数保持一致。"""
-        scrollbar = get_ui_attr(self.ui, name)
-        if scrollbar is None:
-            return
         norm = self._normalize_time_scroll_value(name, value)
         try:
-            old_block = scrollbar.blockSignals(True)
-            scrollbar.setValue(norm)
-            scrollbar.blockSignals(old_block)
+            self._set_pill_slider_value(name, norm)
             self._update_time_scrollbar_display(name, norm)
         except Exception:
             self._logger.exception("设置时间拖条失败: %s", name)
@@ -775,6 +794,8 @@ class StimTestController:
 
     # ----------------- UI 事件：频率/方案/按钮 -----------------
     def _on_left_freq_value_changed(self, value: int) -> None:
+        if "comboBox_left_freq" in self._pill_slider_suppress:
+            return
         self._update_freq_value_label(value)
 
     def _on_left_freq_released(self) -> None:
@@ -786,6 +807,28 @@ class StimTestController:
             self._send_basic_params()
         except Exception:
             self._logger.exception("频率变更下发基础参数失败")
+        self._save_current_params()
+
+    def _on_left_freq_increase(self) -> None:
+        self._step_left_freq(1)
+
+    def _on_left_freq_decrease(self) -> None:
+        self._step_left_freq(-1)
+
+    def _step_left_freq(self, step: int) -> None:
+        if not self._interaction_allowed():
+            return
+        if not self._try_begin_adjust_cooldown():
+            return
+        current = self._get_freq_value()
+        new_freq = self._normalize_freq_value(current + int(step))
+        if new_freq == current:
+            return
+        self._set_freq_value(new_freq)
+        try:
+            self._send_basic_params()
+        except Exception:
+            self._logger.exception("频率步进下发基础参数失败")
         self._save_current_params()
 
     def _on_left_freq_changed(self, index: int) -> None:
@@ -869,43 +912,64 @@ class StimTestController:
         except Exception:
             self._logger.exception("设置下拉框索引失败: %s", name)
 
+    def _pill_slider(self, name: str) -> Optional[SliderWidget]:
+        return self._pill_sliders.get(name)
+
+    def _slider_host(self, name: str):
+        return get_ui_attr(self.ui, name)
+
+    def _init_pill_slider(self, name: str, vmin: int, vmax: int, default: int, tick_count: int) -> None:
+        if name in self._pill_sliders:
+            return
+        host = self._slider_host(name)
+        if host is None:
+            return
+        if isinstance(host, SliderWidget):
+            slider = host
+        else:
+            slider = SliderWidget(host)
+            slider.setGeometry(host.rect())
+            host.installEventFilter(_SliderHostResizeFilter(slider, host))
+        slider.set_vertical_style("pill")
+        slider.set_tick_count(tick_count)
+        slider.set_range(vmin, vmax)
+        slider.set_value(default)
+        slider.raise_()
+        self._pill_sliders[name] = slider
+
+    def _set_pill_slider_value(self, name: str, value: int) -> None:
+        slider = self._pill_slider(name)
+        if slider is None:
+            return
+        self._pill_slider_suppress.add(name)
+        try:
+            slider.set_value(int(value))
+        finally:
+            self._pill_slider_suppress.discard(name)
+
+    def _init_freq_pill_slider(self) -> None:
+        self._init_pill_slider(
+            "comboBox_left_freq",
+            self._FREQ_MIN_MS,
+            self._FREQ_MAX_MS,
+            self._FREQ_DEFAULT_MS,
+            tick_count=5,
+        )
+
     def _get_freq_value(self) -> int:
-        slider = get_ui_attr(self.ui, "comboBox_left_freq")
+        slider = self._pill_slider("comboBox_left_freq")
         if slider is None:
             return self._FREQ_DEFAULT_MS
         try:
-            value_getter = getattr(slider, "value", None)
-            if callable(value_getter):
-                return self._normalize_freq_value(int(value_getter()))
-            current_index_getter = getattr(slider, "currentIndex", None)
-            if callable(current_index_getter):
-                return self._normalize_freq_value(int(current_index_getter()))
+            return self._normalize_freq_value(int(slider.value()))
         except Exception:
             self._logger.exception("读取频率值失败")
-        return self._FREQ_DEFAULT_MS
+            return self._FREQ_DEFAULT_MS
 
     def _set_freq_value(self, value: int | None) -> None:
-        slider = get_ui_attr(self.ui, "comboBox_left_freq")
-        if slider is None:
-            return
         freq = self._normalize_freq_value(value)
-        try:
-            if hasattr(slider, "setMinimum"):
-                slider.setMinimum(self._FREQ_MIN_MS)
-            if hasattr(slider, "setMaximum"):
-                slider.setMaximum(self._FREQ_MAX_MS)
-            old_block = slider.blockSignals(True)
-            set_value = getattr(slider, "setValue", None)
-            if callable(set_value):
-                set_value(freq)
-            else:
-                set_index = getattr(slider, "setCurrentIndex", None)
-                if callable(set_index):
-                    set_index(freq)
-            slider.blockSignals(old_block)
-            self._update_freq_value_label(freq)
-        except Exception:
-            self._logger.exception("设置频率值失败")
+        self._set_pill_slider_value("comboBox_left_freq", freq)
+        self._update_freq_value_label(freq)
 
     def _normalize_freq_value(self, value: int | None) -> int:
         if value is None:
@@ -918,6 +982,21 @@ class StimTestController:
             return
         freq = self._get_freq_value() if value is None else self._normalize_freq_value(value)
         safe_call(self._logger, getattr(label, "setText", None), f"{freq} ms")
+        self._update_freq_stepper_enabled(freq)
+
+    def _update_freq_stepper_enabled(self, freq: int | None = None) -> None:
+        """步进按钮：受全局可用状态与频率上下限共同约束。"""
+        if freq is None:
+            freq = self._get_freq_value()
+        else:
+            freq = self._normalize_freq_value(freq)
+        controls_enabled = self._stim_controls_enabled()
+        at_min = freq <= self._FREQ_MIN_MS
+        at_max = freq >= self._FREQ_MAX_MS
+        small = get_ui_attr(self.ui, "pushButton_left_freq_turnsmall")
+        big = get_ui_attr(self.ui, "pushButton_left_freq_turnbig")
+        safe_call(self._logger, getattr(small, "setEnabled", None), controls_enabled and not at_min)
+        safe_call(self._logger, getattr(big, "setEnabled", None), controls_enabled and not at_max)
 
     def _is_stim_duration_scroll(self, name: str) -> bool:
         return name == self._STIM_DURATION_SCROLL_NAME
@@ -954,67 +1033,41 @@ class StimTestController:
             "horizontalScrollBar_time_rise",
             "horizontalScrollBar_time_down",
         ):
-            scrollbar = get_ui_attr(self.ui, name)
-            if scrollbar is None:
+            host = self._slider_host(name)
+            if host is None:
                 continue
             try:
-                scrollbar.setMinimum(self._time_scroll_min(name))
-                scrollbar.setMaximum(self._time_scroll_max(name))
-                scrollbar.setSingleStep(1)
-                scrollbar.setPageStep(1)
-                scrollbar.setValue(self._default_time_scroll_value(name))
-                scrollbar.setStyleSheet(self._time_scrollbar_style())
+                self._init_pill_slider(
+                    name,
+                    self._time_scroll_min(name),
+                    self._time_scroll_max(name),
+                    self._default_time_scroll_value(name),
+                    tick_count=4,
+                )
+                slider = self._pill_slider(name)
+                if slider is None:
+                    continue
                 safe_connect(
                     self._logger,
-                    getattr(scrollbar, "valueChanged", None),
+                    getattr(slider, "valueChanged", None),
                     lambda value, n=name: self._on_time_scrollbar_changed(n, value),
                 )
                 safe_connect(
                     self._logger,
-                    getattr(scrollbar, "sliderReleased", None),
+                    getattr(slider, "sliderReleased", None),
                     self._on_time_scrollbar_slider_released,
                 )
                 self._ensure_time_scrollbar_aux_widgets(name)
-                self._update_time_scrollbar_display(name, scrollbar.value())
+                self._update_time_scrollbar_display(name, slider.value())
             except Exception:
                 self._logger.exception("初始化时间拖条失败: %s", name)
-
-    def _time_scrollbar_style(self) -> str:
-        return """
-QScrollBar:horizontal {
-    background: #EAF1FF;
-    border: none;
-    border-radius: 11px;
-    height: 22px;
-    margin: 0px;
-}
-QScrollBar::sub-page:horizontal {
-    background: #AFC4FF;
-    border-radius: 11px;
-}
-QScrollBar::add-page:horizontal {
-    background: #EAF1FF;
-    border-radius: 11px;
-}
-QScrollBar::handle:horizontal {
-    background: #FFFFFF;
-    border: 4px solid #7DA1FF;
-    border-radius: 11px;
-    min-width: 22px;
-}
-QScrollBar::add-line:horizontal,
-QScrollBar::sub-line:horizontal {
-    width: 0px;
-    height: 0px;
-}
-"""
 
     def _ensure_time_scrollbar_aux_widgets(self, name: str) -> None:
         if name in self._time_scroll_widgets:
             return
-        scrollbar = get_ui_attr(self.ui, name)
-        parent = scrollbar.parent() if scrollbar is not None else None
-        if scrollbar is None or parent is None:
+        host = self._slider_host(name)
+        parent = host.parent() if host is not None else None
+        if host is None or parent is None:
             return
 
         tip = QLabel(parent)
@@ -1063,11 +1116,11 @@ QScrollBar::sub-line:horizontal {
         self._layout_time_scrollbar_aux_widgets(name)
 
     def _layout_time_scrollbar_aux_widgets(self, name: str) -> None:
-        scrollbar = get_ui_attr(self.ui, name)
+        host = self._slider_host(name)
         widgets = self._time_scroll_widgets.get(name)
-        if scrollbar is None or not widgets:
+        if host is None or not widgets:
             return
-        geom = scrollbar.geometry()
+        geom = host.geometry()
         tick_y = geom.y() + geom.height() + 6
         tick_values = (1, 2, 3, 4) if self._is_stim_duration_scroll(name) else (5, 10, 15, 20)
         for tick, tick_value in zip(widgets["ticks"], tick_values):
@@ -1092,6 +1145,8 @@ QScrollBar::sub-line:horizontal {
         return int(left + ratio * width)
 
     def _on_time_scrollbar_changed(self, name: str, value: int) -> None:
+        if name in self._pill_slider_suppress:
+            return
         self._update_time_scrollbar_display(name, value)
 
     def _on_time_scrollbar_slider_released(self) -> None:
@@ -1107,16 +1162,18 @@ QScrollBar::sub-line:horizontal {
             self._logger.exception("时间拖条松手下发失败")
 
     def _step_time_scrollbar(self, name: str, step: int) -> None:
-        scrollbar = get_ui_attr(self.ui, name)
-        if scrollbar is None:
+        if self._pill_slider(name) is None:
             return
         if not self._interaction_allowed():
             return
         if not self._try_begin_adjust_cooldown():
             return
-        scrollbar.setValue(
-            self._normalize_time_scroll_value(name, int(scrollbar.value()) + int(step))
+        current = self._get_time_scrollbar_value(name)
+        self._set_pill_slider_value(
+            name,
+            self._normalize_time_scroll_value(name, current + int(step)),
         )
+        self._update_time_scrollbar_display(name, self._get_time_scrollbar_value(name))
         try:
             self._send_advanced_params(current_value=self._get_left_grade())
             self._save_current_params()
@@ -1129,14 +1186,12 @@ QScrollBar::sub-line:horizontal {
             "horizontalScrollBar_time_rise",
             "horizontalScrollBar_time_down",
         ):
-            scrollbar = get_ui_attr(self.ui, name)
-            if scrollbar is None:
+            if self._pill_slider(name) is None:
                 continue
             try:
-                old_block = scrollbar.blockSignals(True)
-                scrollbar.setValue(self._default_time_scroll_value(name))
-                scrollbar.blockSignals(old_block)
-                self._update_time_scrollbar_display(name, scrollbar.value())
+                default = self._default_time_scroll_value(name)
+                self._set_pill_slider_value(name, default)
+                self._update_time_scrollbar_display(name, default)
             except Exception:
                 self._logger.exception("重置时间拖条失败: %s", name)
 
@@ -1146,16 +1201,16 @@ QScrollBar::sub-line:horizontal {
         return max(self._TIME_MIN_TENTHS, min(self._TIME_MAX_TENTHS, int(value)))
 
     def _update_time_scrollbar_display(self, name: str, value: int) -> None:
-        scrollbar = get_ui_attr(self.ui, name)
+        host = self._slider_host(name)
         widgets = self._time_scroll_widgets.get(name)
-        if scrollbar is None or not widgets:
+        if host is None or not widgets:
             return
         norm = self._normalize_time_scroll_value(name, value)
         text = self._format_time_scroll_display(name, norm)
         widgets["value"].setText(text)
         widgets["tip"].setText(text)
 
-        geom = scrollbar.geometry()
+        geom = host.geometry()
         tip_width = 58
         tip_x = self._time_value_to_x(geom.x(), geom.width(), name, norm) - tip_width // 2
         tip_x = max(geom.x(), min(geom.x() + geom.width() - tip_width, tip_x))
