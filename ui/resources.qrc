@@ -99,6 +99,7 @@
         <file>pic/treat_pause.png</file>
         <file>pic/treat_power_logo.png</file>
         <file>pic/treat_patient_touxiang.png</file>
+        <file>pic/combo_triangle_down.png</file>
     </qresource>
 
     <!-- 主界面图片资源 -->
