@@ -9,6 +9,7 @@ from PySide6.QtGui import QPixmap, QRegion
 from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QVBoxLayout
 
 from ui.dialogs.tips_dialog import TipsDialog
+from ui.widgets.bubble_tip_widget import BubbleTipWidget
 from ui.widgets.circle_level_widget import CircleLevelWidget
 from ui.widgets.slider_widget import SliderWidget
 from application.session_app import SessionApp, PatientTreatParams
@@ -1088,24 +1089,7 @@ class StimTestController:
         if host is None or parent is None:
             return
 
-        tip = QLabel(parent)
-        tip.setAlignment(Qt.AlignCenter)
-        tip.setStyleSheet(
-            "QLabel { background: #789EFF; color: white; border-radius: 4px; padding: 2px 6px; }"
-        )
-
-        tick_labels: list[QLabel] = []
-        tick_texts = (
-            ("1", "2", "3", "4")
-            if self._is_stim_duration_scroll(name)
-            else ("0.5s", "1s", "1.5s", "2s")
-        )
-        for text in tick_texts:
-            tick = QLabel(parent)
-            tick.setText(text)
-            tick.setAlignment(Qt.AlignCenter)
-            tick.setStyleSheet("QLabel { color: #333333; font-size: 13px; }")
-            tick_labels.append(tick)
+        tip = BubbleTipWidget(parent)
 
         stepper_ui = self._TIME_SCROLL_STEPPER_UI.get(name)
         minus = plus = value_label = None
@@ -1138,7 +1122,6 @@ class StimTestController:
 
         self._time_scroll_widgets[name] = {
             "tip": tip,
-            "ticks": tick_labels,
             "minus": minus,
             "value": value_label,
             "plus": plus,
@@ -1152,29 +1135,15 @@ class StimTestController:
         if host is None or not widgets:
             return
         geom = host.geometry()
-        tick_y = geom.y() + geom.height() + 6
-        tick_values = (1, 2, 3, 4) if self._is_stim_duration_scroll(name) else (5, 10, 15, 20)
-        for tick, tick_value in zip(widgets["ticks"], tick_values):
-            x = self._time_value_to_x(geom.x(), geom.width(), name, tick_value) - 24
-            tick.setGeometry(x, tick_y, 48, 18)
-            tick.show()
 
         if not widgets.get("stepper_in_ui"):
-            panel_y = geom.y() + geom.height() + 36
+            panel_y = geom.y() + geom.height() + 12
             panel_x = geom.x() + max(0, (geom.width() - 210) // 2)
             widgets["minus"].setGeometry(panel_x, panel_y, 60, 34)
             widgets["value"].setGeometry(panel_x + 60, panel_y, 90, 34)
             widgets["plus"].setGeometry(panel_x + 150, panel_y, 60, 34)
         for key in ("minus", "value", "plus", "tip"):
             widgets[key].show()
-
-    def _time_value_to_x(self, left: int, width: int, name: str, value: int) -> int:
-        vmin = self._time_scroll_min(name)
-        vmax = self._time_scroll_max(name)
-        span = max(1, vmax - vmin)
-        v = self._normalize_time_scroll_value(name, value)
-        ratio = (v - vmin) / span
-        return int(left + ratio * width)
 
     def _on_time_scrollbar_changed(self, name: str, value: int) -> None:
         if name in self._pill_slider_suppress:
@@ -1242,12 +1211,21 @@ class StimTestController:
         widgets["value"].setText(text)
         widgets["tip"].setText(text)
 
-        geom = host.geometry()
-        tip_width = 58
-        tip_x = self._time_value_to_x(geom.x(), geom.width(), name, norm) - tip_width // 2
-        tip_x = max(geom.x(), min(geom.x() + geom.width() - tip_width, tip_x))
-        widgets["tip"].setGeometry(tip_x, geom.y() - 34, tip_width, 24)
-        widgets["tip"].raise_()
+        slider = self._pill_slider(name)
+        tip = widgets["tip"]
+        parent = tip.parent()
+        if slider is None or parent is None:
+            return
+
+        tip_w = tip.width()
+        tip_h = tip.height()
+        handle_center, handle_radius = slider.handle_anchor_in(parent)
+        handle_x = int(handle_center.x())
+        gap_above_handle = 4
+        tip_x = handle_x - tip_w // 2
+        tip_y = int(handle_center.y() - handle_radius - gap_above_handle - tip_h)
+        tip.setGeometry(tip_x, tip_y, tip_w, tip_h)
+        tip.raise_()
 
     def _set_time_aux_controls_enabled(self, enabled: bool) -> None:
         for widgets in self._time_scroll_widgets.values():

@@ -3963,22 +3963,22 @@ border-radius: 12px;</string>
       <widget class="QComboBox" name="comboBox_left_scheme">
        <property name="geometry">
         <rect>
-         <x>740</x>
-         <y>340</y>
-         <width>331</width>
-         <height>41</height>
+         <x>680</x>
+         <y>320</y>
+         <width>538</width>
+         <height>50</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>127</width>
-         <height>39</height>
+         <width>538</width>
+         <height>50</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>1270</width>
-         <height>390</height>
+         <width>538</width>
+         <height>50</height>
         </size>
        </property>
        <property name="font">
@@ -3991,7 +3991,7 @@ border-radius: 12px;</string>
         <string notr="true">QComboBox {
 background-color: rgb(248, 248, 248);
 border: none;
-border-radius: 7px;
+border-radius: 8px;
 color: #000000;
 padding-left: 12px;
 padding-right: 36px;
@@ -4035,8 +4035,8 @@ outline: none;
       <widget class="QLabel" name="label_left_channel_2">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>270</y>
+         <x>680</x>
+         <y>250</y>
          <width>61</width>
          <height>31</height>
         </rect>
@@ -4056,8 +4056,8 @@ outline: none;
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>700</x>
-         <y>580</y>
+         <x>680</x>
+         <y>570</y>
          <width>111</width>
          <height>31</height>
         </rect>
@@ -4077,29 +4077,29 @@ outline: none;
       <widget class="QWidget" name="comboBox_left_freq" native="true">
        <property name="geometry">
         <rect>
-         <x>730</x>
-         <y>650</y>
-         <width>471</width>
-         <height>41</height>
+         <x>660</x>
+         <y>640</y>
+         <width>580</width>
+         <height>42</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>220</width>
-         <height>33</height>
+         <width>580</width>
+         <height>42</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>2200</width>
-         <height>3300</height>
+         <width>580</width>
+         <height>42</height>
         </size>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_left_freq_turnsmall">
        <property name="geometry">
         <rect>
-         <x>807</x>
+         <x>810</x>
          <y>710</y>
          <width>63</width>
          <height>39</height>
@@ -4134,7 +4134,7 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_left_freq_value">
        <property name="geometry">
         <rect>
-         <x>870</x>
+         <x>873</x>
          <y>710</y>
          <width>127</width>
          <height>39</height>
@@ -4162,7 +4162,7 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_left_freq_turnbig">
        <property name="geometry">
         <rect>
-         <x>997</x>
+         <x>1000</x>
          <y>710</y>
          <width>63</width>
          <height>39</height>
@@ -4253,7 +4253,7 @@ QPushButton:disabled { background-color: #707070; color: rgba(255, 255, 255, 1);
       <widget class="QLabel" name="label_26">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>23</x>
          <y>180</y>
          <width>1881</width>
          <height>721</height>
@@ -4457,9 +4457,9 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QWidget" name="horizontalScrollBar_time_stim" native="true">
        <property name="geometry">
         <rect>
-         <x>1540</x>
-         <y>290</y>
-         <width>261</width>
+         <x>1420</x>
+         <y>300</y>
+         <width>441</width>
          <height>41</height>
         </rect>
        </property>
@@ -4479,9 +4479,9 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QWidget" name="horizontalScrollBar_time_rise" native="true">
        <property name="geometry">
         <rect>
-         <x>1529</x>
-         <y>470</y>
-         <width>261</width>
+         <x>1420</x>
+         <y>460</y>
+         <width>431</width>
          <height>41</height>
         </rect>
        </property>
@@ -4501,9 +4501,9 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QWidget" name="horizontalScrollBar_time_down" native="true">
        <property name="geometry">
         <rect>
-         <x>1539</x>
-         <y>650</y>
-         <width>251</width>
+         <x>1420</x>
+         <y>630</y>
+         <width>421</width>
          <height>41</height>
         </rect>
        </property>
@@ -4621,8 +4621,8 @@ color: rgb(180, 190, 215);
       <widget class="QPushButton" name="pushButton_time_rise_turnsmall">
        <property name="geometry">
         <rect>
-         <x>1533</x>
-         <y>547</y>
+         <x>1550</x>
+         <y>530</y>
          <width>63</width>
          <height>39</height>
         </rect>
@@ -4656,8 +4656,8 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_time_rise_value">
        <property name="geometry">
         <rect>
-         <x>1596</x>
-         <y>547</y>
+         <x>1613</x>
+         <y>530</y>
          <width>127</width>
          <height>39</height>
         </rect>
@@ -4684,8 +4684,8 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_time_rise_turnbig">
        <property name="geometry">
         <rect>
-         <x>1723</x>
-         <y>547</y>
+         <x>1740</x>
+         <y>530</y>
          <width>63</width>
          <height>39</height>
         </rect>
@@ -4719,8 +4719,8 @@ color: rgb(180, 190, 215);
       <widget class="QPushButton" name="pushButton_time_down_turnsmall">
        <property name="geometry">
         <rect>
-         <x>1539</x>
-         <y>727</y>
+         <x>1550</x>
+         <y>700</y>
          <width>63</width>
          <height>39</height>
         </rect>
@@ -4754,8 +4754,8 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_time_down_value">
        <property name="geometry">
         <rect>
-         <x>1602</x>
-         <y>727</y>
+         <x>1613</x>
+         <y>700</y>
          <width>127</width>
          <height>39</height>
         </rect>
@@ -4782,8 +4782,8 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_time_down_turnbig">
        <property name="geometry">
         <rect>
-         <x>1729</x>
-         <y>727</y>
+         <x>1740</x>
+         <y>700</y>
          <width>63</width>
          <height>39</height>
         </rect>
@@ -4817,8 +4817,8 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>760</x>
-         <y>450</y>
+         <x>680</x>
+         <y>410</y>
          <width>111</width>
          <height>41</height>
         </rect>
@@ -4838,22 +4838,22 @@ color: rgb(180, 190, 215);
       <widget class="QComboBox" name="comboBox_pulse_width">
        <property name="geometry">
         <rect>
-         <x>750</x>
-         <y>500</y>
-         <width>311</width>
-         <height>41</height>
+         <x>680</x>
+         <y>480</y>
+         <width>538</width>
+         <height>50</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>127</width>
-         <height>39</height>
+         <width>538</width>
+         <height>50</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>1270</width>
-         <height>390</height>
+         <width>538</width>
+         <height>50</height>
         </size>
        </property>
        <property name="font">
@@ -4866,7 +4866,7 @@ color: rgb(180, 190, 215);
         <string notr="true">QComboBox {
 background-color:rgb(248, 248, 248);
 border: none;
-border-radius: 7px;
+border-radius: 8px;
 color: #000000;
 padding-left: 12px;
 padding-right: 36px;
@@ -4930,19 +4930,19 @@ outline: none;
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
-         <x>1380</x>
-         <y>290</y>
-         <width>111</width>
+         <x>1320</x>
+         <y>300</y>
+         <width>81</width>
          <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>14</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(88, 112, 224);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>刺激时长</string>
@@ -4951,19 +4951,19 @@ outline: none;
       <widget class="QLabel" name="label_5">
        <property name="geometry">
         <rect>
-         <x>1380</x>
-         <y>450</y>
-         <width>111</width>
-         <height>41</height>
+         <x>1320</x>
+         <y>470</y>
+         <width>81</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>14</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(88, 112, 224);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>上升时长</string>
@@ -4972,19 +4972,19 @@ outline: none;
       <widget class="QLabel" name="label_6">
        <property name="geometry">
         <rect>
-         <x>1380</x>
+         <x>1320</x>
          <y>640</y>
-         <width>111</width>
-         <height>31</height>
+         <width>81</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>14</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(88, 112, 224);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>下降时长</string>

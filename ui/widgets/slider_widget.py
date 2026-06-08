@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Tuple
 
-from PySide6.QtCore import QEvent, Qt, Signal, QPointF, QRectF
+from PySide6.QtCore import QEvent, Qt, Signal, QPoint, QPointF, QRectF
 from PySide6.QtGui import QColor, QLinearGradient, QMouseEvent, QPainter, QPainterPath, QPen, QBrush, QPixmap
 from PySide6.QtWidgets import QWidget
 
@@ -80,6 +80,12 @@ class SliderWidget(QWidget):
 
     def value(self) -> int:
         return self._value
+
+    def handle_anchor_in(self, target: QWidget) -> Tuple[QPointF, float]:
+        """手柄中心在 target 坐标系中的位置及手柄半径，供外部气泡对齐。"""
+        center = self._handle_center()
+        mapped = self.mapTo(target, QPoint(int(center.x()), int(center.y())))
+        return QPointF(float(mapped.x()), float(mapped.y())), self._handle_radius()
 
     def set_vertical_style(self, style: str) -> None:
         """滑杆样式：gradient（默认）或 pill（圆角轨道 + 刻度点 + 白色手柄，横/竖向均可用）。"""
