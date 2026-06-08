@@ -47,6 +47,9 @@ class StimTestController:
     _CURRENT_MAX_OUTPUT = 0x50
     _ADVANCED_RESERVED_STIM_PAGE = 0x02
     _ADJUST_COOLDOWN_MS = 1000
+    _ELEC_STATUS_DEFAULT = ("未运行", "#999999", ":/set/pic/icon_elec_hui.png")
+    _ELEC_STATUS_RUNNING = ("运行中", "#789EFF", ":/set/pic/icon_elec_lan.png")
+    _ELEC_STATUS_STIMULATING = ("刺激中", "#F2AD49", ":/set/pic/icon_elec_huang.png")
 
     _STYLE_LEG_BTN_SELECTED = (
         "QPushButton { background: transparent; border: none; color: rgb(91, 141, 239); "
@@ -366,6 +369,7 @@ class StimTestController:
         self._hide_right_channel_widgets()
         self._update_freq_value_label()
         self._init_time_scrollbars()
+        self._update_elec_status()
 
     def _on_stim_leg_clicked(self, left: bool) -> None:
         self._switch_active_leg(left=left)
@@ -523,6 +527,25 @@ class StimTestController:
 
         self._apply_stim_controls_enabled()
         self._refresh_stim_leg_styles()
+        self._update_elec_status()
+
+    def _update_elec_status(self) -> None:
+        """刷新电刺激通道状态：未运行、运行中、刺激中。"""
+        if not self._test_running:
+            text, color, icon = self._ELEC_STATUS_DEFAULT
+        elif self._get_left_grade() > 0:
+            text, color, icon = self._ELEC_STATUS_STIMULATING
+        else:
+            text, color, icon = self._ELEC_STATUS_RUNNING
+
+        status_label = get_ui_attr(self.ui, "label_elec_status")
+        if status_label is not None:
+            safe_call(self._logger, getattr(status_label, "setText", None), text)
+            safe_call(self._logger, getattr(status_label, "setStyleSheet", None), f"color: {color};")
+
+        icon_label = get_ui_attr(self.ui, "label_elec_icon") or get_ui_attr(self.ui, "label_69")
+        if icon_label is not None:
+            safe_call(self._logger, getattr(icon_label, "setStyleSheet", None), f"border-image: url({icon});")
 
     def set_hardware_online(self, is_online: bool) -> None:
         """根据下位机在线状态更新控件可用性"""
@@ -646,6 +669,7 @@ class StimTestController:
         safe_call(self._logger, getattr(label, "setText", None), f"{grade}mA")
         if self._left_circle_widget is not None:
             self._left_circle_widget.set_level(grade)
+        self._update_elec_status()
 
     def _send_basic_params(self) -> None:
         if not self.stim_app:

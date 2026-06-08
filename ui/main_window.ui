@@ -262,7 +262,7 @@ QTabWidget#tabWidget_main QTabBar::tab {
 }</string>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -3408,9 +3408,6 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
      <property name="text">
       <string/>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
@@ -3429,9 +3426,6 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
      </property>
      <property name="text">
       <string/>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -3534,7 +3528,7 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
       </size>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -3546,8 +3540,20 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
          <x>20</x>
          <y>0</y>
          <width>1881</width>
-         <height>161</height>
+         <height>156</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1871</width>
+         <height>156</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>1881</width>
+         <height>156</height>
+        </size>
        </property>
        <property name="visible">
         <bool>false</bool>
@@ -3682,8 +3688,14 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
            <widget class="QFrame" name="frame_stim_leg_left">
             <property name="minimumSize">
              <size>
-              <width>0</width>
-              <height>56</height>
+              <width>422</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>422</width>
+              <height>50</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -3789,8 +3801,14 @@ border-radius: 12px;</string>
            <widget class="QFrame" name="frame_stim_leg_right">
             <property name="minimumSize">
              <size>
-              <width>0</width>
-              <height>56</height>
+              <width>422</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>422</width>
+              <height>50</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -4125,22 +4143,22 @@ QPushButton:disabled { background-color: #707070; color: rgba(255, 255, 255, 1);
       <widget class="QWidget" name="widget_circle_level_left" native="true">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>140</x>
          <y>290</y>
-         <width>360</width>
-         <height>360</height>
+         <width>400</width>
+         <height>400</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>360</width>
-         <height>360</height>
+         <width>400</width>
+         <height>400</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>360</width>
-         <height>360</height>
+         <width>400</width>
+         <height>400</height>
         </size>
        </property>
       </widget>
@@ -4176,9 +4194,9 @@ background-color: rgb(255,255,255);</string>
       <widget class="QPushButton" name="pushButton_left_turnsmall">
        <property name="geometry">
         <rect>
-         <x>168</x>
-         <y>690</y>
-         <width>74</width>
+         <x>300</x>
+         <y>710</y>
+         <width>63</width>
          <height>39</height>
         </rect>
        </property>
@@ -4211,9 +4229,9 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_left_grade">
        <property name="geometry">
         <rect>
-         <x>242</x>
-         <y>690</y>
-         <width>148</width>
+         <x>363</x>
+         <y>710</y>
+         <width>127</width>
          <height>39</height>
         </rect>
        </property>
@@ -4242,9 +4260,9 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_left_turnbig">
        <property name="geometry">
         <rect>
-         <x>390</x>
-         <y>690</y>
-         <width>74</width>
+         <x>490</x>
+         <y>710</y>
+         <width>63</width>
          <height>39</height>
         </rect>
        </property>
@@ -4597,23 +4615,6 @@ border-left: 2px dashed #EEEEEE;
 }</string>
        </property>
       </widget>
-      <widget class="Line" name="line_10">
-       <property name="geometry">
-        <rect>
-         <x>1380</x>
-         <y>890</y>
-         <width>461</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: none;
-border-top: 1px solid #EEEEEE;</string>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
       <widget class="Line" name="line_11">
        <property name="geometry">
         <rect>
@@ -4841,6 +4842,95 @@ border-top: 1px solid #EEEEEE;</string>
         <bool>false</bool>
        </property>
       </widget>
+      <widget class="QLabel" name="label_63">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>710</y>
+         <width>161</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>39</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>39</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(248, 248, 248);
+border-radius: 8px;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_64">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>721</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #999999;</string>
+       </property>
+       <property name="text">
+        <string>通道状态：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_elec_status">
+       <property name="geometry">
+        <rect>
+         <x>202</x>
+         <y>721</y>
+         <width>41</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: #999999;</string>
+       </property>
+       <property name="text">
+        <string>未运行</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_elec_icon">
+       <property name="geometry">
+        <rect>
+         <x>252</x>
+         <y>722</y>
+         <width>10</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>10</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>10</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_elec_hui.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
       <zorder>widget_stim_leg_bar</zorder>
       <zorder>label_26</zorder>
       <zorder>pushButton_next</zorder>
@@ -4867,7 +4957,6 @@ border-top: 1px solid #EEEEEE;</string>
       <zorder>line_7</zorder>
       <zorder>line_8</zorder>
       <zorder>line_9</zorder>
-      <zorder>line_10</zorder>
       <zorder>line_11</zorder>
       <zorder>line_12</zorder>
       <zorder>line_13</zorder>
@@ -4876,6 +4965,10 @@ border-top: 1px solid #EEEEEE;</string>
       <zorder>label_48</zorder>
       <zorder>label_50</zorder>
       <zorder>label_51</zorder>
+      <zorder>label_63</zorder>
+      <zorder>label_64</zorder>
+      <zorder>label_elec_status</zorder>
+      <zorder>label_elec_icon</zorder>
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
