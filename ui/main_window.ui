@@ -4422,10 +4422,10 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QWidget" name="horizontalScrollBar_time_stim" native="true">
        <property name="geometry">
         <rect>
-         <x>1630</x>
-         <y>300</y>
-         <width>160</width>
-         <height>33</height>
+         <x>1540</x>
+         <y>290</y>
+         <width>261</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -4436,18 +4436,18 @@ background-color: rgb(213, 213, 213);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>160</width>
-         <height>33</height>
+         <width>1600</width>
+         <height>330</height>
         </size>
        </property>
       </widget>
       <widget class="QWidget" name="horizontalScrollBar_time_rise" native="true">
        <property name="geometry">
         <rect>
-         <x>1630</x>
+         <x>1529</x>
          <y>470</y>
-         <width>160</width>
-         <height>33</height>
+         <width>261</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -4458,18 +4458,18 @@ background-color: rgb(213, 213, 213);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>160</width>
-         <height>33</height>
+         <width>1600</width>
+         <height>330</height>
         </size>
        </property>
       </widget>
       <widget class="QWidget" name="horizontalScrollBar_time_down" native="true">
        <property name="geometry">
         <rect>
-         <x>1630</x>
+         <x>1539</x>
          <y>650</y>
-         <width>160</width>
-         <height>33</height>
+         <width>251</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -4480,9 +4480,303 @@ background-color: rgb(213, 213, 213);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>160</width>
-         <height>33</height>
+         <width>1600</width>
+         <height>330</height>
         </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_time_stim_turnsmall">
+       <property name="geometry">
+        <rect>
+         <x>1544</x>
+         <y>367</y>
+         <width>63</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(180, 190, 215);
+}</string>
+       </property>
+       <property name="text">
+        <string>−</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_time_stim_value">
+       <property name="geometry">
+        <rect>
+         <x>1607</x>
+         <y>367</y>
+         <width>127</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(248, 248, 248);
+border-left: 1px solid rgb(235, 235, 235);
+border-right: 1px solid rgb(235, 235, 235);
+color: rgb(88, 122, 244);</string>
+       </property>
+       <property name="text">
+        <string>3s</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_time_stim_turnbig">
+       <property name="geometry">
+        <rect>
+         <x>1734</x>
+         <y>367</y>
+         <width>63</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(180, 190, 215);
+}</string>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_time_rise_turnsmall">
+       <property name="geometry">
+        <rect>
+         <x>1533</x>
+         <y>547</y>
+         <width>63</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(180, 190, 215);
+}</string>
+       </property>
+       <property name="text">
+        <string>−</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_time_rise_value">
+       <property name="geometry">
+        <rect>
+         <x>1596</x>
+         <y>547</y>
+         <width>127</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(248, 248, 248);
+border-left: 1px solid rgb(235, 235, 235);
+border-right: 1px solid rgb(235, 235, 235);
+color: rgb(88, 122, 244);</string>
+       </property>
+       <property name="text">
+        <string>0.5s</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_time_rise_turnbig">
+       <property name="geometry">
+        <rect>
+         <x>1723</x>
+         <y>547</y>
+         <width>63</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(180, 190, 215);
+}</string>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_time_down_turnsmall">
+       <property name="geometry">
+        <rect>
+         <x>1539</x>
+         <y>727</y>
+         <width>63</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-left-radius: 7px;
+border-bottom-left-radius: 7px;
+color: rgb(180, 190, 215);
+}</string>
+       </property>
+       <property name="text">
+        <string>−</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_time_down_value">
+       <property name="geometry">
+        <rect>
+         <x>1602</x>
+         <y>727</y>
+         <width>127</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(248, 248, 248);
+border-left: 1px solid rgb(235, 235, 235);
+border-right: 1px solid rgb(235, 235, 235);
+color: rgb(88, 122, 244);</string>
+       </property>
+       <property name="text">
+        <string>0.5s</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_time_down_turnbig">
+       <property name="geometry">
+        <rect>
+         <x>1729</x>
+         <y>727</y>
+         <width>63</width>
+         <height>39</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(88, 122, 244);
+}
+QPushButton:pressed { background-color: rgb(238, 241, 250); }
+QPushButton:disabled {
+background-color: rgb(248, 248, 248);
+border: none;
+border-top-right-radius: 7px;
+border-bottom-right-radius: 7px;
+color: rgb(180, 190, 215);
+}</string>
+       </property>
+       <property name="text">
+        <string>+</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_2">
@@ -5028,6 +5322,15 @@ border-radius: 8px;</string>
       <zorder>horizontalScrollBar_time_stim</zorder>
       <zorder>horizontalScrollBar_time_rise</zorder>
       <zorder>horizontalScrollBar_time_down</zorder>
+      <zorder>pushButton_time_stim_turnsmall</zorder>
+      <zorder>label_time_stim_value</zorder>
+      <zorder>pushButton_time_stim_turnbig</zorder>
+      <zorder>pushButton_time_rise_turnsmall</zorder>
+      <zorder>label_time_rise_value</zorder>
+      <zorder>pushButton_time_rise_turnbig</zorder>
+      <zorder>pushButton_time_down_turnsmall</zorder>
+      <zorder>label_time_down_value</zorder>
+      <zorder>pushButton_time_down_turnbig</zorder>
       <zorder>label_2</zorder>
       <zorder>comboBox_pulse_width</zorder>
       <zorder>label_3</zorder>

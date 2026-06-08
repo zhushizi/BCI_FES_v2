@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional, Tuple
 
 from PySide6.QtCore import QEvent, Qt, Signal, QPointF, QRectF
-from PySide6.QtGui import QColor, QLinearGradient, QMouseEvent, QPainter, QPainterPath, QPen, QBrush
+from PySide6.QtGui import QColor, QLinearGradient, QMouseEvent, QPainter, QPainterPath, QPen, QBrush, QPixmap
 from PySide6.QtWidgets import QWidget
 
 
@@ -42,13 +42,15 @@ class SliderWidget(QWidget):
         self._vertical_style = "gradient"
         self._tick_count = 0
         self._pill_track_width = 24.0
-        self._pill_handle_radius = 15.0
+        self._pill_handle_track_ratio = 1.6
         self._pill_track_idle = QColor(233, 237, 245)
         self._pill_track_active = QColor(0x78, 0x9E, 0xFF)  # #789EFF
         self._pill_track_border = QColor(208, 214, 224)
-        self._pill_track_shadow = QColor(0, 0, 0, 28)
+        self._pill_handle_fill = QColor(255, 255, 255)
         self._pill_handle_border = QColor(216, 222, 232)
-        self._pill_handle_shadow = QColor(0, 0, 0, 50)
+        self._pill_handle_icon = QColor(118, 154, 246)
+        self._pill_handle_icon_pixmap: Optional[QPixmap] = None
+        self._pill_handle_icon_ratio = 0.46
         self._pill_tick_idle = QColor(196, 202, 214)
         self._pill_tick_active = QColor(255, 255, 255)
         self._apply_active_palette()
@@ -94,6 +96,13 @@ class SliderWidget(QWidget):
         if count != self._tick_count:
             self._tick_count = count
             self.update()
+
+    def set_pill_handle_icon(self, resource_path: str) -> None:
+        """pill 摇杆中心图标（资源路径，如 :/set/pic/icon_yaogan_time.png）；未设置则绘制闪电。"""
+        path = str(resource_path or "").strip()
+        pixmap = QPixmap(path) if path else QPixmap()
+        self._pill_handle_icon_pixmap = None if pixmap.isNull() else pixmap
+        self.update()
 
     def _apply_active_palette(self) -> None:
         self._track_border_color = QColor(224, 228, 235)
@@ -192,8 +201,9 @@ class SliderWidget(QWidget):
 
     def _handle_radius(self) -> float:
         if self._vertical_style == "pill":
-            _, track_radius, _ = self._track_geometry()
-            return max(self._pill_handle_radius, track_radius * 1.6)
+            track_rect, _, _ = self._track_geometry()
+            track_cross = track_rect.height() if self._is_horizontal() else track_rect.width()
+            return track_cross * self._pill_handle_track_ratio / 2.0
         _, radius, _ = self._track_geometry()
         return radius
 
@@ -233,14 +243,6 @@ class SliderWidget(QWidget):
         path_track = QPainterPath()
         path_track.addRoundedRect(track_rect, radius, radius)
 
-        if self.isEnabled():
-            shadow_path = QPainterPath()
-            shadow_rect = track_rect.adjusted(0.0, 1.0, 0.0, 2.0)
-            shadow_path.addRoundedRect(shadow_rect, radius, radius)
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(self._pill_track_shadow)
-            painter.drawPath(shadow_path)
-
         border_color = self._pill_track_border if self.isEnabled() else self._track_border_color
         fill_color = self._pill_track_idle if self.isEnabled() else self._track_base_color
         painter.setPen(QPen(border_color, 1))
@@ -248,30 +250,57 @@ class SliderWidget(QWidget):
         painter.drawPath(path_track)
         return path_track
 
-    def _draw_pill_handle(self, painter: QPainter, handle_center: QPointF, hr: float) -> None:
-        shadow_dx = 1.0 if self._is_horizontal() else 0.0
-        shadow_dy = 0.0 if self._is_horizontal() else 1.5
-        shadow_rect = QRectF(
-            handle_center.x() - hr + shadow_dx,
-            handle_center.y() - hr + shadow_dy,
-            hr * 2.0,
-            hr * 2.0,
+    def _draw_handle_icon(self, painter: QPainter, center: QPointF, hr: float) -> None:
+        pixmap = self._pill_handle_icon_pixmap
+        if pixmap is None or pixmap.isNull():
+            self._draw_lightning(painter, center, hr * 0.82)
+            return
+        icon_size = hr * 2.0 * self._pill_handle_icon_ratio
+        scaled = pixmap.scaled(
+            int(icon_size),
+            int(icon_size),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
         )
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._pill_handle_shadow if self.isEnabled() else QColor(0, 0, 0, 25))
-        painter.drawEllipse(shadow_rect)
+        painter.save()
+        if not self.isEnabled():
+            painter.setOpacity(0.45)
+        painter.drawPixmap(
+            int(center.x() - scaled.width() / 2.0),
+            int(center.y() - scaled.height() / 2.0),
+            scaled,
+        )
+        painter.restore()
 
+    def _draw_lightning(self, painter: QPainter, center: QPointF, size: float) -> None:
+        painter.save()
+        path = QPainterPath()
+        path.moveTo(center.x() + size * 0.05, center.y() - size * 0.48)
+        path.lineTo(center.x() - size * 0.28, center.y() + size * 0.03)
+        path.lineTo(center.x() - size * 0.03, center.y() + size * 0.03)
+        path.lineTo(center.x() - size * 0.12, center.y() + size * 0.48)
+        path.lineTo(center.x() + size * 0.30, center.y() - size * 0.12)
+        path.lineTo(center.x() + size * 0.04, center.y() - size * 0.12)
+        path.closeSubpath()
+        painter.setPen(Qt.NoPen)
+        icon_color = self._pill_handle_icon if self.isEnabled() else self._handle_color
+        painter.setBrush(QBrush(icon_color))
+        painter.drawPath(path)
+        painter.restore()
+
+    def _draw_pill_handle(self, painter: QPainter, handle_center: QPointF, hr: float) -> None:
         handle_rect = QRectF(
             handle_center.x() - hr,
             handle_center.y() - hr,
             hr * 2.0,
             hr * 2.0,
         )
+        fill_color = self._pill_handle_fill if self.isEnabled() else self._handle_inner_color
         border_color = self._pill_handle_border if self.isEnabled() else self._track_border_color
-        fill_color = QColor(255, 255, 255) if self.isEnabled() else self._handle_inner_color
-        painter.setPen(QPen(border_color, 1))
-        painter.setBrush(fill_color)
+        painter.setPen(QPen(border_color, 1.0))
+        painter.setBrush(QBrush(fill_color))
         painter.drawEllipse(handle_rect)
+        self._draw_handle_icon(painter, handle_center, hr)
 
     def _paint_vertical_pill(self, painter: QPainter) -> None:
         track_rect, radius, _ = self._track_geometry()

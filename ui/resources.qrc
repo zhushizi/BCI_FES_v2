@@ -154,5 +154,6 @@
         <file>pic/icon_shut_paradigm.png</file>
         <file>pic/icon_dialog_gantan.png</file>
         <file>pic/icon_dialog_chengong.png</file>
+        <file>pic/icon_yaogan_time.png</file>
     </qresource>
 </RCC>

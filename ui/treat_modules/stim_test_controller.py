@@ -54,6 +54,23 @@ class StimTestController:
         "horizontalScrollBar_time_rise": 5,
         "horizontalScrollBar_time_down": 5,
     }
+    _TIME_SCROLL_STEPPER_UI = {
+        "horizontalScrollBar_time_stim": (
+            "pushButton_time_stim_turnsmall",
+            "label_time_stim_value",
+            "pushButton_time_stim_turnbig",
+        ),
+        "horizontalScrollBar_time_rise": (
+            "pushButton_time_rise_turnsmall",
+            "label_time_rise_value",
+            "pushButton_time_rise_turnbig",
+        ),
+        "horizontalScrollBar_time_down": (
+            "pushButton_time_down_turnsmall",
+            "label_time_down_value",
+            "pushButton_time_down_turnbig",
+        ),
+    }
     # 开始测试：基础参数帧与下一条高级参数帧之间间隔（与训练范式 INTER_CMD_DELAY 一致）
     _BASIC_ADVANCED_DELAY_SEC = 1.0
     _CURRENT_MODE_START = 0xEF
@@ -1047,6 +1064,7 @@ class StimTestController:
                 slider = self._pill_slider(name)
                 if slider is None:
                     continue
+                slider.set_pill_handle_icon(":/set/pic/icon_yaogan_time.png")
                 safe_connect(
                     self._logger,
                     getattr(slider, "valueChanged", None),
@@ -1089,20 +1107,32 @@ class StimTestController:
             tick.setStyleSheet("QLabel { color: #333333; font-size: 13px; }")
             tick_labels.append(tick)
 
-        minus = QPushButton("-", parent)
-        value_label = QLabel(parent)
-        plus = QPushButton("+", parent)
-        for button in (minus, plus):
-            button.setCursor(Qt.PointingHandCursor)
-            button.setStyleSheet(
-                "QPushButton { background: #F7F7F7; color: #789EFF; border: 1px solid #E5E5E5; "
-                "font-size: 20px; } QPushButton:pressed { background: #EEF3FF; }"
+        stepper_ui = self._TIME_SCROLL_STEPPER_UI.get(name)
+        minus = plus = value_label = None
+        stepper_in_ui = False
+        if stepper_ui is not None:
+            minus = get_ui_attr(self.ui, stepper_ui[0])
+            value_label = get_ui_attr(self.ui, stepper_ui[1])
+            plus = get_ui_attr(self.ui, stepper_ui[2])
+            stepper_in_ui = minus is not None and value_label is not None and plus is not None
+        if not stepper_in_ui:
+            minus = QPushButton("-", parent)
+            value_label = QLabel(parent)
+            plus = QPushButton("+", parent)
+            for button in (minus, plus):
+                button.setCursor(Qt.PointingHandCursor)
+                button.setStyleSheet(
+                    "QPushButton { background: #F7F7F7; color: #789EFF; border: 1px solid #E5E5E5; "
+                    "font-size: 20px; } QPushButton:pressed { background: #EEF3FF; }"
+                )
+            value_label.setAlignment(Qt.AlignCenter)
+            value_label.setStyleSheet(
+                "QLabel { background: #F7F7F7; color: #789EFF; border-top: 1px solid #E5E5E5; "
+                "border-bottom: 1px solid #E5E5E5; font-size: 18px; }"
             )
-        value_label.setAlignment(Qt.AlignCenter)
-        value_label.setStyleSheet(
-            "QLabel { background: #F7F7F7; color: #789EFF; border-top: 1px solid #E5E5E5; "
-            "border-bottom: 1px solid #E5E5E5; font-size: 18px; }"
-        )
+        else:
+            for button in (minus, plus):
+                button.setCursor(Qt.PointingHandCursor)
         safe_connect(self._logger, getattr(minus, "clicked", None), lambda _=False, n=name: self._step_time_scrollbar(n, -1))
         safe_connect(self._logger, getattr(plus, "clicked", None), lambda _=False, n=name: self._step_time_scrollbar(n, 1))
 
@@ -1112,6 +1142,7 @@ class StimTestController:
             "minus": minus,
             "value": value_label,
             "plus": plus,
+            "stepper_in_ui": stepper_in_ui,
         }
         self._layout_time_scrollbar_aux_widgets(name)
 
@@ -1128,11 +1159,12 @@ class StimTestController:
             tick.setGeometry(x, tick_y, 48, 18)
             tick.show()
 
-        panel_y = geom.y() + geom.height() + 36
-        panel_x = geom.x() + max(0, (geom.width() - 210) // 2)
-        widgets["minus"].setGeometry(panel_x, panel_y, 60, 34)
-        widgets["value"].setGeometry(panel_x + 60, panel_y, 90, 34)
-        widgets["plus"].setGeometry(panel_x + 150, panel_y, 60, 34)
+        if not widgets.get("stepper_in_ui"):
+            panel_y = geom.y() + geom.height() + 36
+            panel_x = geom.x() + max(0, (geom.width() - 210) // 2)
+            widgets["minus"].setGeometry(panel_x, panel_y, 60, 34)
+            widgets["value"].setGeometry(panel_x + 60, panel_y, 90, 34)
+            widgets["plus"].setGeometry(panel_x + 150, panel_y, 60, 34)
         for key in ("minus", "value", "plus", "tip"):
             widgets[key].show()
 
