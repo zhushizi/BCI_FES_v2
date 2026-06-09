@@ -8,6 +8,7 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable, Optional
 
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget
 
 
@@ -36,6 +37,18 @@ def safe_call(
     except Exception:
         logger.exception("调用失败: %s", getattr(func, "__name__", "unknown"))
         return False
+
+
+def set_mouse_transparent(widget: QWidget | None) -> None:
+    """让控件不拦截鼠标事件，点击穿透到下层控件。"""
+    if widget is not None:
+        widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+
+
+def set_overlay_labels_mouse_transparent(ui: Any, label_names: tuple[str, ...] | list[str]) -> None:
+    """批量设置叠在按钮上的图标标签为鼠标穿透。"""
+    for name in label_names:
+        set_mouse_transparent(get_ui_attr(ui, name))
 
 
 def safe_connect(

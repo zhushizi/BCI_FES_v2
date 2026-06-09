@@ -21,11 +21,21 @@ from application.training_main_app import TrainingMainApp
 from application.training_sub_app import TrainingSubApp
 from ui.main_window.sub_window import SubWindow
 from ui.main_window.main_window_treat_sections import TreatNavigation, TreatSessionGuard, TreatWsBridge
+from ui.core.utils import set_overlay_labels_mouse_transparent
 from ui.treat_modules import (
     StimTestController,
     ImpedanceTestController,
     TrainingMainController,
     TrainingSubController,
+)
+
+_BUTTON_OVERLAY_ICON_LABELS = (
+    "label_70",
+    "label_71",
+    "label_72",
+    "label_73",
+    "label_74",
+    "label_75",
 )
 
 
@@ -85,6 +95,7 @@ class TreatPageController:
 
         self._current_patient: dict | None = None
         self._treat_entry_button: str | None = None
+        set_overlay_labels_mouse_transparent(ui, _BUTTON_OVERLAY_ICON_LABELS)
 
     # ---------- 对外接口 ----------
     def bind_signals(self) -> None:

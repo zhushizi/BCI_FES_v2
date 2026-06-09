@@ -8,7 +8,7 @@ from application.session_app import SessionApp
 from application.training_main_app import TrainingMainApp
 from ui.widgets.bci_wave_widget import BCIWaveWidget
 from ui.widgets.power_bar_widget import PowerBarWidget
-from ui.core.utils import get_ui_attr, safe_call, safe_connect
+from ui.core.utils import get_ui_attr, safe_call, safe_connect, set_mouse_transparent
 from PySide6.QtWidgets import QVBoxLayout, QWidget, QLabel
 
 from ui.dialogs.tips_dialog import TipsDialog
@@ -419,6 +419,7 @@ class TrainingMainController:
         safe_call(self._logger, getattr(icon_label, "setStyleSheet", None), "")
         safe_call(self._logger, getattr(icon_label, "setPixmap", None), pixmap)
         safe_call(self._logger, getattr(icon_label, "setFixedSize", None), width, height)
+        set_mouse_transparent(icon_label)
 
     def _apply_start_stop_visual(self, running: bool) -> None:
         """刷新开始/暂停按钮样式、文案与左侧图标。"""

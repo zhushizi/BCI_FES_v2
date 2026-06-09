@@ -14,7 +14,7 @@ from ui.widgets.circle_level_widget import CircleLevelWidget
 from ui.widgets.slider_widget import SliderWidget
 from application.session_app import SessionApp, PatientTreatParams
 from application.stim_test_app import StimTestApp
-from ui.core.utils import get_ui_attr, safe_call, safe_connect
+from ui.core.utils import get_ui_attr, safe_call, safe_connect, set_mouse_transparent
 
 
 class _SliderHostResizeFilter(QObject):
@@ -588,6 +588,7 @@ class StimTestController:
         safe_call(self._logger, getattr(icon_label, "setStyleSheet", None), "")
         safe_call(self._logger, getattr(icon_label, "setPixmap", None), pixmap)
         safe_call(self._logger, getattr(icon_label, "setFixedSize", None), width, height)
+        set_mouse_transparent(icon_label)
 
     def _update_start_test_side_icon(self, running: bool) -> None:
         """开始/停止测试按钮左侧图标：开始=播放，停止=暂停。"""
