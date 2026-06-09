@@ -3964,7 +3964,7 @@ border-radius: 12px;</string>
        <property name="geometry">
         <rect>
          <x>680</x>
-         <y>320</y>
+         <y>270</y>
          <width>538</width>
          <height>50</height>
         </rect>
@@ -4032,43 +4032,22 @@ outline: none;
         </property>
        </item>
       </widget>
-      <widget class="QLabel" name="label_left_channel_2">
-       <property name="geometry">
-        <rect>
-         <x>680</x>
-         <y>250</y>
-         <width>61</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(88, 112, 224);</string>
-       </property>
-       <property name="text">
-        <string>波形</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>680</x>
-         <y>570</y>
-         <width>111</width>
-         <height>31</height>
+         <x>713</x>
+         <y>565</y>
+         <width>81</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>14</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(88, 112, 224);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>刺激周期</string>
@@ -4078,7 +4057,7 @@ outline: none;
        <property name="geometry">
         <rect>
          <x>660</x>
-         <y>640</y>
+         <y>648</y>
          <width>580</width>
          <height>42</height>
         </rect>
@@ -4458,7 +4437,7 @@ background-color: rgb(213, 213, 213);</string>
        <property name="geometry">
         <rect>
          <x>1420</x>
-         <y>300</y>
+         <y>298</y>
          <width>441</width>
          <height>41</height>
         </rect>
@@ -4480,7 +4459,7 @@ background-color: rgb(213, 213, 213);</string>
        <property name="geometry">
         <rect>
          <x>1420</x>
-         <y>460</y>
+         <y>467</y>
          <width>431</width>
          <height>41</height>
         </rect>
@@ -4523,7 +4502,7 @@ background-color: rgb(213, 213, 213);</string>
       <widget class="QPushButton" name="pushButton_time_stim_turnsmall">
        <property name="geometry">
         <rect>
-         <x>1544</x>
+         <x>1510</x>
          <y>367</y>
          <width>63</width>
          <height>39</height>
@@ -4558,7 +4537,7 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_time_stim_value">
        <property name="geometry">
         <rect>
-         <x>1607</x>
+         <x>1573</x>
          <y>367</y>
          <width>127</width>
          <height>39</height>
@@ -4586,7 +4565,7 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_time_stim_turnbig">
        <property name="geometry">
         <rect>
-         <x>1734</x>
+         <x>1700</x>
          <y>367</y>
          <width>63</width>
          <height>39</height>
@@ -4621,7 +4600,7 @@ color: rgb(180, 190, 215);
       <widget class="QPushButton" name="pushButton_time_rise_turnsmall">
        <property name="geometry">
         <rect>
-         <x>1550</x>
+         <x>1510</x>
          <y>530</y>
          <width>63</width>
          <height>39</height>
@@ -4656,7 +4635,7 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_time_rise_value">
        <property name="geometry">
         <rect>
-         <x>1613</x>
+         <x>1573</x>
          <y>530</y>
          <width>127</width>
          <height>39</height>
@@ -4684,7 +4663,7 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_time_rise_turnbig">
        <property name="geometry">
         <rect>
-         <x>1740</x>
+         <x>1700</x>
          <y>530</y>
          <width>63</width>
          <height>39</height>
@@ -4719,7 +4698,7 @@ color: rgb(180, 190, 215);
       <widget class="QPushButton" name="pushButton_time_down_turnsmall">
        <property name="geometry">
         <rect>
-         <x>1550</x>
+         <x>1510</x>
          <y>700</y>
          <width>63</width>
          <height>39</height>
@@ -4754,7 +4733,7 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_time_down_value">
        <property name="geometry">
         <rect>
-         <x>1613</x>
+         <x>1573</x>
          <y>700</y>
          <width>127</width>
          <height>39</height>
@@ -4782,7 +4761,7 @@ color: rgb(88, 122, 244);</string>
       <widget class="QPushButton" name="pushButton_time_down_turnbig">
        <property name="geometry">
         <rect>
-         <x>1740</x>
+         <x>1700</x>
          <y>700</y>
          <width>63</width>
          <height>39</height>
@@ -4817,19 +4796,19 @@ color: rgb(180, 190, 215);
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>680</x>
-         <y>410</y>
-         <width>111</width>
-         <height>41</height>
+         <x>717</x>
+         <y>392</y>
+         <width>81</width>
+         <height>21</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>14</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(88, 112, 224);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>脉冲宽度</string>
@@ -4839,7 +4818,7 @@ color: rgb(180, 190, 215);
        <property name="geometry">
         <rect>
          <x>680</x>
-         <y>480</y>
+         <y>460</y>
          <width>538</width>
          <height>50</height>
         </rect>
@@ -5153,7 +5132,7 @@ border-top: 1px solid #EEEEEE;</string>
       <widget class="QLabel" name="label_30">
        <property name="geometry">
         <rect>
-         <x>690</x>
+         <x>684</x>
          <y>200</y>
          <width>18</width>
          <height>15</height>
@@ -5181,7 +5160,7 @@ border-top: 1px solid #EEEEEE;</string>
       <widget class="QLabel" name="label_48">
        <property name="geometry">
         <rect>
-         <x>1340</x>
+         <x>1324</x>
          <y>200</y>
          <width>15</width>
          <height>18</height>
@@ -5209,8 +5188,8 @@ border-top: 1px solid #EEEEEE;</string>
       <widget class="QLabel" name="label_50">
        <property name="geometry">
         <rect>
-         <x>720</x>
-         <y>197</y>
+         <x>709</x>
+         <y>195</y>
          <width>71</width>
          <height>21</height>
         </rect>
@@ -5249,7 +5228,7 @@ border-top: 1px solid #EEEEEE;</string>
       <widget class="QLabel" name="label_51">
        <property name="geometry">
         <rect>
-         <x>1370</x>
+         <x>1345</x>
          <y>199</y>
          <width>91</width>
          <height>21</height>
@@ -5375,6 +5354,108 @@ border-radius: 8px;</string>
         <string/>
        </property>
       </widget>
+      <widget class="QLabel" name="label_65">
+       <property name="geometry">
+        <rect>
+         <x>684</x>
+         <y>396</y>
+         <width>18</width>
+         <height>13</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>18</width>
+         <height>13</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>18</width>
+         <height>13</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_pulse_width.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="Line" name="line_14">
+       <property name="geometry">
+        <rect>
+         <x>680</x>
+         <y>430</y>
+         <width>545</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>545</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: none;
+border-top: 1px solid #EEEEEE;</string>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="Line" name="line_15">
+       <property name="geometry">
+        <rect>
+         <x>680</x>
+         <y>600</y>
+         <width>545</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>545</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: none;
+border-top: 1px solid #EEEEEE;</string>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_69">
+       <property name="geometry">
+        <rect>
+         <x>684</x>
+         <y>566</y>
+         <width>18</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_stim_cycle.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
       <zorder>widget_stim_leg_bar</zorder>
       <zorder>label_26</zorder>
       <zorder>pushButton_next</zorder>
@@ -5385,7 +5466,6 @@ border-radius: 8px;</string>
       <zorder>pushButton_left_freq_turnsmall</zorder>
       <zorder>label_left_freq_value</zorder>
       <zorder>pushButton_left_freq_turnbig</zorder>
-      <zorder>label_left_channel_2</zorder>
       <zorder>comboBox_left_scheme</zorder>
       <zorder>label_33</zorder>
       <zorder>pushButton_reset_2</zorder>
@@ -5424,6 +5504,10 @@ border-radius: 8px;</string>
       <zorder>label_64</zorder>
       <zorder>label_elec_status</zorder>
       <zorder>label_elec_icon</zorder>
+      <zorder>label_65</zorder>
+      <zorder>line_14</zorder>
+      <zorder>line_15</zorder>
+      <zorder>label_69</zorder>
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">

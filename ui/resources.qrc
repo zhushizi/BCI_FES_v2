@@ -156,5 +156,7 @@
         <file>pic/icon_dialog_gantan.png</file>
         <file>pic/icon_dialog_chengong.png</file>
         <file>pic/icon_yaogan_time.png</file>
+        <file>pic/icon_pulse_width.png</file>
+        <file>pic/icon_stim_cycle.png</file>
     </qresource>
 </RCC>

@@ -154,6 +154,7 @@ class StimTestController:
         self._pill_sliders: dict[str, SliderWidget] = {}
         self._pill_slider_suppress: set[str] = set()
         self._time_scroll_widgets: dict[str, dict[str, object]] = {}
+        self._freq_slider_tip: Optional[BubbleTipWidget] = None
         self._adjust_cooldown_until: float = 0.0
 
     def set_treat_entry_button(self, button_name: Optional[str]) -> None:
@@ -973,6 +974,9 @@ class StimTestController:
             self._FREQ_DEFAULT_MS,
             tick_count=5,
         )
+        slider = self._pill_slider("comboBox_left_freq")
+        self._ensure_freq_slider_tip()
+        self._update_freq_slider_tip(self._get_freq_value())
 
     def _get_freq_value(self) -> int:
         slider = self._pill_slider("comboBox_left_freq")
@@ -995,12 +999,51 @@ class StimTestController:
         return max(self._FREQ_MIN_MS, min(self._FREQ_MAX_MS, int(value)))
 
     def _update_freq_value_label(self, value: int | None = None) -> None:
-        label = get_ui_attr(self.ui, "label_left_freq_value")
-        if label is None:
-            return
         freq = self._get_freq_value() if value is None else self._normalize_freq_value(value)
-        safe_call(self._logger, getattr(label, "setText", None), f"{freq} ms")
+        text = f"{freq} ms"
+        label = get_ui_attr(self.ui, "label_left_freq_value")
+        if label is not None:
+            safe_call(self._logger, getattr(label, "setText", None), text)
+        self._update_freq_slider_tip(freq)
         self._update_freq_stepper_enabled(freq)
+
+    def _ensure_freq_slider_tip(self) -> None:
+        if self._freq_slider_tip is not None:
+            return
+        host = self._slider_host("comboBox_left_freq")
+        parent = host.parent() if host is not None else None
+        if host is None or parent is None:
+            return
+        tip = BubbleTipWidget(parent)
+        tip.show()
+        self._freq_slider_tip = tip
+
+    def _update_freq_slider_tip(self, freq: int) -> None:
+        slider = self._pill_slider("comboBox_left_freq")
+        tip = self._freq_slider_tip
+        if slider is None or tip is None:
+            return
+        self._position_slider_bubble_tip(slider, tip, f"{freq} ms")
+
+    def _position_slider_bubble_tip(
+        self,
+        slider: SliderWidget,
+        tip: BubbleTipWidget,
+        text: str,
+    ) -> None:
+        tip.setText(text)
+        parent = tip.parent()
+        if parent is None:
+            return
+        tip_w = tip.width()
+        tip_h = tip.height()
+        handle_center, handle_radius = slider.handle_anchor_in(parent)
+        handle_x = int(handle_center.x())
+        gap_above_handle = 4
+        tip_x = handle_x - tip_w // 2
+        tip_y = int(handle_center.y() - handle_radius - gap_above_handle - tip_h)
+        tip.setGeometry(tip_x, tip_y, tip_w, tip_h)
+        tip.raise_()
 
     def _update_freq_stepper_enabled(self, freq: int | None = None) -> None:
         """步进按钮：受全局可用状态与频率上下限共同约束。"""
@@ -1209,23 +1252,11 @@ class StimTestController:
         norm = self._normalize_time_scroll_value(name, value)
         text = self._format_time_scroll_display(name, norm)
         widgets["value"].setText(text)
-        widgets["tip"].setText(text)
-
         slider = self._pill_slider(name)
         tip = widgets["tip"]
-        parent = tip.parent()
-        if slider is None or parent is None:
+        if slider is None or not isinstance(tip, BubbleTipWidget):
             return
-
-        tip_w = tip.width()
-        tip_h = tip.height()
-        handle_center, handle_radius = slider.handle_anchor_in(parent)
-        handle_x = int(handle_center.x())
-        gap_above_handle = 4
-        tip_x = handle_x - tip_w // 2
-        tip_y = int(handle_center.y() - handle_radius - gap_above_handle - tip_h)
-        tip.setGeometry(tip_x, tip_y, tip_w, tip_h)
-        tip.raise_()
+        self._position_slider_bubble_tip(slider, tip, text)
 
     def _set_time_aux_controls_enabled(self, enabled: bool) -> None:
         for widgets in self._time_scroll_widgets.values():
