@@ -28,6 +28,8 @@ class TrainingMainController:
     _WAVE_LABEL_PANEL_WIDTH = 64
     _WAVE_LABEL_DOT_WIDTH = 14
     _WAVE_LABEL_PANEL_GAP = 8
+    _START_STOP_STYLE = "background-color: #789EFF; color: #ffffff; border: none; border-radius: 8px;"
+    _SHUT_DOWN_STYLE = "background-color: #ffffff; color: #FF7B71; border: 1px solid #FF7B71; border-radius: 8px;"
 
     def __init__(
         self,
@@ -364,8 +366,8 @@ class TrainingMainController:
         """将开始/暂停按钮设为「开始」状态（倒计时完成或停止时）。"""
         start_stop_btn = get_ui_attr(self.ui, "pushButton_start_stop")
         if start_stop_btn:
-            start_stop_btn.setStyleSheet("border-image: url(:/treat/pic/treat_start.png); color: #ffffff;")
-            start_stop_btn.setText("          开始")
+            start_stop_btn.setStyleSheet(self._START_STOP_STYLE)
+            start_stop_btn.setText("开始")
 
     def _show_countdown_finished_dialog(self) -> None:
         """倒计时结束时弹窗（tips.ui）：本次训练结束，是否返回主页面。确定：返回主页面，否：留在当前页。"""
@@ -412,13 +414,13 @@ class TrainingMainController:
                     TipsDialog.show_tips(self.ui, message or "预训练未完成无法暂停")
                     return
             self.pause_countdown()
-            start_stop_btn.setStyleSheet("border-image: url(:/treat/pic/treat_start.png); color: #ffffff;")
-            start_stop_btn.setText("          开始")
+            start_stop_btn.setStyleSheet(self._START_STOP_STYLE)
+            start_stop_btn.setText("开始")
             if self.training_flow_app:
                 self.training_flow_app.notify_pause()
         else:
-            start_stop_btn.setStyleSheet("border-image: url(:/treat/pic/treat_pause.png); color: #ffffff;")
-            start_stop_btn.setText("          暂停")
+            start_stop_btn.setStyleSheet(self._START_STOP_STYLE)
+            start_stop_btn.setText("暂停")
             self.start_countdown()
             if self.training_flow_app:
                 self.training_flow_app.notify_start()

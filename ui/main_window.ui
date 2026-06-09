@@ -3528,7 +3528,7 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -9919,32 +9919,32 @@ padding: 0px;</string>
         <rect>
          <x>1070</x>
          <y>830</y>
-         <width>180</width>
+         <width>141</width>
          <height>50</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>180</width>
+         <width>141</width>
          <height>50</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>180</width>
+         <width>141</width>
          <height>50</height>
         </size>
        </property>
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/treat/pic/treat_start.png);color: #ffffff;</string>
+        <string notr="true">background-color: #789EFF; color: #ffffff; border: none; border-radius: 8px;</string>
        </property>
        <property name="text">
-        <string>          开始</string>
+        <string>开始</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_paradigm_shut_down">
@@ -9952,32 +9952,32 @@ padding: 0px;</string>
         <rect>
          <x>1280</x>
          <y>830</y>
-         <width>180</width>
+         <width>141</width>
          <height>50</height>
         </rect>
        </property>
        <property name="minimumSize">
         <size>
-         <width>180</width>
+         <width>141</width>
          <height>50</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>180</width>
+         <width>141</width>
          <height>50</height>
         </size>
        </property>
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/treat/pic/treat_shut.png); color: #ffffff;</string>
+        <string notr="true">background-color: #ffffff; color: #FF7B71; border: 1px solid #FF7B71; border-radius: 8px;</string>
        </property>
        <property name="text">
-        <string>          结束</string>
+        <string>结束</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_47">
