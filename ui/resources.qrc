@@ -162,5 +162,6 @@
         <file>pic/icon_next.png</file>
         <file>pic/icon_reset.png</file>
         <file>pic/icon_zanting_paradigm.png</file>
+        <file>pic/icon_zanting.png</file>
     </qresource>
 </RCC>

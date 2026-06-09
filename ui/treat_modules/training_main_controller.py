@@ -12,7 +12,7 @@ from ui.core.utils import get_ui_attr, safe_call, safe_connect
 from PySide6.QtWidgets import QVBoxLayout, QWidget, QLabel
 
 from ui.dialogs.tips_dialog import TipsDialog
-from PySide6.QtGui import QImage, QPainter, QPen, QColor, QFont
+from PySide6.QtGui import QImage, QPainter, QPen, QColor, QFont, QPixmap
 from PySide6.QtCore import QTimer, Qt, QObject, QEvent, QRect, QBuffer
 
 
@@ -29,6 +29,11 @@ class TrainingMainController:
     _WAVE_LABEL_DOT_WIDTH = 14
     _WAVE_LABEL_PANEL_GAP = 8
     _START_STOP_STYLE = "background-color: #789EFF; color: #ffffff; border: none; border-radius: 8px;"
+    _START_STOP_PAUSE_STYLE = "background-color: #F2AD49; color: #ffffff; border: none; border-radius: 8px;"
+    _START_STOP_TEXT_START = "      开始"
+    _START_STOP_TEXT_PAUSE = "      暂停"
+    _START_STOP_ICON_START = (":/set/pic/icon_start.png", 14, 16)
+    _START_STOP_ICON_PAUSE = (":/set/pic/icon_zanting.png", 11, 16)
     _SHUT_DOWN_STYLE = "background-color: #ffffff; color: #FF7B71; border: 1px solid #FF7B71; border-radius: 8px;"
 
     def __init__(
@@ -362,12 +367,37 @@ class TrainingMainController:
         self._countdown_remaining -= 1
         self._update_countdown_label()
 
-    def _set_start_stop_to_start_state(self) -> None:
-        """将开始/暂停按钮设为「开始」状态（倒计时完成或停止时）。"""
+    def _set_start_stop_side_icon(self, running: bool) -> None:
+        """开始/暂停按钮左侧图标：开始=播放，运行中=暂停。"""
+        path, width, height = self._START_STOP_ICON_PAUSE if running else self._START_STOP_ICON_START
+        icon_label = get_ui_attr(self.ui, "label_74")
+        if icon_label is None:
+            return
+        pixmap = QPixmap(path)
+        if not pixmap.isNull():
+            pixmap = pixmap.scaled(
+                width,
+                height,
+                Qt.AspectRatioMode.IgnoreAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+        safe_call(self._logger, getattr(icon_label, "setStyleSheet", None), "")
+        safe_call(self._logger, getattr(icon_label, "setPixmap", None), pixmap)
+        safe_call(self._logger, getattr(icon_label, "setFixedSize", None), width, height)
+
+    def _apply_start_stop_visual(self, running: bool) -> None:
+        """刷新开始/暂停按钮样式、文案与左侧图标。"""
         start_stop_btn = get_ui_attr(self.ui, "pushButton_start_stop")
         if start_stop_btn:
-            start_stop_btn.setStyleSheet(self._START_STOP_STYLE)
-            start_stop_btn.setText("开始")
+            style = self._START_STOP_PAUSE_STYLE if running else self._START_STOP_STYLE
+            text = self._START_STOP_TEXT_PAUSE if running else self._START_STOP_TEXT_START
+            safe_call(self._logger, getattr(start_stop_btn, "setStyleSheet", None), style)
+            safe_call(self._logger, getattr(start_stop_btn, "setText", None), text)
+        self._set_start_stop_side_icon(running)
+
+    def _set_start_stop_to_start_state(self) -> None:
+        """将开始/暂停按钮设为「开始」状态（倒计时完成或停止时）。"""
+        self._apply_start_stop_visual(running=False)
 
     def _show_countdown_finished_dialog(self) -> None:
         """倒计时结束时弹窗（tips.ui）：本次训练结束，是否返回主页面。确定：返回主页面，否：留在当前页。"""
@@ -414,13 +444,11 @@ class TrainingMainController:
                     TipsDialog.show_tips(self.ui, message or "预训练未完成无法暂停")
                     return
             self.pause_countdown()
-            start_stop_btn.setStyleSheet(self._START_STOP_STYLE)
-            start_stop_btn.setText("开始")
+            self._apply_start_stop_visual(running=False)
             if self.training_flow_app:
                 self.training_flow_app.notify_pause()
         else:
-            start_stop_btn.setStyleSheet(self._START_STOP_STYLE)
-            start_stop_btn.setText("暂停")
+            self._apply_start_stop_visual(running=True)
             self.start_countdown()
             if self.training_flow_app:
                 self.training_flow_app.notify_start()
