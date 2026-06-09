@@ -262,7 +262,7 @@ QTabWidget#tabWidget_main QTabBar::tab {
 }</string>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -345,7 +345,7 @@ QTabWidget#tabWidget QTabBar::tab {
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>4</number>
      </property>
      <property name="tabBarAutoHide">
       <bool>false</bool>
@@ -3191,35 +3191,35 @@ border-color: #C7D2FE;
       <widget class="QWidget" name="widget_patients_record" native="true">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>60</y>
-         <width>411</width>
-         <height>851</height>
+         <x>40</x>
+         <y>30</y>
+         <width>441</width>
+         <height>901</height>
         </rect>
        </property>
       </widget>
       <widget class="QWidget" name="widget_patient_treat_record" native="true">
        <property name="geometry">
         <rect>
-         <x>560</x>
-         <y>60</y>
-         <width>1161</width>
-         <height>851</height>
+         <x>550</x>
+         <y>30</y>
+         <width>1201</width>
+         <height>901</height>
         </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_60">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>30</y>
-         <width>471</width>
-         <height>911</height>
+         <x>22</x>
+         <y>10</y>
+         <width>481</width>
+         <height>941</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
+border-radius: 8px;</string>
        </property>
        <property name="text">
         <string/>
@@ -3228,15 +3228,15 @@ border-radius: 10px;</string>
       <widget class="QLabel" name="label_61">
        <property name="geometry">
         <rect>
-         <x>530</x>
-         <y>30</y>
-         <width>1221</width>
-         <height>911</height>
+         <x>526</x>
+         <y>10</y>
+         <width>1241</width>
+         <height>941</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
+border-radius: 8px;</string>
        </property>
        <property name="text">
         <string/>
