@@ -28,13 +28,21 @@ class TrainingMainController:
     _WAVE_LABEL_PANEL_WIDTH = 64
     _WAVE_LABEL_DOT_WIDTH = 14
     _WAVE_LABEL_PANEL_GAP = 8
-    _START_STOP_STYLE = "background-color: #789EFF; color: #ffffff; border: none; border-radius: 8px;"
-    _START_STOP_PAUSE_STYLE = "background-color: #F2AD49; color: #ffffff; border: none; border-radius: 8px;"
+    _ENTER_BUTTON_COOLDOWN_MS = 2000
+    _START_STOP_BTN_STYLE_TEMPLATE = (
+        "QPushButton {{ background-color: {bg}; color: #ffffff; border: none; border-radius: 8px; }}"
+        "QPushButton:disabled {{ background-color: #707070; color: #ffffff; border: none; border-radius: 8px; }}"
+    )
+    _START_STOP_STYLE = _START_STOP_BTN_STYLE_TEMPLATE.format(bg="#789EFF")
+    _START_STOP_PAUSE_STYLE = _START_STOP_BTN_STYLE_TEMPLATE.format(bg="#F2AD49")
     _START_STOP_TEXT_START = "      开始"
     _START_STOP_TEXT_PAUSE = "      暂停"
     _START_STOP_ICON_START = (":/set/pic/icon_start.png", 14, 16)
     _START_STOP_ICON_PAUSE = (":/set/pic/icon_zanting.png", 11, 16)
-    _SHUT_DOWN_STYLE = "background-color: #ffffff; color: #FF7B71; border: 1px solid #FF7B71; border-radius: 8px;"
+    _SHUT_DOWN_STYLE = (
+        "QPushButton { background-color: #ffffff; color: #FF7B71; border: 1px solid #FF7B71; border-radius: 8px; }"
+        "QPushButton:disabled { background-color: #E8E8E8; color: #B0B0B0; border: 1px solid #D0D0D0; border-radius: 8px; }"
+    )
 
     def __init__(
         self,
@@ -77,6 +85,9 @@ class TrainingMainController:
         self._last_session_id: Optional[int] = None
         self._countdown_timer = QTimer()
         self._countdown_timer.timeout.connect(self._tick_countdown)
+        self._enter_button_cooldown_timer = QTimer()
+        self._enter_button_cooldown_timer.setSingleShot(True)
+        self._enter_button_cooldown_timer.timeout.connect(self._end_enter_button_cooldown)
         self._countdown_remaining = 0
         self._countdown_total = 0
         self._pretrain_full_completed = False  # decoder.Inform pretrain=pretrain_full_completed 后为 True
@@ -85,6 +96,7 @@ class TrainingMainController:
         self._init_wave_widget()
         self._init_power_widget()
         self._apply_countdown_emphasis_style()
+        self._init_training_action_buttons()
 
     def bind_signals(self) -> None:
         start_stop_btn = get_ui_attr(self.ui, "pushButton_start_stop")
@@ -127,6 +139,7 @@ class TrainingMainController:
             self._pretrain_full_completed = False
             self._has_sent_paradigm_shut_down = False
         self._refresh_info_panel()
+        self._begin_enter_button_cooldown()
 
     def set_pretrain_full_completed(self) -> None:
         """收到 decoder.Inform pretrain=pretrain_full_completed 时调用（SSMVEP/MI 可暂停）。"""
@@ -138,8 +151,30 @@ class TrainingMainController:
         self._reaction_curve_points = []
         self._reaction_time_points = []
         self._last_session_id = None
+        self._enter_button_cooldown_timer.stop()
+        self._set_training_action_buttons_enabled(True)
         self.stop_countdown()
         return
+
+    def _init_training_action_buttons(self) -> None:
+        shut_down_btn = get_ui_attr(self.ui, "pushButton_paradigm_shut_down")
+        if shut_down_btn:
+            safe_call(self._logger, getattr(shut_down_btn, "setStyleSheet", None), self._SHUT_DOWN_STYLE)
+        self._apply_start_stop_visual(running=False)
+
+    def _set_training_action_buttons_enabled(self, enabled: bool) -> None:
+        for button_name in ("pushButton_start_stop", "pushButton_paradigm_shut_down"):
+            button = get_ui_attr(self.ui, button_name)
+            if button is not None:
+                safe_call(self._logger, getattr(button, "setEnabled", None), enabled)
+
+    def _begin_enter_button_cooldown(self) -> None:
+        self._enter_button_cooldown_timer.stop()
+        self._set_training_action_buttons_enabled(False)
+        self._enter_button_cooldown_timer.start(self._ENTER_BUTTON_COOLDOWN_MS)
+
+    def _end_enter_button_cooldown(self) -> None:
+        self._set_training_action_buttons_enabled(True)
 
     def _refresh_info_panel(self) -> None:
         patient = self._current_patient_snapshot
