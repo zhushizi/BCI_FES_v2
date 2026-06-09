@@ -89,7 +89,7 @@ class PatientNewDialog(BaseUiDialog):
             default_leg_index = combo_leg.findText("双腿")
             if default_leg_index != -1:
                 safe_call(self._logger, combo_leg.setCurrentIndex, default_leg_index)
-        # 新建用户：左腿/右腿不可选（仅双腿）；编辑时可改回单侧
+        # 新建与编辑：左腿/右腿均不可选
         self._apply_leg_combo_policy()
 
         if self._is_edit:
@@ -119,7 +119,7 @@ class PatientNewDialog(BaseUiDialog):
         self.setFixedSize(1046, 608)
 
     def _apply_leg_combo_policy(self) -> None:
-        """新建：左腿/右腿禁用并变淡；编辑：三项均可选。"""
+        """新建与编辑：左腿/右腿禁用并变淡，不可选择。"""
         combo = get_ui_attr(self.ui, "comboBox_leg")
         if combo is None:
             return
@@ -130,7 +130,7 @@ class PatientNewDialog(BaseUiDialog):
         for idx in (1, 2):
             item = model.item(idx)
             if item is not None:
-                item.setEnabled(bool(self._is_edit))
+                item.setEnabled(False)
 
     @classmethod
     def _apply_calendar_arrow_style(cls) -> None:
