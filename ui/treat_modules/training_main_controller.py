@@ -25,6 +25,10 @@ class TrainingMainController:
     需要负责显示脑电波形13个通道
     """
 
+    _WAVE_LABEL_PANEL_WIDTH = 64
+    _WAVE_LABEL_DOT_WIDTH = 14
+    _WAVE_LABEL_PANEL_GAP = 8
+
     def __init__(
         self,
         ui,
@@ -199,13 +203,19 @@ class TrainingMainController:
         if self._wave_label_panel is None or self._wave_widget is None:
             return
         labels = self._wave_widget.get_visible_labels()
-        n_rows = max(len(labels), 1)
+        if not labels:
+            self._wave_label_panel.hide()
+            return
+        self._wave_label_panel.show()
+        n_rows = len(labels)
         host = self._wave_widget.parentWidget()
         if host is None:
             return
         host_geo = host.geometry()
-        panel_width = 50
-        panel_x = max(host_geo.x() - panel_width - 8, 0)
+        panel_width = self._WAVE_LABEL_PANEL_WIDTH
+        dot_width = self._WAVE_LABEL_DOT_WIDTH
+        text_width = panel_width - dot_width
+        panel_x = max(host_geo.x() - panel_width - self._WAVE_LABEL_PANEL_GAP, 0)
         self._wave_label_panel.setGeometry(
             QRect(panel_x, host_geo.y(), panel_width, host_geo.height())
         )
@@ -217,17 +227,18 @@ class TrainingMainController:
             self._wave_label_items = []
             for label in labels:
                 text_item = QLabel(self._wave_label_panel)
-                text_item.setText(label)
                 text_item.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-                text_item.setStyleSheet("padding-left: 6px;")
+                text_item.setStyleSheet("padding-left: 4px; padding-right: 2px;")
                 dot_item = QLabel(self._wave_label_panel)
-                dot_item.setText("•" if label else "")
                 dot_item.setAlignment(Qt.AlignCenter)
                 self._wave_label_items.append((text_item, dot_item))
         row_h = max(int(host_geo.height() / n_rows), 1)
         for idx, (text_item, dot_item) in enumerate(self._wave_label_items):
-            text_item.setGeometry(0, idx * row_h, panel_width - 14, row_h)
-            dot_item.setGeometry(panel_width - 14, idx * row_h, 14, row_h)
+            label = labels[idx] if idx < len(labels) else ""
+            text_item.setText(label)
+            dot_item.setText("•" if label else "")
+            text_item.setGeometry(0, idx * row_h, text_width, row_h)
+            dot_item.setGeometry(text_width, idx * row_h, dot_width, row_h)
 
     def _init_power_widget(self) -> None:
         host = get_ui_attr(self.ui, "widget_PowerBar")

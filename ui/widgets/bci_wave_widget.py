@@ -13,6 +13,8 @@ class BCIWaveWidget(QWidget):
     简易 EEG 波形显示控件（多通道叠加分区显示）。
     """
 
+    PLACEHOLDER_CH_LABELS = ("CH10", "CH12", "CH14")
+
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self._logger = logging.getLogger(__name__)
@@ -36,11 +38,14 @@ class BCIWaveWidget(QWidget):
         self._last_raw_channel_count: int = 0
 
     def count_visible_eeg_rows(self, eeg_data: Any) -> int:
-        """与 _filter_channels 一致的可视行数（排除 CH 前缀通道），用于侧栏布局。"""
+        """与 _filter_channels 一致的可视行数，用于侧栏布局。"""
+        if not self._has_eeg_waveform(eeg_data):
+            return 0
         eeg = self._to_2d_array(eeg_data)
         if not eeg:
-            return self._last_visible_channel_count
-        return sum(1 for idx in range(len(eeg)) if not self._channel_row_hidden_for_display(idx))
+            return 0
+        real_rows = sum(1 for idx in range(len(eeg)) if not self._channel_row_hidden_for_display(idx))
+        return real_rows + len(self._placeholder_channel_labels())
 
     def set_channel_labels(self, electrodes: Iterable[Any]) -> None:
         """由 decoder.ImpedanceValue 的 electrode 列表设置通道名，顺序与 EEG 通道一致。"""
@@ -65,15 +70,18 @@ class BCIWaveWidget(QWidget):
         self.update()
 
     def get_visible_labels(self) -> list[str]:
+        if not self._has_eeg_waveform():
+            return []
         n = max(len(self._channel_labels), self._last_raw_channel_count)
         if n <= 0:
-            n = 1
+            return []
         out: list[str] = []
         for idx in range(n):
             if self._channel_row_hidden_for_display(idx):
                 continue
             label = self._channel_label_at(idx)
             out.append(label)
+        out.extend(self._placeholder_channel_labels())
         return out
 
     def paintEvent(self, event) -> None:
@@ -214,6 +222,26 @@ class BCIWaveWidget(QWidget):
     def _channel_row_hidden_for_display(self, idx: int) -> bool:
         return self._is_ch_prefixed_electrode_label(self._channel_label_at(idx))
 
+    def _has_eeg_waveform(self, eeg_data: Any = None) -> bool:
+        """是否已收到脑电图机传来的有效波形帧。"""
+        if eeg_data is not None:
+            eeg = self._to_2d_array(eeg_data)
+            return bool(eeg)
+        if self._eeg_data is None:
+            return False
+        return self._to_2d_array(self._eeg_data) is not None
+
+    def _placeholder_channel_labels(self) -> list[str]:
+        """CH10/CH12/CH14 为模拟通道：仅在已有真实波形时追加展示。"""
+        if not self._has_eeg_waveform():
+            return []
+        labels = {label.upper() for label in self._channel_labels if label}
+        return [label for label in self.PLACEHOLDER_CH_LABELS if label in labels]
+
+    @staticmethod
+    def _straight_line_samples(point_count: int = 2) -> list[float]:
+        return [0.0] * max(point_count, 2)
+
     def _filter_channels(self, eeg: list[list[float]]) -> tuple[list[list[float]], list[str]]:
         visible_eeg: list[list[float]] = []
         visible_labels: list[str] = []
@@ -222,4 +250,7 @@ class BCIWaveWidget(QWidget):
                 continue
             visible_eeg.append(samples)
             visible_labels.append(self._channel_label_at(idx))
+        for label in self._placeholder_channel_labels():
+            visible_eeg.append(self._straight_line_samples())
+            visible_labels.append(label)
         return visible_eeg, visible_labels

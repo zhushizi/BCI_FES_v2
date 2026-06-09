@@ -3528,7 +3528,7 @@ border-image: url(:/main/pic/icon_hosipital.png);</string>
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -5657,12 +5657,24 @@ QRadioButton::indicator { width: 16px; height: 16px; }</string>
          <x>890</x>
          <y>790</y>
          <width>141</width>
-         <height>41</height>
+         <height>50</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>141</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>141</width>
+         <height>50</height>
+        </size>
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
@@ -5672,7 +5684,7 @@ border: none;
 border-radius: 8px;</string>
        </property>
        <property name="text">
-        <string>开始评估</string>
+        <string>     开始评估</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_Electrode_P7">
@@ -9217,6 +9229,34 @@ padding: 0px;</string>
         <string/>
        </property>
       </widget>
+      <widget class="QLabel" name="label_73">
+       <property name="geometry">
+        <rect>
+         <x>920</x>
+         <y>807</y>
+         <width>14</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>14</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>14</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_start.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
       <zorder>label_21</zorder>
       <zorder>label_19</zorder>
       <zorder>label_18</zorder>
@@ -9307,6 +9347,7 @@ padding: 0px;</string>
       <zorder>label_Electrode_PO8</zorder>
       <zorder>label_Electrode_PO2</zorder>
       <zorder>label_Electrode_PO4</zorder>
+      <zorder>label_73</zorder>
      </widget>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
