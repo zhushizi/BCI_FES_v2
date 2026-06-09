@@ -158,5 +158,9 @@
         <file>pic/icon_yaogan_time.png</file>
         <file>pic/icon_pulse_width.png</file>
         <file>pic/icon_stim_cycle.png</file>
+        <file>pic/icon_start.png</file>
+        <file>pic/icon_next.png</file>
+        <file>pic/icon_reset.png</file>
+        <file>pic/icon_zanting_paradigm.png</file>
     </qresource>
 </RCC>

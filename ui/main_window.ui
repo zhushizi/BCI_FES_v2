@@ -3950,14 +3950,14 @@ border-radius: 12px;</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgba(120, 158, 255, 1); color: rgba(255, 255, 255, 1); border-radius: 8px;</string>
        </property>
        <property name="text">
-        <string>下一项</string>
+        <string>      下一项</string>
        </property>
       </widget>
       <widget class="QComboBox" name="comboBox_left_scheme">
@@ -4196,7 +4196,7 @@ color: rgb(180, 190, 215);
        </property>
        <property name="font">
         <font>
-         <pointsize>16</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
@@ -4204,7 +4204,7 @@ color: rgb(180, 190, 215);
 QPushButton:disabled { background-color: #707070; color: rgba(255, 255, 255, 1); border-radius: 8px; }</string>
        </property>
        <property name="text">
-        <string>开始测试</string>
+        <string>      开始测试</string>
        </property>
       </widget>
       <widget class="QWidget" name="widget_circle_level_left" native="true">
@@ -4233,7 +4233,7 @@ QPushButton:disabled { background-color: #707070; color: rgba(255, 255, 255, 1);
        <property name="geometry">
         <rect>
          <x>23</x>
-         <y>180</y>
+         <y>177</y>
          <width>1881</width>
          <height>721</height>
         </rect>
@@ -4422,15 +4422,16 @@ color: rgb(180, 190, 215);
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-radius: 8px;
-background-color: rgb(213, 213, 213);</string>
+background-color: #DDDDDD;
+color:#666666;</string>
        </property>
        <property name="text">
-        <string>恢复默认</string>
+        <string>      恢复默认</string>
        </property>
       </widget>
       <widget class="QWidget" name="horizontalScrollBar_time_stim" native="true">
@@ -5456,6 +5457,90 @@ border-top: 1px solid #EEEEEE;</string>
         <string/>
        </property>
       </widget>
+      <widget class="QLabel" name="label_70">
+       <property name="geometry">
+        <rect>
+         <x>829</x>
+         <y>828</y>
+         <width>14</width>
+         <height>14</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>14</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>14</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_reset.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_71">
+       <property name="geometry">
+        <rect>
+         <x>1020</x>
+         <y>828</y>
+         <width>14</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>14</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>14</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_start.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_72">
+       <property name="geometry">
+        <rect>
+         <x>1765</x>
+         <y>828</y>
+         <width>15</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>15</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>15</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/set/pic/icon_next.png);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
       <zorder>widget_stim_leg_bar</zorder>
       <zorder>label_26</zorder>
       <zorder>pushButton_next</zorder>
@@ -5508,6 +5593,9 @@ border-top: 1px solid #EEEEEE;</string>
       <zorder>line_14</zorder>
       <zorder>line_15</zorder>
       <zorder>label_69</zorder>
+      <zorder>label_70</zorder>
+      <zorder>label_71</zorder>
+      <zorder>label_72</zorder>
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">

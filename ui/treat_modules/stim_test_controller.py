@@ -82,6 +82,9 @@ class StimTestController:
     _ELEC_STATUS_DEFAULT = ("未运行", "#999999", ":/set/pic/icon_elec_hui.png")
     _ELEC_STATUS_RUNNING = ("运行中", "#789EFF", ":/set/pic/icon_elec_lan.png")
     _ELEC_STATUS_STIMULATING = ("刺激中", "#F2AD49", ":/set/pic/icon_elec_huang.png")
+    _START_TEST_ICON_START = (":/set/pic/icon_start.png", 14, 16)
+    _START_TEST_ICON_STOP = (":/set/pic/icon_zanting_paradigm.png", 11, 16)
+    _NEXT_SIDE_ICON = (":/set/pic/icon_next.png", 15, 16)
 
     _STYLE_LEG_BTN_SELECTED = (
         "QPushButton { background: transparent; border: none; color: rgb(91, 141, 239); "
@@ -215,7 +218,8 @@ class StimTestController:
 
     def _set_preprocess_next_button_text(self, text: str) -> None:
         btn = get_ui_attr(self.ui, "pushButton_next")
-        safe_call(self._logger, getattr(btn, "setText", None), text)
+        safe_call(self._logger, getattr(btn, "setText", None), f"      {text}")
+        self._update_next_side_icon()
 
     def _grade_for_leg(self, channel: str) -> int:
         """读取某一侧档位：当前编辑中的腿用界面值，另一侧用 session 缓存。"""
@@ -552,20 +556,48 @@ class StimTestController:
             safe_call(
                 self._logger,
                 getattr(start_btn, "setText", None),
-                "停止测试" if self._test_running else "开始测试",
+                "      停止测试" if self._test_running else "      开始测试",
             )
-            # 开始测试：背景 #789EFF、白色字体；停止测试：背景 #F48438、白色字体；保留倒角与 .ui 一致
+            # 开始测试：背景 #789EFF、白色字体；停止测试：背景 #F48438、白色字体；倒角与 .ui 一致
             bg = "#F48438" if self._test_running else "#789EFF"
             safe_call(
                 self._logger,
                 getattr(start_btn, "setStyleSheet", None),
-                f"QPushButton {{ background-color: {bg}; color: white; border-radius: 12.6px; }} "
-                f"QPushButton:disabled {{ background-color: #707070; color: white; border-radius: 12.6px; }}",
+                f"QPushButton {{ background-color: {bg}; color: white; border-radius: 8px; }} "
+                f"QPushButton:disabled {{ background-color: #707070; color: white; border-radius: 8px; }}",
             )
+
+        self._update_start_test_side_icon(self._test_running)
 
         self._apply_stim_controls_enabled()
         self._refresh_stim_leg_styles()
         self._update_elec_status()
+
+    def _set_side_icon_label(self, label_name: str, path: str, width: int, height: int) -> None:
+        icon_label = get_ui_attr(self.ui, label_name)
+        if icon_label is None:
+            return
+        pixmap = QPixmap(path)
+        if not pixmap.isNull():
+            pixmap = pixmap.scaled(
+                width,
+                height,
+                Qt.AspectRatioMode.IgnoreAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+        safe_call(self._logger, getattr(icon_label, "setStyleSheet", None), "")
+        safe_call(self._logger, getattr(icon_label, "setPixmap", None), pixmap)
+        safe_call(self._logger, getattr(icon_label, "setFixedSize", None), width, height)
+
+    def _update_start_test_side_icon(self, running: bool) -> None:
+        """开始/停止测试按钮左侧图标：开始=播放，停止=暂停。"""
+        path, width, height = self._START_TEST_ICON_STOP if running else self._START_TEST_ICON_START
+        self._set_side_icon_label("label_71", path, width, height)
+
+    def _update_next_side_icon(self) -> None:
+        """下一项/确认按钮左侧图标。"""
+        path, width, height = self._NEXT_SIDE_ICON
+        self._set_side_icon_label("label_72", path, width, height)
 
     def _update_elec_status(self) -> None:
         """刷新电刺激通道状态：未运行、运行中、刺激中。"""
