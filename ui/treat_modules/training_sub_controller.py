@@ -69,6 +69,24 @@ class TrainingSubController:
         if self.sub_window:
             self.sub_window.switch_tab(0)
 
+    def is_paradigm_running(self) -> bool:
+        return self._paradigm_process is not None and self._paradigm_process.poll() is None
+
+    def stop_paradigm_service(self) -> None:
+        """停止范式子进程并切回副屏欢迎页。"""
+        if self.is_paradigm_running():
+            try:
+                self._paradigm_process.terminate()
+                try:
+                    self._paradigm_process.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    self._paradigm_process.kill()
+                    self._paradigm_process.wait(timeout=3)
+            except Exception:
+                self._logger.exception("停止范式进程失败")
+        self._paradigm_process = None
+        self.show_welcome_tab()
+
     def start_paradigm_service(self, switch_tab: bool = True, show_screen: bool = True) -> bool:
         """
         启动范式模块（独立 exe）并切换到副屏。

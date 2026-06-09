@@ -7,6 +7,12 @@ from __future__ import annotations
 from ui.dialogs.tips_dialog import TipsDialog
 from ui.core.utils import get_ui_attr, safe_call, safe_connect
 
+_PREPROCESS_PAGE_TITLES = {
+    0: "电刺激强度适应性测试",
+    1: "阻抗检测",
+    2: "训练中",
+}
+
 
 class TreatWsBridge:
     def __init__(self, host):
@@ -86,7 +92,31 @@ class TreatNavigation:
         sub_tab = get_ui_attr(self.ui, "tabWidget_2")
         if sub_tab:
             sub_tab.setCurrentIndex(0)
+        self._update_preprocess_title(0)
         self._host.stim_ctrl.on_enter()
+
+    def _update_preprocess_title(self, index: int) -> None:
+        label_title = get_ui_attr(self.ui, "label_title")
+        safe_call(
+            self._logger,
+            getattr(label_title, "setText", None),
+            _PREPROCESS_PAGE_TITLES.get(index, ""),
+        )
+
+    def _stop_paradigm_if_running(self) -> None:
+        sub_ctrl = self._host.training_sub_ctrl
+        if sub_ctrl is None or not sub_ctrl.is_paradigm_running():
+            return
+        try:
+            training_main = self._host.training_main_ctrl
+            if training_main and training_main.training_flow_app:
+                training_main.training_flow_app.notify_shut_down()
+        except Exception:
+            self._logger.exception("发送范式关闭通知失败")
+        try:
+            sub_ctrl.stop_paradigm_service()
+        except Exception:
+            self._logger.exception("停止范式服务失败")
 
     def on_preprocess_next(self) -> None:
         sub_tab = get_ui_attr(self.ui, "tabWidget_2")
@@ -125,6 +155,7 @@ class TreatNavigation:
 
         if not self._host._session_guard.confirm_exit_if_session_active():
             return
+        self._stop_paradigm_if_running()
         if callable(self._host._on_return_home):
             self._host._on_return_home()
         self._host.stim_ctrl.on_exit()
@@ -136,6 +167,7 @@ class TreatNavigation:
                 sub_tab.setCurrentIndex(0)
 
     def on_sub_tab_changed(self, index: int) -> None:
+        self._update_preprocess_title(index)
         if index == 2:
             try:
                 self._host.training_main_ctrl.on_enter()
