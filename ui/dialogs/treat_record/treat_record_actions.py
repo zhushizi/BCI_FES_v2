@@ -28,11 +28,27 @@ class TreatRecordActions:
             return
         rows_to_delete, session_ids = table.get_selected_session_ids()
         if not rows_to_delete:
+            TipsDialog.show_tips(self._dialog_parent(table), "请先勾选需要删除的治疗记录")
+            return
+        count = len(rows_to_delete)
+        if count == 1:
+            message = "确认要删除所选诊疗记录吗？"
+        else:
+            message = f"确认要删除所选 {count} 条诊疗记录吗？"
+        parent = self._dialog_parent(table)
+        if not TipsDialog.show_confirm(parent, message):
             return
         deleted = self._session_app.delete_patient_treat_sessions(session_ids)
         if deleted <= 0:
             return
         table.remove_rows(rows_to_delete)
+
+    @staticmethod
+    def _dialog_parent(table):
+        ui = getattr(table, "ui", None)
+        if ui is not None:
+            return ui.window()
+        return None
 
     def print_row(self, row: int) -> None:
         self._logger.info("打印行: %s", row + 1)

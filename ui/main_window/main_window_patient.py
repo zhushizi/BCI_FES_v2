@@ -6,19 +6,15 @@ import logging
 from math import ceil
 from typing import Callable, List, Optional
 
-from PySide6.QtCore import Qt, QDateTime, QRect, QSize, Signal, QTimer
+from PySide6.QtCore import Qt, QDateTime, QTimer
 from PySide6.QtGui import QColor, QIntValidator, QPalette
 from PySide6.QtWidgets import (
     QWidget,
-    QCheckBox,
     QFrame,
     QHBoxLayout,
     QLineEdit,
     QLabel,
     QPushButton,
-    QHeaderView,
-    QStyleOptionButton,
-    QStyle,
     QTableWidgetItem,
     QDialog,
     QAbstractItemView,
@@ -28,70 +24,7 @@ from ui.core.base_table_controller import BaseTableController
 from ui.core.utils import get_ui_attr, safe_connect
 from ui.dialogs.patient_newa import PatientNewDialog
 from ui.dialogs.tips_dialog import TipsDialog
-
-
-class CheckBoxHeader(QHeaderView):
-    """带复选框的表头（仅用于第1列）"""
-
-    checkStateChanged = Signal(Qt.CheckState)
-
-    def __init__(self, parent=None):
-        super().__init__(Qt.Horizontal, parent)
-        self._check_state = Qt.Unchecked
-        self.setSectionsClickable(True)
-
-    def paintSection(self, painter, rect, logicalIndex):
-        super().paintSection(painter, rect, logicalIndex)
-        if logicalIndex != 0:
-            return
-        option = QStyleOptionButton()
-        option.state |= QStyle.State_Enabled
-        if self._check_state == Qt.Checked:
-            option.state |= QStyle.State_On
-        elif self._check_state == Qt.PartiallyChecked:
-            option.state |= QStyle.State_NoChange
-        else:
-            option.state |= QStyle.State_Off
-        option.rect = self._checkbox_rect(rect)
-        self.style().drawControl(QStyle.CE_CheckBox, option, painter)
-
-    def mousePressEvent(self, event):
-        index = self.logicalIndexAt(event.pos())
-        if index == 0 and self._checkbox_rect(self._section_rect(0)).contains(event.pos()):
-            self._toggle_state()
-            return
-        super().mousePressEvent(event)
-
-    def _toggle_state(self):
-        new_state = Qt.Unchecked if self._check_state == Qt.Checked else Qt.Checked
-        self.setCheckState(new_state)
-        if hasattr(self, "checkStateChanged"):
-            self.checkStateChanged.emit(new_state)
-
-    def setCheckState(self, state: Qt.CheckState):
-        if state == self._check_state:
-            return
-        self._check_state = state
-        self.updateSection(0)
-
-    def checkState(self) -> Qt.CheckState:
-        return self._check_state
-
-    def _checkbox_rect(self, section_rect) -> QRect:
-        option = QStyleOptionButton()
-        check_box_size = self.style().sizeFromContents(QStyle.CT_CheckBox, option, QSize(), None)
-        x = section_rect.x() + (section_rect.width() - check_box_size.width()) // 2
-        y = section_rect.y() + (section_rect.height() - check_box_size.height()) // 2
-        return QRect(x, y, check_box_size.width(), check_box_size.height())
-
-    def _section_rect(self, logicalIndex: int) -> QRect:
-        """兼容性包装：在 PySide6 中没有 sectionRect，手动构造"""
-        return QRect(
-            self.sectionPosition(logicalIndex),
-            0,
-            self.sectionSize(logicalIndex),
-            self.height(),
-        )
+from ui.widgets.table_checkbox import TableCheckBox, TableCheckBoxHeader, coerce_check_state
 
 
 class PatientPageController(BaseTableController):
@@ -115,8 +48,8 @@ class PatientPageController(BaseTableController):
         self.report_app = report_app  # 报告应用层
         self.user_app = user_app
         self.logger = logger or logging.getLogger(__name__)
-        self._row_checkboxes: List[QCheckBox] = []
-        self._header_checkbox: Optional[CheckBoxHeader] = None
+        self._row_checkboxes: List[TableCheckBox] = []
+        self._header_checkbox: Optional[TableCheckBoxHeader] = None
         self._bulk_updating_checks = False
         self._all_patients: List[dict] = []
         self._patient_data: List[dict] = []
@@ -179,7 +112,7 @@ class PatientPageController(BaseTableController):
         default_section_size = old_header.defaultSectionSize()
         stretch_last = old_header.stretchLastSection()
 
-        header = CheckBoxHeader(table)
+        header = TableCheckBoxHeader(table)
         header.setDefaultSectionSize(default_section_size)
         for idx, size in enumerate(section_sizes):
             header.resizeSection(idx, size)
@@ -490,12 +423,7 @@ class PatientPageController(BaseTableController):
             self._sync_widget_row_background(table, row)
 
     def _setup_patient_row_widgets(self, table, row: int):
-        checkbox = QCheckBox()
-        checkbox.setTristate(False)
-        checkbox.setStyleSheet(
-            "QCheckBox { background: transparent; spacing: 4px; }"
-            "QCheckBox::indicator { width: 18px; height: 18px; }"
-        )
+        checkbox = TableCheckBox()
         checkbox.stateChanged.connect(lambda state, r=row: self._on_row_checkbox_changed(r, state))
         cb_container = QWidget()
         cb_layout = QHBoxLayout(cb_container)
@@ -759,11 +687,15 @@ class PatientPageController(BaseTableController):
     def _on_header_checkbox_state_changed(self, state: Qt.CheckState):
         if self._bulk_updating_checks:
             return
+        state = coerce_check_state(state)
         if state not in (Qt.CheckState.Checked, Qt.CheckState.Unchecked):
             return
+        target = Qt.CheckState.Checked if state == Qt.CheckState.Checked else Qt.CheckState.Unchecked
         self._bulk_updating_checks = True
         for cb in self._row_checkboxes:
-            cb.setCheckState(Qt.CheckState.Checked if state == Qt.CheckState.Checked else Qt.CheckState.Unchecked)
+            cb.blockSignals(True)
+            cb.setCheckState(target)
+            cb.blockSignals(False)
         self._bulk_updating_checks = False
 
     def _on_search_text_changed(self, text: str):
