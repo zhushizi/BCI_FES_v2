@@ -5,7 +5,7 @@ from math import ceil
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QColor, QIntValidator, QPalette
+from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import (
     QFrame,
     QHBoxLayout,
@@ -206,42 +206,31 @@ class PatientSelectPanel(QWidget):
         search_wrap.setObjectName("searchWrap")
         search_wrap.setStyleSheet(
             "QFrame#searchWrap {"
-            "background: #DDDDDD;"
-            "border: none;"
-            "border-radius: 8px;"
+            "background: #F7F8FC;"
+            "border: 1px solid #E9EDF5;"
+            "border-radius: 12px;"
             "}"
         )
         search_layout = QHBoxLayout(search_wrap)
-        search_layout.setContentsMargins(14, 8, 14, 8)
-        search_layout.setSpacing(8)
+        search_layout.setContentsMargins(12, 8, 12, 8)
+        search_layout.setSpacing(6)
 
         self._search_input = QLineEdit()
         self._search_input.setPlaceholderText("搜索患者姓名")
         self._search_input.setFrame(False)
-        self._search_input.setAutoFillBackground(True)
-        search_palette = self._search_input.palette()
-        search_palette.setColor(QPalette.Base, QColor("#DDDDDD"))
-        search_palette.setColor(QPalette.Text, QColor("#666666"))
-        search_palette.setColor(QPalette.PlaceholderText, QColor("#999999"))
-        self._search_input.setPalette(search_palette)
         self._search_input.setStyleSheet(
             "QLineEdit {"
-            "background-color: #DDDDDD;"
+            "background: transparent;"
             "border: none;"
-            "border-radius: 8px;"
-            "color: #666666;"
             "font-size: 13px;"
-            "padding: 4px 0px;"
-            "}"
-            "QLineEdit::placeholder {"
-            "color: #999999;"
+            "color: #1F1F1F;"
             "}"
         )
         self._search_input.textChanged.connect(self._on_search_text_changed)
         search_layout.addWidget(self._search_input, 1)
 
         search_icon = QLabel()
-        search_icon.setFixedSize(18, 18)
+        search_icon.setFixedSize(16, 16)
         search_icon.setStyleSheet("border-image: url(:/treat/pic/treat_search.png);")
         search_layout.addWidget(search_icon, 0, Qt.AlignRight | Qt.AlignVCenter)
 

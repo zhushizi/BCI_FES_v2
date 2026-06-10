@@ -118,6 +118,12 @@
         <file>pic/patient_revise_logo.png</file>
         <file>pic/patient_select_logo.png</file>
         <file>pic/patient_select_close.png</file>
+        <file>pic/patient_icon_age.png</file>
+        <file>pic/patient_icon_birthday.png</file>
+        <file>pic/patient_icon_high_weight.png</file>
+        <file>pic/patient_icon_number.png</file>
+        <file>pic/patient_icon_sex.png</file>
+        <file>pic/patient_icon_treat_time.png</file>
     </qresource>
 
     <!-- 主界面图片资源 -->
