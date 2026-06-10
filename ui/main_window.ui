@@ -1242,7 +1242,7 @@ border-image: url(:/patient/pic/patient_icon_number.png);</string>
        <property name="geometry">
         <rect>
          <x>510</x>
-         <y>530</y>
+         <y>520</y>
          <width>141</width>
          <height>21</height>
         </rect>
@@ -1317,7 +1317,7 @@ border-image: url(:/patient/pic/patient_icon_number.png);</string>
        <property name="geometry">
         <rect>
          <x>520</x>
-         <y>870</y>
+         <y>860</y>
          <width>141</width>
          <height>31</height>
         </rect>
