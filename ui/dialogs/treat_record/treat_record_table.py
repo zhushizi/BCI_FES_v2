@@ -6,20 +6,104 @@ from __future__ import annotations
 
 from typing import Callable, Iterable, Tuple
 
-from PySide6.QtCore import Qt, QRect, QSize, Signal
+from PySide6.QtCore import Qt, QRect, QEvent, Signal
+from PySide6.QtGui import QColor, QPainter, QPen
 from PySide6.QtWidgets import (
-    QCheckBox,
     QHBoxLayout,
     QPushButton,
     QTableWidgetItem,
     QWidget,
     QHeaderView,
-    QStyleOptionButton,
-    QStyle,
 )
 
 from ui.core.table_utils import set_text_item
 from ui.core.utils import get_ui_attr, safe_connect
+
+_CHECKBOX_CHECKED_COLOR = "#789EFF"
+_CHECKBOX_UNCHECKED_BORDER = "#D0D5DD"
+_CHECKBOX_SIZE = 18
+
+
+def _coerce_check_state(state) -> Qt.CheckState:
+    if isinstance(state, Qt.CheckState):
+        return state
+    return Qt.CheckState(int(state))
+
+
+def _check_state_value(state: Qt.CheckState) -> int:
+    state = _coerce_check_state(state)
+    return state.value
+
+
+def _paint_checkbox_indicator(painter: QPainter, rect: QRect, state: Qt.CheckState) -> None:
+    painter.save()
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    if state in (Qt.CheckState.Checked, Qt.CheckState.PartiallyChecked):
+        painter.setBrush(QColor(_CHECKBOX_CHECKED_COLOR))
+        painter.setPen(QColor(_CHECKBOX_CHECKED_COLOR))
+    else:
+        painter.setBrush(QColor("#FFFFFF"))
+        painter.setPen(QColor(_CHECKBOX_UNCHECKED_BORDER))
+    painter.drawRoundedRect(rect, 4, 4)
+
+    if state == Qt.CheckState.Checked:
+        pen = QPen(
+            QColor("#FFFFFF"),
+            2,
+            Qt.PenStyle.SolidLine,
+            Qt.PenCapStyle.RoundCap,
+            Qt.PenJoinStyle.RoundJoin,
+        )
+        painter.setPen(pen)
+        x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+        painter.drawLine(int(x + w * 0.22), int(y + h * 0.52), int(x + w * 0.42), int(y + h * 0.72))
+        painter.drawLine(int(x + w * 0.42), int(y + h * 0.72), int(x + w * 0.78), int(y + h * 0.30))
+    elif state == Qt.CheckState.PartiallyChecked:
+        pen = QPen(QColor("#FFFFFF"), 2, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
+        painter.setPen(pen)
+        x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+        painter.drawLine(int(x + w * 0.24), int(y + h * 0.5), int(x + w * 0.76), int(y + h * 0.5))
+    painter.restore()
+
+
+class ReportCheckBox(QWidget):
+    """自绘复选框，与表头样式一致（避免系统样式下勾选标记不显示）。"""
+
+    stateChanged = Signal(int)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._state = Qt.CheckState.Unchecked
+        self.setFixedSize(_CHECKBOX_SIZE, _CHECKBOX_SIZE)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    def checkState(self) -> Qt.CheckState:
+        return self._state
+
+    def setCheckState(self, state: Qt.CheckState) -> None:
+        state = _coerce_check_state(state)
+        if state == self._state:
+            return
+        self._state = state
+        self.update()
+        self.stateChanged.emit(_check_state_value(state))
+
+    def setChecked(self, checked: bool) -> None:
+        self.setCheckState(Qt.CheckState.Checked if checked else Qt.CheckState.Unchecked)
+
+    def paintEvent(self, _event) -> None:
+        painter = QPainter(self)
+        _paint_checkbox_indicator(painter, self.rect(), self._state)
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            new_state = (
+                Qt.CheckState.Unchecked
+                if self._state == Qt.CheckState.Checked
+                else Qt.CheckState.Checked
+            )
+            self.setCheckState(new_state)
+        super().mousePressEvent(event)
 
 
 class CheckBoxHeader(QHeaderView):
@@ -29,34 +113,32 @@ class CheckBoxHeader(QHeaderView):
 
     def __init__(self, parent=None):
         super().__init__(Qt.Horizontal, parent)
-        self._check_state = Qt.Unchecked
+        self._check_state = Qt.CheckState.Unchecked
         self.setSectionsClickable(True)
 
     def paintSection(self, painter, rect, logicalIndex):
         super().paintSection(painter, rect, logicalIndex)
         if logicalIndex != 0:
             return
-        option = QStyleOptionButton()
-        option.state |= QStyle.State_Enabled
-        if self._check_state == Qt.Checked:
-            option.state |= QStyle.State_On
-        elif self._check_state == Qt.PartiallyChecked:
-            option.state |= QStyle.State_NoChange
-        else:
-            option.state |= QStyle.State_Off
-        option.rect = self._checkbox_rect(rect)
-        self.style().drawControl(QStyle.CE_CheckBox, option, painter)
+        _paint_checkbox_indicator(painter, self._checkbox_rect(rect), self._check_state)
 
-    def mousePressEvent(self, event):
-        index = self.logicalIndexAt(event.pos())
-        if index == 0 and self._checkbox_rect(self._section_rect(0)).contains(event.pos()):
-            new_state = Qt.Unchecked if self._check_state == Qt.Checked else Qt.Checked
-            self.setCheckState(new_state)
-            self.checkStateChanged.emit(new_state)
-            return
-        super().mousePressEvent(event)
+    def viewportEvent(self, event) -> bool:
+        if event.type() == QEvent.Type.MouseButtonRelease:
+            if event.button() == Qt.MouseButton.LeftButton and self.logicalIndexAt(event.pos()) == 0:
+                self._toggle_check_state()
+                return True
+        return super().viewportEvent(event)
+
+    def _toggle_check_state(self) -> None:
+        if self._check_state == Qt.CheckState.Checked:
+            new_state = Qt.CheckState.Unchecked
+        else:
+            new_state = Qt.CheckState.Checked
+        self.setCheckState(new_state)
+        self.checkStateChanged.emit(new_state)
 
     def setCheckState(self, state: Qt.CheckState):
+        state = _coerce_check_state(state)
         if state == self._check_state:
             return
         self._check_state = state
@@ -65,18 +147,16 @@ class CheckBoxHeader(QHeaderView):
     def checkState(self) -> Qt.CheckState:
         return self._check_state
 
-    def _checkbox_rect(self, section_rect) -> QRect:
-        option = QStyleOptionButton()
-        check_box_size = self.style().sizeFromContents(QStyle.CT_CheckBox, option, QSize(), None)
-        x = section_rect.x() + (section_rect.width() - check_box_size.width()) // 2
-        y = section_rect.y() + (section_rect.height() - check_box_size.height()) // 2
-        return QRect(x, y, check_box_size.width(), check_box_size.height())
+    def _checkbox_rect(self, section_rect: QRect) -> QRect:
+        x = section_rect.x() + (section_rect.width() - _CHECKBOX_SIZE) // 2
+        y = section_rect.y() + (section_rect.height() - _CHECKBOX_SIZE) // 2
+        return QRect(x, y, _CHECKBOX_SIZE, _CHECKBOX_SIZE)
 
-    def _section_rect(self, logicalIndex: int) -> QRect:
+    def _section_rect(self, logical_index: int) -> QRect:
         return QRect(
-            self.sectionPosition(logicalIndex),
+            self.sectionViewportPosition(logical_index),
             0,
-            self.sectionSize(logicalIndex),
+            self.sectionSize(logical_index),
             self.height(),
         )
 
@@ -86,7 +166,8 @@ class TreatRecordTable:
         self.ui = ui
         self._logger = logger
         self._block_item_changed = False
-        self._row_checkboxes: list[QCheckBox | None] = []
+        self._bulk_updating_checks = False
+        self._row_checkboxes: list[ReportCheckBox | None] = []
         self._header_checkbox: CheckBoxHeader | None = None
 
     def _get_table(self):
@@ -212,7 +293,7 @@ class TreatRecordTable:
         rows_to_delete: list[int] = []
         session_ids: list[int] = []
         for row, checkbox in enumerate(self._row_checkboxes):
-            if checkbox and checkbox.checkState() == Qt.Checked:
+            if checkbox and checkbox.checkState() == Qt.CheckState.Checked:
                 pid_item = table.item(row, 1)
                 session_id = None
                 if pid_item is not None:
@@ -257,42 +338,43 @@ class TreatRecordTable:
         return record_data, treat_start_time, session_id
 
     def update_header_check_state(self) -> None:
-        if self._header_checkbox is None:
+        if self._header_checkbox is None or self._bulk_updating_checks:
             return
-        row_count = len(self._row_checkboxes)
+        active_checkboxes = [cb for cb in self._row_checkboxes if cb is not None]
+        row_count = len(active_checkboxes)
         if row_count == 0:
-            self._header_checkbox.setCheckState(Qt.Unchecked)
+            self._bulk_updating_checks = True
+            self._header_checkbox.setCheckState(Qt.CheckState.Unchecked)
+            self._bulk_updating_checks = False
             return
-        checked = 0
-        unchecked = 0
+        checked = sum(cb.checkState() == Qt.CheckState.Checked for cb in active_checkboxes)
+        unchecked = sum(cb.checkState() == Qt.CheckState.Unchecked for cb in active_checkboxes)
+        self._bulk_updating_checks = True
+        if checked == row_count:
+            self._header_checkbox.setCheckState(Qt.CheckState.Checked)
+        elif unchecked == row_count:
+            self._header_checkbox.setCheckState(Qt.CheckState.Unchecked)
+        else:
+            self._header_checkbox.setCheckState(Qt.CheckState.PartiallyChecked)
+        self._bulk_updating_checks = False
+
+    def _on_header_checkbox_state_changed(self, state: Qt.CheckState) -> None:
+        if self._bulk_updating_checks:
+            return
+        state = _coerce_check_state(state)
+        if state not in (Qt.CheckState.Checked, Qt.CheckState.Unchecked):
+            return
+        target = Qt.CheckState.Checked if state == Qt.CheckState.Checked else Qt.CheckState.Unchecked
+        self._bulk_updating_checks = True
+        self._block_item_changed = True
         for checkbox in self._row_checkboxes:
             if checkbox is None:
                 continue
-            if checkbox.checkState() == Qt.Checked:
-                checked += 1
-            elif checkbox.checkState() == Qt.Unchecked:
-                unchecked += 1
-        self._block_item_changed = True
-        if checked == row_count:
-            self._header_checkbox.setCheckState(Qt.Checked)
-        elif unchecked == row_count:
-            self._header_checkbox.setCheckState(Qt.Unchecked)
-        else:
-            self._header_checkbox.setCheckState(Qt.PartiallyChecked)
+            checkbox.blockSignals(True)
+            checkbox.setCheckState(target)
+            checkbox.blockSignals(False)
         self._block_item_changed = False
-
-    def _on_header_checkbox_state_changed(self, state: Qt.CheckState) -> None:
-        if self._block_item_changed:
-            return
-        if state not in (Qt.CheckState.Checked, Qt.CheckState.Unchecked):
-            return
-        self._block_item_changed = True
-        checked = state == Qt.CheckState.Checked
-        for checkbox in self._row_checkboxes:
-            if checkbox is not None:
-                checkbox.setChecked(checked)
-        self._block_item_changed = False
-        self.update_header_check_state()
+        self._bulk_updating_checks = False
 
     def _on_row_checkbox_changed(self, row: int, state: int) -> None:
         if self._block_item_changed:
@@ -300,8 +382,7 @@ class TreatRecordTable:
         self.update_header_check_state()
 
     def _set_checkbox_item(self, table, row: int, col: int) -> None:
-        checkbox = QCheckBox()
-        checkbox.setTristate(False)
+        checkbox = ReportCheckBox()
         checkbox.stateChanged.connect(lambda state, r=row: self._on_row_checkbox_changed(r, state))
         container = QWidget()
         layout = QHBoxLayout(container)
