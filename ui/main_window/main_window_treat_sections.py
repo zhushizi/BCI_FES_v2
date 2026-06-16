@@ -9,7 +9,7 @@ from ui.core.utils import get_ui_attr, safe_call, safe_connect
 
 _PREPROCESS_PAGE_TITLES = {
     0: "电刺激强度适应性测试",
-    1: "阻抗检测",
+    1: "脑阻抗检测",
     2: "训练中",
 }
 
